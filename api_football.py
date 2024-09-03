@@ -1,9 +1,10 @@
 #library for my apifootball api
 import os
 import requests
-import datetime
+from datetime import datetime
 from rich.table import Table
 from rich import print as rich_print
+from gm_data import Team
 
 
 # Base URL e API key di API-FOOTBALL
@@ -12,36 +13,73 @@ API_KEY = os.environ.get("APIFOOTBALL_KEY")
 
 
 class ApiFootball:
-    def __init__(self):
+    def __init__(self, year=datetime.now().year):
         self.headers = {
             "x-rapidapi-host": "v3.football.api-sports.io",
             "x-rapidapi-key": API_KEY
         }
-        self.YEAR = datetime.datetime.now().year  #set by default to current year
-
-    def get_table_standings(self,league,year=datetime.datetime.now().year):
-        url = f"{API_URL}/standings?league={league}&season={year}"
+        self.YEAR = year
+    def get_standings(self,league):
+        # get standings from api_football in a specific year from the api parameter and return a table with the data
+        # static method (there is no need to create an instance of the class)
+        url = f"{API_URL}/standings"
         params = {
-            "league": league
+            "league": league,
+            "season": self.YEAR
         }
         response = requests.get(url, params=params, headers=self.headers)
         standings = response.json()
-
-        table = Table(title=f"Classifica Dettagliata {year}")
-        table.add_column("Pos", style="cyan")
-        table.add_column("Squadra", style="magenta")
+        return standings
+    def get_list_standings(self,league):
+        
+        standings = self.get_standings(league)
+        #memorize the table in a list of Team objects
+        teams = []
+        for t in standings['response'][0]['league']['standings'][0]:
+            # add the team to the list
+            teams.append(Team(t["team"]["id"],
+                                t["team"]["name"],   
+                                t["rank"],
+                                t["points"],
+                                t["all"]["played"],
+                                t["team"]["logo"],
+                                t["all"]["win"],
+                                t["all"]["draw"],
+                                t["all"]["lose"],
+                                t["all"]["goals"]["for"],
+                                t["all"]["goals"]["against"],
+                                t["home"]["win"],
+                                t["away"]["win"],
+                                t["home"]["draw"],
+                                t["away"]["draw"],
+                                t["home"]["lose"],
+                                t["away"]["lose"],
+                                t["home"]["goals"]["for"],
+                                t["away"]["goals"]["for"],
+                                t["home"]["goals"]["against"],
+                                t["away"]["goals"]["against"],
+                                t["form"],
+                                t["status"]
+                                ))
+        return teams   
+    def get_table_standings(self,league):
+        standings = self.get_standings(league)
+        table = Table(title=f"Standings {self.YEAR}", show_lines=True, show_header=True)
+        table.add_column("POS", style="cyan")
+        table.add_column("TEAM", style="magenta")
+        table.add_column("P", style="bold")
         table.add_column("PG", style="green")
-        table.add_column("V", style="green")
-        table.add_column("P", style="green")
-        table.add_column("S", style="green")
-        table.add_column("GF (C)", style="yellow")
-        table.add_column("GS (C)", style="yellow")
-        table.add_column("GF (F)", style="yellow")
-        table.add_column("GS (F)", style="yellow")
-        table.add_column("MGF (C)", style="yellow")
-        table.add_column("MGF (F)", style="yellow")
-        table.add_column("Andamento", style="bold")
-        table.add_column("Punti", style="bold")
+        table.add_column("W", style="green")
+        table.add_column("D", style="green")
+        table.add_column("L", style="green")
+        table.add_column("GF(H)", style="yellow")
+        table.add_column("GA(H)", style="yellow")
+        table.add_column("GF(A)", style="yellow")
+        table.add_column("GA(A)", style="yellow")
+        table.add_column("MGF(H)", style="yellow")
+        table.add_column("MGA(A)", style="yellow")
+        table.add_column("Status", style="bold")
+     
 
         for team in standings['response'][0]['league']['standings'][0]:
             position = str(team['rank'])
@@ -84,8 +122,11 @@ class ApiFootball:
                 str(avg_goals_for_home), str(avg_goals_for_away),
                 str(form), points
             )
-
+        #create a list of Team objects from the table
+        #table = [Team(row) for row in table.rows]
         return table
         
-m=ApiFootball().get_table_standings(135)
-rich_print(m) #print(m)
+# m=ApiFootball().get_table_standings(135)
+# rich_print(m)
+
+
