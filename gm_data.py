@@ -66,10 +66,16 @@ class Team:
         Returns:
             float: The average goals scored by the team.
         """
-        return (self.goals_for) / self.matches
+        try:
+            return (self.goals_for) / self.matches
+        except ZeroDivisionError:
+            return 0
     def medius_goals_against(self):
         #medius between goals for in the matches and goals against in the number of matches
-        return (self.goals_against) / self.matches
+        try:
+            return (self.goals_against) / self.matches
+        except ZeroDivisionError:
+            return 0
     def goal_difference(self):
         """
         Calculate the difference between the goals scored by the team and the goals scored against the team.
@@ -80,9 +86,15 @@ class Team:
         return self.goals_for - self.goals_against
     #medius between goals for home
     def medius_goals_for_home(self):
-        return (self.goals_for_home) / self.matches
+        try:
+            return (self.goals_for_home) / self.matches
+        except ZeroDivisionError:
+            return 0
     #medius between goals for away
     def medius_goals_for_away(self):
-        return (self.goals_for_away) / self.matches
+        try:
+            return (self.goals_for_away) / self.matches
+        except ZeroDivisionError:
+            return 0
     
 

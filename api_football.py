@@ -32,6 +32,15 @@ class ApiFootball:
         return standings
     def get_list_standings(self,league):
         
+        """
+        Get the standings of a league in a specific year from the api parameter and return a list of Team objects.
+        
+        Args:
+            league (int): the league to get the standings for
+        
+        Returns:
+            list: a list of Team objects representing the standings of the league
+        """
         standings = self.get_standings(league)
         #memorize the table in a list of Team objects
         teams = []
@@ -63,6 +72,15 @@ class ApiFootball:
                                 ))
         return teams   
     def get_table_standings(self,league):
+        """
+        Get the standings of a league in a specific year from the api parameter and return a rich.table.Table object.
+        
+        Args:
+            league (int): the league to get the standings for
+        
+        Returns:
+            rich.table.Table: a rich.table.Table object representing the standings of the league
+        """
         standings = self.get_standings(league)
         table = Table(title=f"Standings {self.YEAR}", show_lines=True, show_header=True)
         table.add_column("POS", style="cyan")
