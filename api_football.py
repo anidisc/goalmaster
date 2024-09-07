@@ -1,10 +1,10 @@
 #library for my apifootball api
 import os
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from rich.table import Table
 from rich import print as rich_print
-from gm_data import Team
+from gm_data import Team, Match
 
 
 # Base URL e API key di API-FOOTBALL
@@ -13,22 +13,29 @@ API_KEY = os.environ.get("APIFOOTBALL_KEY")
 
 
 class ApiFootball:
-    def __init__(self, year=datetime.now().year):
+    def __init__(self, year=datetime.now().year,timezone="Europe/Rome"):
         self.headers = {
             "x-rapidapi-host": "v3.football.api-sports.io",
             "x-rapidapi-key": API_KEY
         }
         self.YEAR = year
+        self.timezone = timezone
+    def get_status(self):
+        url = f"{API_URL}/status"
+        response = requests.get(url, headers=self.headers)
+        return 100 - int(response.json()['response']['requests']['current'])
     def get_standings(self,league):
         # get standings from api_football in a specific year from the api parameter and return a table with the data
         # static method (there is no need to create an instance of the class)
         url = f"{API_URL}/standings"
         params = {
             "league": league,
-            "season": self.YEAR
+            "season": self.YEAR,
+            "timezone": self.timezone
         }
         response = requests.get(url, params=params, headers=self.headers)
         standings = response.json()
+        self.rem = response.headers
         return standings
     def get_list_standings(self,league):
         
@@ -143,8 +150,43 @@ class ApiFootball:
         #create a list of Team objects from the table
         #table = [Team(row) for row in table.rows]
         return table
-        
-# m=ApiFootball().get_table_standings(135)
-# rich_print(m)
+    
+    def get_fixtures(self,id_league,datefrom=None,dateto=None):
+        url=f"{API_URL}/fixtures"
+        params = {
+            "league": id_league,
+            "from": datefrom,
+            "to": dateto,
+            "season": self.YEAR,
+            "timezone": self.timezone
+        }
+        response = requests.get(url, params=params, headers=self.headers)
+        fixtures = response.json()
+        return fixtures
+    def get_list_fixtures(self,league,datefrom=None,dateto=None):
+        #get list of fixtures in a specific league in obkect Match
+        fixtures = self.get_fixtures(league,datefrom,dateto)
+        list_fixtures = []
+        for fixture in fixtures['response']:
+            list_fixtures.append(Match(fixture['fixture']['id'],
+                                       fixture['fixture']['date'],
+                                       fixture['league']['round'],
+                                       fixture['teams']['home']['name'],
+                                       fixture['teams']['away']['name'],
+                                       fixture['goals']['home'],
+                                       fixture['goals']['away'],
+                                       fixture['fixture']['status']['short'],
+                                       fixture['fixture']['status']['elapsed'],
+                                       fixture['fixture']['referee']))
+            
+        return list_fixtures
+#m=ApiFootball().get_table_standings(135)
+#rich_print(ApiFootball().get_table_standings(135))
+#rich_print("Status remaining calls :", ApiFootball().get_status())
+#rich_print("standings italy 2023", ApiFootball(2023).get_table_standings(135))
+
+r=ApiFootball().get_list_fixtures(135,datefrom=datetime.now().date()-timedelta(days=10),dateto=datetime.now().date()+timedelta(days=10))
+for i in range(len(r)):
+    rich_print(r[i])
 
 

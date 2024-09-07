@@ -98,3 +98,39 @@ class Team:
             return 0
     
 
+class Match:
+    def __init__(self, id, date, round, home_team, away_team, home_score, away_score, status,minute,referee):
+        """
+        Class for structure data of a match.
+
+        Args:
+            id (int): unique identifier of the match
+            date (str): date of the match
+            home_team (Team): team at home
+            away_team (Team): team away
+            home_score (int): score of the team at home
+            away_score (int): score of the team away
+        """
+        self.id = id
+        self.date = date
+        self.home_team = home_team
+        self.away_team = away_team
+        self.home_score = home_score
+        self.away_score = away_score
+        self.status = status
+        self.minute = minute
+        self.referee = referee
+        self.round = round
+
+    def __str__(self):
+        """
+        Return a string tabulate with normalized space for the representation of the match.
+        ex: team1 - team2 - score 'ninutes - status - date
+        
+        Returns:
+            str: a string representation of the match
+        """
+        #format string with tabulate with same space between columns with using tabulate
+        return f"{self.home_team} {self.home_score} - {self.away_score} {self.away_team} - {self.minute} - {self.status} - {self.date}"
+
+    #function to get fixture data

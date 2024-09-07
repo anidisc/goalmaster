@@ -1,0 +1,14 @@
+#Screen {
+    align: center middle;
+    layers: below above above2;
+}
+
+#siderbar_years {
+    dock: right;
+    background: $boost;
+    color: white;
+    width: 35%;
+    height: 100%;
+    layer: above2;
+    margin:1;
+}
