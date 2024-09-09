@@ -1,0 +1,31 @@
+Screen {
+    align: center middle;
+    layers: below above;
+}
+
+#sidebar_years {
+    width: 25%;
+    height: 90%;
+    padding: 1;
+    background: black;
+    color: white;
+    dock: right;
+    layer: above;
+    margin-top: 5;
+    
+} 
+#list_years {
+    width: 100%;
+    padding: 1;
+    text-style: bold;
+    text-align: center;
+    color: white;
+}
+#box_of_matches{
+    background: black;
+    color: white;
+    layer: below;
+    width: 90%;
+    margin-top: 2;
+
+}

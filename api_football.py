@@ -185,8 +185,8 @@ class ApiFootball:
 #rich_print("Status remaining calls :", ApiFootball().get_status())
 #rich_print("standings italy 2023", ApiFootball(2023).get_table_standings(135))
 
-r=ApiFootball().get_list_fixtures(135,datefrom=datetime.now().date()-timedelta(days=10),dateto=datetime.now().date()+timedelta(days=10))
-for i in range(len(r)):
-    rich_print(r[i])
+# r=ApiFootball().get_list_fixtures(135,datefrom=datetime.now().date()-timedelta(days=10),dateto=datetime.now().date())
+# for i in range(len(r)):
+#     rich_print(r[i])
 
 

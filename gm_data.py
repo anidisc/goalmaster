@@ -1,5 +1,5 @@
 #data structure of the app
-
+from datetime import datetime
 class Team:
     def __init__(self, id, name, position, points, matches, logo,
                  wins, draws, losses, goals_for, goals_against,
@@ -122,15 +122,31 @@ class Match:
         self.referee = referee
         self.round = round
 
-    def __str__(self):
-        """
-        Return a string tabulate with normalized space for the representation of the match.
-        ex: team1 - team2 - score 'ninutes - status - date
+    def __str__(self) -> str:
+        # Tronca o aggiunge spazi ai nomi delle squadre
+        team1_str = f"{self.home_team[:20]:<20}"
+        team2_str = f"{self.away_team[:20]:<20}"
         
-        Returns:
-            str: a string representation of the match
-        """
-        #format string with tabulate with same space between columns with using tabulate
-        return f"{self.home_team} {self.home_score} - {self.away_score} {self.away_team} - {self.minute} - {self.status} - {self.date}"
+        # Format punteggio, stato e minuto (gestisce extra_time)
+        score_team1_str = f"{self.home_score:>2}" if self.home_score != None else " -"
+        score_team2_str = f"{self.away_score:>2}" if self.away_score != None else " -"
+        
+        if self.minute != None:
+            if self.minute > 90:
+                minute_str = f"90+{(self.minute - 90):>2}"  # Formato per minuti supplementari
+            else:
+                minute_str = f"{self.minute:>3}"  # Minuti normali
+        else:
+            minute_str = " - "  # if the minute is None, set it to "  "
+        status_str = f"{self.status[:2]:<2}"
+        
+        # Format data e ora (15 caratteri)
+        datetime_str = datetime.fromisoformat(self.date).strftime("%d/%m/%Y %H:%M")
+        
+        # Costruisci la stringa finale con 1 spazio tra minuto, stato e data
+        result = f"{team1_str}{team2_str}{score_team1_str}{score_team2_str} {minute_str} {status_str} {datetime_str}"
+        
+        return result
+
 
     #function to get fixture data
