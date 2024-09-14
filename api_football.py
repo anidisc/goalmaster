@@ -162,9 +162,19 @@ class ApiFootball:
         response = requests.get(url, params=params, headers=self.headers)
         fixtures = response.json()
         return fixtures
-    def get_list_fixtures(self,league,datefrom,dateto)->Match:
+    #get list of fixtures for live matches or speciafic league
+    def get_fixture_live(self,leagues="all"):
+        url=f"{API_URL}/fixtures"
+        params = {
+            "timezone": self.timezone,
+            "live": leagues
+        }
+        response = requests.get(url, params=params, headers=self.headers)
+        fixtures = response.json()
+        return fixtures
+    def get_list_fixtures(self,league,datefrom,dateto,live=False)->Match:
         #get list of fixtures in a specific league in obkect Match
-        fixtures = self.get_fixtures(league,datefrom,dateto) 
+        fixtures = self.get_fixtures(league,datefrom,dateto) if not live else self.get_fixture_live()
         list_fixtures = []
         for fixture in fixtures['response']:
             list_fixtures.append(Match(fixture['fixture']['id'],
@@ -176,19 +186,20 @@ class ApiFootball:
                                        fixture['goals']['away'],
                                        fixture['fixture']['status']['short'],
                                        fixture['fixture']['status']['elapsed'],
-                                       fixture['fixture']['referee']))
+                                       fixture['fixture']['referee'],
+                                       fixture['league']['country']))
             
         return list_fixtures
 #m=ApiFootball().get_table_standings(135)
 #rich_print(ApiFootball().get_table_standings(135))
 #rich_print("Status remaining calls :", ApiFootball().get_status())
 #rich_print("standings italy 2023", ApiFootball(2023).get_table_standings(135))
-# dfrom=dt.date.today()
-# dto=dt.date.today()+timedelta(days=-30)
-# rich_print(dfrom,dto)
+dfrom=dt.date.today()
+dto=dt.date.today()+timedelta(days=-30)
+rich_print(dfrom,dto)
 
-# r=ApiFootball().get_list_fixtures(135,dto,dfrom)
-# for i in range(len(r)):
-#     rich_print(r[i])
+r=ApiFootball().get_list_fixtures(39,dto,dfrom)
+for i in range(len(r)):
+    rich_print(r[i])
 
 

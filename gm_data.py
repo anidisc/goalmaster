@@ -99,7 +99,7 @@ class Team:
     
 
 class Match:
-    def __init__(self, id, date, round, home_team, away_team, home_score, away_score, status,minute,referee):
+    def __init__(self, id, date, round, home_team, away_team, home_score, away_score, status,minute,referee,country):
         """
         Class for structure data of a match.
 
@@ -121,6 +121,7 @@ class Match:
         self.minute = minute
         self.referee = referee
         self.round = round
+        self.country = country
 
     def __str__(self) -> str:
         # Tronca o aggiunge spazi ai nomi delle squadre
@@ -139,12 +140,18 @@ class Match:
         else:
             minute_str = " - "  # if the minute is None, set it to "  "
         status_str = f"{self.status[:2]:<2}"
+        if self.status == "HT" or self.status == "2H":
+            #mark colored ballon for live matches
+            livestatus = "●LIVE"
+        else:
+            livestatus = " "
         
         # Format data e ora (15 caratteri)
         datetime_str = datetime.fromisoformat(self.date).strftime("%d/%m/%Y %H:%M")
+        country_str = f"{self.country[:20]:<20}"
         
         # Costruisci la stringa finale con 1 spazio tra minuto, stato e data
-        result = f"{team1_str}{team2_str}{score_team1_str}{score_team2_str} {minute_str} {status_str} {datetime_str}"
+        result = f"{team1_str}{team2_str}{score_team1_str}{score_team2_str} {minute_str} {status_str} {datetime_str} | {country_str} {livestatus}"
         
         return result
 

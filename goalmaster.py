@@ -4,7 +4,7 @@ import gemini_ai
 import api_football as af
 from textual.app import App
 from textual.widgets import Header, Footer, Button, Static, ListView, ListItem, Input, OptionList
-from textual.containers import ScrollableContainer
+from textual.containers import ScrollableContainer, Vertical
 from rich import print as rich_print
 from _datetime import datetime,timedelta
 import shlex
@@ -28,7 +28,7 @@ class goalmasterapp(App):
                 ("y", "change_year", "Change Year"),
                 ("i", "insert_command", "Insert Command"),
                 ("r","remove_block","Remove Block")]
-    CSS_PATH = "appstyle.css"
+    CSS_PATH = "appstyle.tcss"
 
     
     def __init__(self):
@@ -45,6 +45,9 @@ class goalmasterapp(App):
         self.yearsbox=OptionList("2020","2021","2022","2023","2024",id="yearsbox")
         self.yearsbox.border_title = "Select Year"
         yield self.yearsbox
+        #create an info box to show a varius texts
+        self.infobox = Static("info text to print",id="infobox")
+        yield Vertical(self.infobox,Button("ok",id="ok_info_button"),id="infolayout") 
 
     def find_league(self,league):
             #find name of league with de id of league
@@ -57,7 +60,6 @@ class goalmasterapp(App):
     #create block to show the current standings of the league
     def add_block_standings(self,league,text="text to print"):
         standings = af.ApiFootball(self.YEAR_SELECT).get_table_standings(league)
-        #standings=text
         self.input_box.styles.visibility = "hidden" # Hide the input box
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
@@ -65,11 +67,11 @@ class goalmasterapp(App):
         block.border_title = f"Standings {self.find_league(league)}"
         self.query_one("#main_container").mount(block)
         self.query_one("#main_container").scroll_end()
-    def add_block_fixture(self,datefrom,dateto):
+    def add_block_fixture(self,datefrom,dateto,live=False):
         self.input_box.styles.visibility = "hidden" # Hide the input box
-        fixtures=af.ApiFootball().get_list_fixtures(self.league_selected,datefrom,dateto)
+        fixtures=af.ApiFootball().get_list_fixtures(self.league_selected,datefrom,dateto,live)
         self.block_counter += 1 # Increment the block counter
-        list_fixtures = ListView(*[ListItem(Static(str(fix)),name="item_match") for fix in fixtures],id=f"block_{self.block_counter}",classes="block2")
+        list_fixtures = ListView(*[ListItem(Static(str(fix)),classes="item_match") for fix in fixtures],id=f"block_{self.block_counter}",classes="block2")
         list_fixtures.border_title = f"Fixtures League: {self.find_league(self.league_selected)}"
         list_fixtures.border_subtitle = f"from:{datefrom} - to:{dateto}"
 
@@ -78,12 +80,33 @@ class goalmasterapp(App):
         list_fixtures.focus()
         #scrool maioncontainer on botton of list view
         self.query_one("#main_container").scroll_end()
+    # def add_block_fixture_live(self,leagues="all"):
+    #     self.input_box.styles.visibility = "hidden" # Hide the input box
+    #     fixtures=af.ApiFootball().get_list_fixtures(self.league_selected,
+    #                                                 datefrom=datetime.now().date(),
+    #                                                 dateto=datetime.now().date(),
+    #                                                 live=True)
+    #     self.block_counter += 1 # Increment the block counter
+    #     list_fixtures = ListView(*[ListItem(Static(str(fix)),name="item_match") for fix in fixtures],id=f"block_{self.block_counter}",classes="block2")
+    #     list_fixtures.border_title = "Fixtures Live"
+    #     self.query_one("#main_container").mount(list_fixtures)
+    #     #focus on list view
+    #     list_fixtures.focus()
+    #     #scrool maioncontainer on botton of list view
+    #     self.query_one("#main_container").scroll_end()
     def on_mount(self):
-        #self.add_block_standings(self.league_selected)
         self.query_one("#input").styles.visibility = "hidden" # 
         self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}"
-        #self.yearsbox.styles.visibility = "hidden"
+        self.boxmessage = self.query_one("#infolayout")
+        self.boxmessage.styles.visibility = "hidden"
         self.query_one("#main_container").focus()
+    #make a function that show a message in the infobox
+    def show_message(self,text,titlebox=""):
+        self.boxmessage.styles.visibility = "visible"
+        self.boxmessage.border_title = titlebox
+        self.infobox.update(text)
+        self.query_one("#ok_info_button").focus()
+        
     def on_key(self, event: Key):
         if event.key == "a":
             self.YEAR_SELECT = af.ApiFootball().YEAR
@@ -95,6 +118,11 @@ class goalmasterapp(App):
             #exit app if no block is left
             if self.block_counter == 0:
                 self.exit()
+    #button pressed
+    def on_button_pressed(self, event: Button.Pressed):
+        if event.button.id == "ok_info_button":
+            self.boxmessage.styles.visibility = "hidden"
+            self.screen.focus()
     def action_insert_command(self):
         self.input_box.styles.visibility = "visible" if self.input_box.styles.visibility == "hidden" else "hidden"
         self.input_box.focus()
@@ -102,15 +130,31 @@ class goalmasterapp(App):
         self.yearsbox.styles.visibility = "visible" if self.yearsbox.styles.visibility == "hidden" else "hidden"
         self.yearsbox.focus()
     def on_input_submitted(self, event: Input.Submitted):
+        #validate di input is not void
+        if event.value == "":
+            return
+        command = shlex.split(event.value.upper()) # Split the input string into a list of words
+        #hide input box
+        self.input_box.styles.visibility = "hidden"
+        #check if command is valid
+        if command[0] == "LIVE":
+            self.add_block_fixture(datetime.now().date(),datetime.now().date(),live=True)
+            # show live matches define in ApiFootball and function get_fixture_live
+            return
 
-        command = shlex.split(event.value.upper())
-        #self.add_block_standings(self.league_selected,text=command[0]+" "+command[1])    
-        #verify if the command input is in the keys od dictionary af_map
+
         if command[0] in af_map:
             self.league_selected = af_map[command[0]]["id"]
+            #check if command is valid
+            if len(command) == 1:
+                self.show_message(f"insert options command for {self.find_league(self.league_selected)}",
+                                  titlebox=f"IMCOMPLETE COMMAND")
+                return
             if command[1] == "-S":
                 self.add_block_standings(self.league_selected)
             elif command[1] == "-T":
+                if len(command) < 3:
+                    command.append("0")  #default value for days
                 #validate if the time parameter is valid in range -150 to 150
                 if -150 <= int(command[2]) <= 150:
                     if int(command[2]) >= 0:
@@ -122,7 +166,9 @@ class goalmasterapp(App):
                         dto=datetime.now().date()
                         self.add_block_fixture(dfrom,dto)
             else:
-                pass
+                self.show_message("error command syntax",titlebox="SYNTAX ERROR")
+        else:
+            self.show_message("command not found",titlebox="INVALID COMMAND")
             # self.add_block_standings(self.league_selected)   
 
         # if command == "seriea":
