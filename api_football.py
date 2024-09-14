@@ -2,6 +2,7 @@
 import os
 import requests
 from datetime import datetime, timedelta
+import datetime as dt
 from rich.table import Table
 from rich import print as rich_print
 from gm_data import Team, Match
@@ -20,7 +21,7 @@ class ApiFootball:
         }
         self.YEAR = year
         self.timezone = timezone
-    def get_status(self):
+    def get_status_apicalls(self):
         url = f"{API_URL}/status"
         response = requests.get(url, headers=self.headers)
         return 100 - int(response.json()['response']['requests']['current'])
@@ -30,8 +31,7 @@ class ApiFootball:
         url = f"{API_URL}/standings"
         params = {
             "league": league,
-            "season": self.YEAR,
-            "timezone": self.timezone
+            "season": self.YEAR
         }
         response = requests.get(url, params=params, headers=self.headers)
         standings = response.json()
@@ -89,7 +89,7 @@ class ApiFootball:
             rich.table.Table: a rich.table.Table object representing the standings of the league
         """
         standings = self.get_standings(league)
-        table = Table(title=f"Standings {self.YEAR}", show_lines=True, show_header=True)
+        table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
         table.add_column("POS", style="cyan")
         table.add_column("TEAM", style="magenta")
         table.add_column("P", style="bold")
@@ -129,29 +129,28 @@ class ApiFootball:
 
         
             # Ultime 5 partite (simboli colorati)
-            form = ""
-            for result in team['form'].split():
+            form=""
+            for result in list(str(team['form'])):
                 if result == 'W':
-                    form += "[green]●[/green] "
+                    form += "[green]●[/green]"
                 elif result == 'D':
-                    form += "[white]●[/white] "
+                    form += "[white]●[/white]"
                 elif result == 'L':
-                    form += "[red]●[/red] "
+                    form += "[red]●[/red]"
 
             points = str(team['points'])
 
             table.add_row(
-                position, team_name, played_games, wins, draws, losses,
+                position, team_name, points, played_games, wins, draws, losses,
                 str(goals_for_home), str(goals_against_home),
                 str(goals_for_away), str(goals_against_away),
-                str(avg_goals_for_home), str(avg_goals_for_away),
-                str(form), points
+                str(avg_goals_for_home), str(avg_goals_for_away),form
             )
         #create a list of Team objects from the table
         #table = [Team(row) for row in table.rows]
         return table
     
-    def get_fixtures(self,id_league,datefrom=None,dateto=None):
+    def get_fixtures(self,id_league,datefrom,dateto):
         url=f"{API_URL}/fixtures"
         params = {
             "league": id_league,
@@ -163,9 +162,9 @@ class ApiFootball:
         response = requests.get(url, params=params, headers=self.headers)
         fixtures = response.json()
         return fixtures
-    def get_list_fixtures(self,league,datefrom=None,dateto=None):
+    def get_list_fixtures(self,league,datefrom,dateto)->Match:
         #get list of fixtures in a specific league in obkect Match
-        fixtures = self.get_fixtures(league,datefrom,dateto)
+        fixtures = self.get_fixtures(league,datefrom,dateto) 
         list_fixtures = []
         for fixture in fixtures['response']:
             list_fixtures.append(Match(fixture['fixture']['id'],
@@ -184,8 +183,11 @@ class ApiFootball:
 #rich_print(ApiFootball().get_table_standings(135))
 #rich_print("Status remaining calls :", ApiFootball().get_status())
 #rich_print("standings italy 2023", ApiFootball(2023).get_table_standings(135))
+# dfrom=dt.date.today()
+# dto=dt.date.today()+timedelta(days=-30)
+# rich_print(dfrom,dto)
 
-# r=ApiFootball().get_list_fixtures(135,datefrom=datetime.now().date()-timedelta(days=10),dateto=datetime.now().date())
+# r=ApiFootball().get_list_fixtures(135,dto,dfrom)
 # for i in range(len(r)):
 #     rich_print(r[i])
 
