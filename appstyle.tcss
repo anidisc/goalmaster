@@ -1,0 +1,66 @@
+/* ScrollableContainer {
+    width: 100%;
+    height: 1fr;
+} */
+
+Screen {   
+    layers: below above above2;
+}
+
+.block {
+    width: 100%;
+    height: auto;
+    border: hkey rgb(232, 207, 15);
+    margin: 1 0;
+    padding: 1;
+    layer: below;
+}
+
+.block2 {
+    width: 100%;
+    height: auto;
+    border: solid rgb(37, 163, 222);
+    margin: 1 0;
+    padding: 1;
+    layer: below;
+}
+
+#item_match {
+    margin: 1 0;
+    padding: 1;
+    color: blueviolet;
+    layer: below;
+}
+
+#yearsbox {
+    layer: above;
+    dock: right;
+    border: solid;
+    width:15%;
+    height:auto;
+    margin: 1 0;
+    padding: 1;
+    visibility: hidden;
+}
+#infolayout {
+    layer: above2;
+    border: heavy white;
+    offset: 50% 50%;
+    align: center middle;
+    width: 50%;
+    height: 50%;
+}
+#infobox {
+    layer: above2;
+    align: center middle;
+    content-align: center middle;
+    height: 50%;
+    width: 50%;
+}
+#ok_info_button {
+    layer: above2;
+    offset: 50% 50%;
+}
+.item_match {
+    
+}

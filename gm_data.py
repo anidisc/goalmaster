@@ -140,7 +140,7 @@ class Match:
         else:
             minute_str = " - "  # if the minute is None, set it to "  "
         status_str = f"{self.status[:2]:<2}"
-        if self.status == "HT" or self.status == "2H":
+        if self.status == "HT" or self.status == "2H" or self.status == "1H":
             #mark colored ballon for live matches
             livestatus = "●LIVE"
         else:
@@ -148,7 +148,7 @@ class Match:
         
         # Format data e ora (15 caratteri)
         datetime_str = datetime.fromisoformat(self.date).strftime("%d/%m/%Y %H:%M")
-        country_str = f"{self.country[:20]:<20}"
+        country_str = f"{self.country[:15]:<15}"
         
         # Costruisci la stringa finale con 1 spazio tra minuto, stato e data
         result = f"{team1_str}{team2_str}{score_team1_str}{score_team2_str} {minute_str} {status_str} {datetime_str} | {country_str} {livestatus}"

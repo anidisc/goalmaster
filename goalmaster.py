@@ -10,7 +10,7 @@ from _datetime import datetime,timedelta
 import shlex
 
 
-APPVERSION = "0.0.3"
+APPVERSION = "0.0.4"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -30,11 +30,15 @@ class goalmasterapp(App):
                 ("r","remove_block","Remove Block")]
     CSS_PATH = "appstyle.tcss"
 
-    
+
     def __init__(self):
         super().__init__()
         self.YEAR_SELECT = af.ApiFootball().YEAR
-        self.league_selected = 135
+        self.league_selected = 0
+        #create a dict of all list of fixtures to reference them later
+        self.blocklist = {}
+        self.list_of_blocks = []
+
     def compose(self):
         yield Header()
         yield ScrollableContainer(id="main_container")
@@ -71,8 +75,13 @@ class goalmasterapp(App):
         self.input_box.styles.visibility = "hidden" # Hide the input box
         fixtures=af.ApiFootball().get_list_fixtures(self.league_selected,datefrom,dateto,live)
         self.block_counter += 1 # Increment the block counter
-        list_fixtures = ListView(*[ListItem(Static(str(fix)),classes="item_match") for fix in fixtures],id=f"block_{self.block_counter}",classes="block2")
-        list_fixtures.border_title = f"Fixtures League: {self.find_league(self.league_selected)}"
+        block_id = f"block_{self.block_counter}" # Create a unique block id
+        self.list_of_blocks.append(block_id)  #create e registry of blocks
+        #save blocklist in a dict
+        self.blocklist[block_id] = fixtures
+        #list_fixtures = ListView(*[ListItem(Static(str(fix)),classes="item_match") for fix in fixtures],id=f"block_{self.block_counter}",classes="block2")
+        list_fixtures = OptionList(*[str(fix) for fix in fixtures],id=block_id,classes="block2")
+        list_fixtures.boder_title = f"Fixtures League: {self.find_league(self.league_selected)}"
         list_fixtures.border_subtitle = f"from:{datefrom} - to:{dateto}"
 
         self.query_one("#main_container").mount(list_fixtures)
@@ -80,20 +89,7 @@ class goalmasterapp(App):
         list_fixtures.focus()
         #scrool maioncontainer on botton of list view
         self.query_one("#main_container").scroll_end()
-    # def add_block_fixture_live(self,leagues="all"):
-    #     self.input_box.styles.visibility = "hidden" # Hide the input box
-    #     fixtures=af.ApiFootball().get_list_fixtures(self.league_selected,
-    #                                                 datefrom=datetime.now().date(),
-    #                                                 dateto=datetime.now().date(),
-    #                                                 live=True)
-    #     self.block_counter += 1 # Increment the block counter
-    #     list_fixtures = ListView(*[ListItem(Static(str(fix)),name="item_match") for fix in fixtures],id=f"block_{self.block_counter}",classes="block2")
-    #     list_fixtures.border_title = "Fixtures Live"
-    #     self.query_one("#main_container").mount(list_fixtures)
-    #     #focus on list view
-    #     list_fixtures.focus()
-    #     #scrool maioncontainer on botton of list view
-    #     self.query_one("#main_container").scroll_end()
+
     def on_mount(self):
         self.query_one("#input").styles.visibility = "hidden" # 
         self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}"
@@ -147,8 +143,9 @@ class goalmasterapp(App):
             self.league_selected = af_map[command[0]]["id"]
             #check if command is valid
             if len(command) == 1:
-                self.show_message(f"insert options command for {self.find_league(self.league_selected)}",
-                                  titlebox=f"IMCOMPLETE COMMAND")
+                self.notify(f"insert options command for {self.find_league(self.league_selected)}",severity="warning",timeout=10)
+                # self.show_message(f"insert options command for {self.find_league(self.league_selected)}",
+                #                   titlebox=f"IMCOMPLETE COMMAND")
                 return
             if command[1] == "-S":
                 self.add_block_standings(self.league_selected)
@@ -166,9 +163,11 @@ class goalmasterapp(App):
                         dto=datetime.now().date()
                         self.add_block_fixture(dfrom,dto)
             else:
-                self.show_message("error command syntax",titlebox="SYNTAX ERROR")
+                #self.show_message("error command syntax",titlebox="SYNTAX ERROR")
+                self.notify("error command syntax",severity="error",timeout=10)
         else:
-            self.show_message("command not found",titlebox="INVALID COMMAND")
+            #self.show_message("command not found",titlebox="INVALID COMMAND")
+            self.notify("command not found",severity="error",timeout=10)
             # self.add_block_standings(self.league_selected)   
 
         # if command == "seriea":
@@ -185,12 +184,18 @@ class goalmasterapp(App):
         self.input_box.value = ""
  
     def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
-        
-        elected_option = event.option.prompt
-        self.yearsbox.border_subtitle = elected_option
-        self.yearsbox.styles.visibility = "hidden"
-        self.YEAR_SELECT = elected_option
-        self.title = f"GOAL MASTER {APPVERSION} YEAR:{self.YEAR_SELECT} CALLS:{af.ApiFootball().get_status_apicalls()}"
+        if event.option_list.id == "yearsbox":
+            selected_option = event.option.prompt
+            self.yearsbox.border_subtitle = selected_option
+            self.yearsbox.styles.visibility = "hidden"
+            self.YEAR_SELECT = selected_option
+            self.title = f"GOAL MASTER {APPVERSION} YEAR:{self.YEAR_SELECT} CALLS:{af.ApiFootball().get_status_apicalls()}"
+            return
+        if event.option_list.id in self.list_of_blocks:
+            selec_match = self.blocklist[event.option_list.id][event.option_index]
+            self.notify(selec_match.home_team+" vs "+selec_match.away_team,severity="info",timeout=10)
+            #TODO show live matches in the future
+
 if __name__ == "__main__":
     app = goalmasterapp().run()
 
