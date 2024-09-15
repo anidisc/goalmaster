@@ -157,3 +157,7 @@ class Match:
 
 
     #function to get fixture data
+
+class Event:
+    def __init__(self,team,event,minute,player,player_in,player_out) -> None:
+        pass

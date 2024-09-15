@@ -3,7 +3,7 @@ from textual.events import AppFocus, Key
 import gemini_ai
 import api_football as af
 from textual.app import App
-from textual.widgets import Header, Footer, Button, Static, ListView, ListItem, Input, OptionList
+from textual.widgets import Header, Footer, Button, Static, Input, OptionList, Collapsible
 from textual.containers import ScrollableContainer, Vertical
 from rich import print as rich_print
 from _datetime import datetime,timedelta
@@ -50,8 +50,8 @@ class goalmasterapp(App):
         self.yearsbox.border_title = "Select Year"
         yield self.yearsbox
         #create an info box to show a varius texts
-        self.infobox = Static("info text to print",id="infobox")
-        yield Vertical(self.infobox,Button("ok",id="ok_info_button"),id="infolayout") 
+        # self.infobox = Static("info text to print",id="infobox")
+        # yield Vertical(self.infobox,Button("ok",id="ok_info_button"),id="infolayout") 
 
     def find_league(self,league):
             #find name of league with de id of league
@@ -67,10 +67,11 @@ class goalmasterapp(App):
         self.input_box.styles.visibility = "hidden" # Hide the input box
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
-        block = Static(standings,id=block_id, name="block",classes="block")
+        block = Static(standings,id=block_id+"_standings", name="block",classes="block")
         block.border_title = f"Standings {self.find_league(league)}"
-        self.query_one("#main_container").mount(block)
+        self.query_one("#main_container").mount(Collapsible(block,id=block_id,title=block.border_title,collapsed=False))
         self.query_one("#main_container").scroll_end()
+        self.query_one(f"#{block_id}").focus()
     def add_block_fixture(self,datefrom,dateto,live=False):
         self.input_box.styles.visibility = "hidden" # Hide the input box
         fixtures=af.ApiFootball().get_list_fixtures(self.league_selected,datefrom,dateto,live)
@@ -81,10 +82,12 @@ class goalmasterapp(App):
         self.blocklist[block_id] = fixtures
         #list_fixtures = ListView(*[ListItem(Static(str(fix)),classes="item_match") for fix in fixtures],id=f"block_{self.block_counter}",classes="block2")
         list_fixtures = OptionList(*[str(fix) for fix in fixtures],id=block_id,classes="block2")
-        list_fixtures.boder_title = f"Fixtures League: {self.find_league(self.league_selected)}"
+        list_fixtures_title = f"Fixtures League: {self.find_league(self.league_selected)}" if live == False else "Live Fixtures ALL COUNTRIES"
         list_fixtures.border_subtitle = f"from:{datefrom} - to:{dateto}"
 
-        self.query_one("#main_container").mount(list_fixtures)
+        self.query_one("#main_container").mount(Collapsible(list_fixtures,
+                                                            id=block_id+"_fixtures",title=list_fixtures_title,
+                                                            collapsed=False)) #mount block and list_fixtures)
         #focus on list view
         list_fixtures.focus()
         #scrool maioncontainer on botton of list view
@@ -93,15 +96,15 @@ class goalmasterapp(App):
     def on_mount(self):
         self.query_one("#input").styles.visibility = "hidden" # 
         self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}"
-        self.boxmessage = self.query_one("#infolayout")
-        self.boxmessage.styles.visibility = "hidden"
+        # self.boxmessage = self.query_one("#infolayout")
+        # self.boxmessage.styles.visibility = "hidden"
         self.query_one("#main_container").focus()
     #make a function that show a message in the infobox
-    def show_message(self,text,titlebox=""):
-        self.boxmessage.styles.visibility = "visible"
-        self.boxmessage.border_title = titlebox
-        self.infobox.update(text)
-        self.query_one("#ok_info_button").focus()
+    # def show_message(self,text,titlebox=""):
+    #     self.boxmessage.styles.visibility = "visible"
+    #     self.boxmessage.border_title = titlebox
+    #     self.infobox.update(text)
+    #     self.query_one("#ok_info_button").focus()
         
     def on_key(self, event: Key):
         if event.key == "a":

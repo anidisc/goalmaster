@@ -190,6 +190,15 @@ class ApiFootball:
                                        fixture['league']['country']))
             
         return list_fixtures
+    def get_list_events_fixtures(self,id_fixture):
+        url=f"{API_URL}/fixtures/events"
+        params = {
+            "fixture": id_fixture
+        }
+        response = requests.get(url, params=params, headers=self.headers)
+        events = response.json()
+        return events
+    
 #m=ApiFootball().get_table_standings(135)
 #rich_print(ApiFootball().get_table_standings(135))
 #rich_print("Status remaining calls :", ApiFootball().get_status())

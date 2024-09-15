@@ -10,7 +10,6 @@ Screen {
 .block {
     width: 100%;
     height: auto;
-    border: hkey rgb(232, 207, 15);
     margin: 1 0;
     padding: 1;
     layer: below;
@@ -41,26 +40,4 @@ Screen {
     margin: 1 0;
     padding: 1;
     visibility: hidden;
-}
-#infolayout {
-    layer: above2;
-    border: heavy white;
-    offset: 50% 50%;
-    align: center middle;
-    width: 50%;
-    height: 50%;
-}
-#infobox {
-    layer: above2;
-    align: center middle;
-    content-align: center middle;
-    height: 50%;
-    width: 50%;
-}
-#ok_info_button {
-    layer: above2;
-    offset: 50% 50%;
-}
-.item_match {
-    
 }
