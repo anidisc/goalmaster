@@ -188,6 +188,10 @@ class ApiFootball:
                                        fixture['fixture']['status']['elapsed'],
                                        fixture['fixture']['referee'],
                                        fixture['league']['country']))
+        #sort list by date
+        list_fixtures.sort(key=lambda x: x.date) 
+        #and then sort by country   
+        list_fixtures.sort(key=lambda x: x.country)
             
         return list_fixtures
     def get_list_events_fixtures(self,id_fixture):
