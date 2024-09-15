@@ -4,13 +4,13 @@ import gemini_ai
 import api_football as af
 from textual.app import App
 from textual.widgets import Header, Footer, Button, Static, Input, OptionList, Collapsible
-from textual.containers import ScrollableContainer, Vertical
+from textual.containers import ScrollableContainer, Vertical,Horizontal
 from rich import print as rich_print
 from _datetime import datetime,timedelta
 import shlex
 
 
-APPVERSION = "0.0.4"
+APPVERSION = "0.0.6"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -38,6 +38,7 @@ class goalmasterapp(App):
         #create a dict of all list of fixtures to reference them later
         self.blocklist = {}
         self.list_of_blocks = []
+        self.selec_match = []
 
     def compose(self):
         yield Header()
@@ -52,7 +53,8 @@ class goalmasterapp(App):
         #create an info box to show a varius texts
         # self.infobox = Static("info text to print",id="infobox")
         # yield Vertical(self.infobox,Button("ok",id="ok_info_button"),id="infolayout") 
-
+        self.select_todo_box = OptionList("Show Events Table","Statistic of the match","Predictions match","Exit",id="select_todo_box")
+        yield self.select_todo_box
     def find_league(self,league):
             #find name of league with de id of league
         for k,v in af_map.items():
@@ -107,6 +109,7 @@ class goalmasterapp(App):
 
     def on_mount(self):
         self.query_one("#input").styles.visibility = "hidden" # 
+        self.select_todo_box.styles.visibility = "hidden" # hide the select todo box
         self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}"
         # self.boxmessage = self.query_one("#infolayout")
         # self.boxmessage.styles.visibility = "hidden"
@@ -207,10 +210,28 @@ class goalmasterapp(App):
             self.title = f"GOAL MASTER {APPVERSION} YEAR:{self.YEAR_SELECT} CALLS:{af.ApiFootball().get_status_apicalls()}"
             return
         if event.option_list.id in self.list_of_blocks:
-            selec_match = self.blocklist[event.option_list.id][event.option_index]
-            self.notify(selec_match.home_team+" vs "+selec_match.away_team,severity="info",timeout=5)
+            self.selec_match = self.blocklist[event.option_list.id][event.option_index]
+            if self.selec_match.status in ["NS","RS"]: #not started or resulted
+                self.notify("match not started yet",severity="warning",timeout=5)
+                #self.select_todo_box.styles.visibility = "hidden"
+                self.screen.focus()
+                return
+            self.select_todo_box.styles.visibility = "visible" #show select todo box
+            #focus on select todo box
+            self.select_todo_box.focus()
+            
+
+            self.notify(self.selec_match.home_team+" vs "+self.selec_match.away_team,severity="info",timeout=5)
             #TODO show live matches in the future
-            self.add_block_events_match(selec_match.id,selec_match.home_team,selec_match.away_team)
+        if event.option_list.id == "select_todo_box":
+            # if self.selec_match.status in ["NS","RS"]: #not started or resulted
+            #     self.notify("match not started yet",severity="warning",timeout=5)
+            #     self.select_todo_box.styles.visibility = "hidden"
+            #     self.screen.focus()
+            #     return
+            self.select_todo_box.styles.visibility = "hidden"
+            if event.option_index == 0:  #selected add block events events of the match
+                self.add_block_events_match(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)
 
 if __name__ == "__main__":
     app = goalmasterapp().run()

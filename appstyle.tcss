@@ -41,3 +41,13 @@ Screen {
     padding: 1;
     visibility: hidden;
 }
+
+#select_todo_box {
+    layer: above2;
+    border: solid grey;
+    background: black;
+    width: 25%;
+    height: auto;
+    dock: top;
+    align: center middle;
+}
