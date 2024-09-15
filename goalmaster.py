@@ -92,6 +92,18 @@ class goalmasterapp(App):
         list_fixtures.focus()
         #scrool maioncontainer on botton of list view
         self.query_one("#main_container").scroll_end()
+    def add_block_events_match(self,id_fixture,team1,team2):
+        self.input_box.styles.visibility = "hidden" # Hide the input box
+        events_table=af.ApiFootball().get_table_event_flow(id_fixture)
+        self.block_counter += 1 # Increment the block counter
+        block_id = f"block_{self.block_counter}" # Create a unique block id
+        self.query_one("#main_container").mount(Collapsible(Static(events_table),
+                                                            id=block_id,title="Events Match: "+team1+" vs "+team2,
+                                                            collapsed=False)) #mount block and list_fixtures)
+        #focus on list view
+        #events.focus()
+        #scrool maioncontainer on botton of list view
+        self.query_one("#main_container").scroll_end()
 
     def on_mount(self):
         self.query_one("#input").styles.visibility = "hidden" # 
@@ -196,8 +208,9 @@ class goalmasterapp(App):
             return
         if event.option_list.id in self.list_of_blocks:
             selec_match = self.blocklist[event.option_list.id][event.option_index]
-            self.notify(selec_match.home_team+" vs "+selec_match.away_team,severity="info",timeout=10)
+            self.notify(selec_match.home_team+" vs "+selec_match.away_team,severity="info",timeout=5)
             #TODO show live matches in the future
+            self.add_block_events_match(selec_match.id,selec_match.home_team,selec_match.away_team)
 
 if __name__ == "__main__":
     app = goalmasterapp().run()

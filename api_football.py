@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import datetime as dt
 from rich.table import Table
 from rich import print as rich_print
-from gm_data import Team, Match
+from gm_data import Team, Match, Event
 
 
 # Base URL e API key di API-FOOTBALL
@@ -93,7 +93,7 @@ class ApiFootball:
         table.add_column("POS", style="cyan")
         table.add_column("TEAM", style="magenta")
         table.add_column("P", style="bold")
-        table.add_column("PG", style="green")
+        table.add_column("RO", style="green")
         table.add_column("W", style="green")
         table.add_column("D", style="green")
         table.add_column("L", style="green")
@@ -201,7 +201,41 @@ class ApiFootball:
         }
         response = requests.get(url, params=params, headers=self.headers)
         events = response.json()
-        return events
+        events_list_flow = []
+        for event in events['response']:
+            events_list_flow.append(Event(event["team"]["name"],
+                                          event["detail"],
+                                          event["time"]["elapsed"],
+                                          event["player"]["name"],
+                                          event["assist"]["name"]if event["assist"] != None else "",
+                                          event["comments"]if event["comments"] != None else ""))
+        return events_list_flow
+    def get_table_event_flow(self,id_fixture):
+        events_list_flow = self.get_list_events_fixtures(id_fixture)
+        table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
+        table.add_column("Time", style="cyan")
+        table.add_column("Event", style="magenta", justify="center")
+        table.add_column("Team", style="yellow")
+        table.add_column("Player", style="green")
+        table.add_column("Assist", style="blue")
+        table.add_column("Comment", style="white")
+        for event in events_list_flow:
+            #color the event according to type
+            if event.event == "Goal" or event.event == "Own Goal" or event.event == "Penalty" or event.event == "Normal Goal":
+                event.event = f"[green]{event.event}[/green]"
+            elif event.event == "Yellow Card":
+                event.event = f"[yellow]{event.event}[/yellow]"
+            elif event.event == "Red Card":
+                event.event = f"[red]{event.event}[/red]"
+            elif event.event == "Substitution 1" or event.event == "Substitution 2" or event.event == "Substitution 3" or event.event == "Substitution 4" or event.event == "Substitution 5":
+                event.event = f"[blue]{event.event}[/blue]"
+            table.add_row(str(event.minute),
+                          event.event,
+                          event.team,
+                          event.player,
+                          event.assist,
+                          event.comment)
+        return table
     
 #m=ApiFootball().get_table_standings(135)
 #rich_print(ApiFootball().get_table_standings(135))
