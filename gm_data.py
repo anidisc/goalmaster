@@ -167,3 +167,42 @@ class Event:
         self.assist = assist
         self.comment = comment
         
+class Stats:
+    def __init__(self,team_name,shots_on_goal,shots_off_goal,shots_insidebox,shots_outsidebox,total_shots,
+                 blocked_shots,fouls,corners_kicks,offsides,ball_possession,yellow_card,red_card,
+                 goalkeepers_saves,total_passes,passes_accurate,passes_percentage) -> None:
+        # self.team_name = {"team_name":team_name}
+        # self.shots_on_goal = {"shots_on_goal":shots_on_goal}
+        # self.shots_off_goal = {"shots_off_goal":shots_off_goal}
+        # self.shots_insidebox = {"shots_insidebox":shots_insidebox}
+        # self.shots_outsidebox = {"shots_outsidebox":shots_outsidebox}
+        # self.total_shots = {"total_shots":total_shots}
+        # self.blocked_shots = {"blocked_shots":blocked_shots}
+        # self.fouls = {"fouls":fouls}
+        # self.corners_kicks = {"corners_kicks":corners_kicks}
+        # self.offsides = {"offsides":offsides}
+        # self.ball_possession = {"ball_possession":ball_possession}
+        # self.yellow_card = {"yellow_card":yellow_card}
+        # self.red_card = {"red_card":red_card}
+        # self.goalkeepers_saves = {"goalkeepers_saves":goalkeepers_saves}
+        # self.total_passes = {"total_passes":total_passes}
+        # self.passes_accurate = {"passes_accurate":passes_accurate}
+        # self.passes_percentage = {"passes_percentage":passes_percentage}
+        self.team_name = team_name
+        self.shots_on_goal = shots_on_goal
+        self.shots_off_goal = shots_off_goal
+        self.shots_insidebox = shots_insidebox
+        self.shots_outsidebox = shots_outsidebox
+        self.total_shots = total_shots
+        self.blocked_shots = blocked_shots
+        self.fouls = fouls
+        self.corners_kicks = corners_kicks
+        self.offsides = offsides
+        self.ball_possession = ball_possession
+        self.yellow_card = yellow_card
+        self.red_card = red_card
+        self.goalkeepers_saves = goalkeepers_saves
+        self.total_passes = total_passes
+        self.passes_accurate = passes_accurate
+        self.passes_percentage = passes_percentage
+    

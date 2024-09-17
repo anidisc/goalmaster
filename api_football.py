@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import datetime as dt
 from rich.table import Table
 from rich import print as rich_print
-from gm_data import Team, Match, Event
+from gm_data import Team, Match, Event, Stats
 
 
 # Base URL e API key di API-FOOTBALL
@@ -203,9 +203,10 @@ class ApiFootball:
         events = response.json()
         events_list_flow = []
         for event in events['response']:
+            extratime = event["time"]["extra"] if event["time"]["extra"] != None else 0
             events_list_flow.append(Event(event["team"]["name"],
                                           event["detail"],
-                                          event["time"]["elapsed"],
+                                          event["time"]["elapsed"]+extratime,
                                           event["player"]["name"],
                                           event["assist"]["name"]if event["assist"] != None else "",
                                           event["comments"]if event["comments"] != None else ""))
@@ -229,14 +230,71 @@ class ApiFootball:
                 event.event = f"[red]{event.event}[/red]"
             elif event.event == "Substitution 1" or event.event == "Substitution 2" or event.event == "Substitution 3" or event.event == "Substitution 4" or event.event == "Substitution 5":
                 event.event = f"[blue]{event.event}[/blue]"
-            table.add_row(str(event.minute),
+            table.add_row(str(event.minute)+"'",
                           event.event,
                           event.team,
                           event.player,
                           event.assist,
                           event.comment)
         return table
+    def get_statistics_match(self,id_fixture):
+        url=f"{API_URL}/fixtures/statistics"
+        params = {
+            "fixture": id_fixture
+        }
+        response = requests.get(url, params=params, headers=self.headers)
+        statistics = response.json()
+        return statistics
     
+    def get_list_statistics_match(self,id_fixture):
+        statistics = self.get_statistics_match(id_fixture)
+        list_teams_stats = []
+        for team in statistics['response']:
+            list_teams_stats.append(Stats(team['team']['name'],
+                                          team['statistics'][0]['value'],
+                                          team['statistics'][1]['value'],
+                                          team['statistics'][2]['value'],
+                                          team['statistics'][3]['value'],
+                                          team['statistics'][4]['value'],
+                                          team['statistics'][5]['value'],
+                                          team['statistics'][6]['value'],
+                                          team['statistics'][7]['value'],
+                                          team['statistics'][8]['value'],
+                                          team['statistics'][9]['value'],
+                                          team['statistics'][10]['value'],
+                                          team['statistics'][11]['value'],
+                                          team['statistics'][12]['value'],
+                                          team['statistics'][13]['value'],
+                                          team['statistics'][14]['value'],
+                                          team['statistics'][15]['value']))
+        return list_teams_stats
+    
+    def print_table_standings(self,league):
+        s=self.get_list_statistics_match(league)
+        table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
+        table.add_column("Stats", style="cyan")
+        table.add_column(s[0].team_name.upper(), style="cyan", justify="center")
+        table.add_column(s[1].team_name.upper(), style="magenta", justify="center")
+        table.add_row("ball possession", str(s[0].ball_possession)+"%", str(s[1].ball_possession)+"%")
+        table.add_row("shoots on goals", str(s[0].shots_on_goal), str(s[1].shots_on_goal))
+        table.add_row("shoots off goals", str(s[0].shots_off_goal), str(s[1].shots_off_goal))
+        table.add_row("shots on target", str(s[0].shots_insidebox), str(s[1].shots_insidebox))
+        table.add_row("shots off target", str(s[0].shots_outsidebox), str(s[1].shots_outsidebox))
+        table.add_row("total shots", str(s[0].total_shots), str(s[1].total_shots))
+        table.add_row("blocked shots", str(s[0].blocked_shots), str(s[1].blocked_shots))
+        table.add_row("offsides", str(s[0].offsides), str(s[1].offsides))
+        table.add_row("corners", str(s[0].corners_kicks), str(s[1].corners_kicks))
+        table.add_row("fouls", str(s[0].fouls), str(s[1].fouls))
+        table.add_row("yellow cards", str(s[0].yellow_card), str(s[1].yellow_card))
+        table.add_row("red cards", str(s[0].red_card), str(s[1].red_card))
+        table.add_row("saves", str(s[0].goalkeepers_saves), str(s[1].goalkeepers_saves))
+        table.add_row("total passes", str(s[0].total_passes), str(s[1].total_passes))
+        table.add_row("accurate passes", str(s[0].passes_accurate), str(s[1].passes_accurate))
+        table.add_row("percentage passes", str(s[0].passes_percentage)+"%", str(s[1].passes_percentage)+"%")
+
+
+        return table
+
 #m=ApiFootball().get_table_standings(135)
 #rich_print(ApiFootball().get_table_standings(135))
 #rich_print("Status remaining calls :", ApiFootball().get_status())
@@ -245,8 +303,8 @@ class ApiFootball:
 # dto=dt.date.today()+timedelta(days=-30)
 # rich_print(dfrom,dto)
 
-# r=ApiFootball().get_list_fixtures(39,dto,dfrom)
+# r=ApiFootball().get_list_fixtures(135,dto,dfrom)
 # for i in range(len(r)):
-#     rich_print(r[i])
+#     rich_print(f"{r[i]}, {r[i].id}")
 
-
+#rich_print(ApiFootball().print_table_standings(1223632))

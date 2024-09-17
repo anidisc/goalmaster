@@ -10,7 +10,7 @@ from _datetime import datetime,timedelta
 import shlex
 
 
-APPVERSION = "0.0.6"
+APPVERSION = "0.0.7"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -27,7 +27,8 @@ class goalmasterapp(App):
     BINDINGS = [("q", "quit", "Quit"),
                 ("y", "change_year", "Change Year"),
                 ("i", "insert_command", "Insert Command"),
-                ("r","remove_block","Remove Block")]
+                ("r","remove_block","Remove Block"),
+                ("c", "collapse_or_expand(True)", "Collapse All")]
     CSS_PATH = "appstyle.tcss"
 
 
@@ -106,6 +107,16 @@ class goalmasterapp(App):
         #events.focus()
         #scrool maioncontainer on botton of list view
         self.query_one("#main_container").scroll_end()
+    
+    def add_block_stats_match(self,id_fixture,team1,team2):
+        self.input_box.styles.visibility = "hidden" # Hide the input box
+        stats_table=af.ApiFootball().print_table_standings(id_fixture)
+        self.block_counter += 1 # Increment the block counter
+        block_id = f"block_{self.block_counter}" # Create a unique block id
+        self.query_one("#main_container").mount(Collapsible(Static(stats_table),
+                                                            id=block_id,title="Statistic Match: "+team1+" vs "+team2,
+                                                            collapsed=False)) #mount block and list_fixtures)
+        self.query_one("#main_container").scroll_end()
 
     def on_mount(self):
         self.query_one("#input").styles.visibility = "hidden" # 
@@ -143,6 +154,10 @@ class goalmasterapp(App):
     def action_change_year(self):
         self.yearsbox.styles.visibility = "visible" if self.yearsbox.styles.visibility == "hidden" else "hidden"
         self.yearsbox.focus()
+    def action_collapse_or_expand(self, collapse: bool) -> None:
+        for child in self.walk_children(Collapsible):
+            child.collapsed = collapse
+
     def on_input_submitted(self, event: Input.Submitted):
         #validate di input is not void
         if event.value == "":
@@ -232,6 +247,8 @@ class goalmasterapp(App):
             self.select_todo_box.styles.visibility = "hidden"
             if event.option_index == 0:  #selected add block events events of the match
                 self.add_block_events_match(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)
+            if event.option_index == 1:  #selected add block stats of the match
+                self.add_block_stats_match(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)
 
 if __name__ == "__main__":
     app = goalmasterapp().run()
