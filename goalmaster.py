@@ -20,6 +20,9 @@ af_map={
     "SERIEB":{"id":136,"name":"Serie B","country":"Italy"},
     "BUNDESLIGA2":{"id":79,"name":"Bundesliga 2","country":"Germany"},
     "LIGUE2":{"id":62,"name":"Ligue 2","country":"France"},
+    "SUPERLIG":{"id":203,"name":"Super Lig","country":"Turkey"},
+    "UCL":{"id":2,"name":"UEFA Champions League","country":"Europe"},
+    "UEL":{"id":3,"name":"UEFA Europa League","country":"Europe"}
 }
 
 #class for structure data of a soccer team
@@ -40,6 +43,7 @@ class goalmasterapp(App):
         self.blocklist = {}
         self.list_of_blocks = []
         self.selec_match = []
+        self.last_focus_id =None
 
     def compose(self):
         yield Header()
@@ -54,7 +58,7 @@ class goalmasterapp(App):
         #create an info box to show a varius texts
         # self.infobox = Static("info text to print",id="infobox")
         # yield Vertical(self.infobox,Button("ok",id="ok_info_button"),id="infolayout") 
-        self.select_todo_box = OptionList("Show Events Table","Statistic of the match","Predictions match","Exit",id="select_todo_box")
+        self.select_todo_box = OptionList("EVENT TABLE","MATCH STATS","PREDICTION","EXIT",id="select_todo_box")
         yield self.select_todo_box
     def find_league(self,league):
             #find name of league with de id of league
@@ -125,13 +129,13 @@ class goalmasterapp(App):
         # self.boxmessage = self.query_one("#infolayout")
         # self.boxmessage.styles.visibility = "hidden"
         self.query_one("#main_container").focus()
-    #make a function that show a message in the infobox
-    # def show_message(self,text,titlebox=""):
-    #     self.boxmessage.styles.visibility = "visible"
-    #     self.boxmessage.border_title = titlebox
-    #     self.infobox.update(text)
-    #     self.query_one("#ok_info_button").focus()
-        
+
+    # async def on_focus(self, event):
+    #     self.last_focus_id = event.app.focused.id if event.app.focused else None
+    #     #create a list of id of focus widgets
+    #     #self.last_focus_id = event.id
+    #     self.title = self.last_focus_id if self.last_focus_id else "GOAL MASTER"
+
     def on_key(self, event: Key):
         if event.key == "a":
             self.YEAR_SELECT = af.ApiFootball().YEAR
@@ -144,10 +148,7 @@ class goalmasterapp(App):
             if self.block_counter == 0:
                 self.exit()
     #button pressed
-    def on_button_pressed(self, event: Button.Pressed):
-        if event.button.id == "ok_info_button":
-            self.boxmessage.styles.visibility = "hidden"
-            self.screen.focus()
+
     def action_insert_command(self):
         self.input_box.styles.visibility = "visible" if self.input_box.styles.visibility == "hidden" else "hidden"
         self.input_box.focus()
@@ -226,11 +227,12 @@ class goalmasterapp(App):
             return
         if event.option_list.id in self.list_of_blocks:
             self.selec_match = self.blocklist[event.option_list.id][event.option_index]
-            if self.selec_match.status in ["NS","RS"]: #not started or resulted
-                self.notify("match not started yet",severity="warning",timeout=5)
-                #self.select_todo_box.styles.visibility = "hidden"
-                self.screen.focus()
-                return
+            # if self.selec_match.status in ["NS","RS"]: #not started or resulted
+            #     self.notify("match not started yet",severity="warning",timeout=5)
+            #     #self.select_todo_box.styles.visibility = "hidden"
+
+            #     self.screen.focus()
+            #     return
             self.select_todo_box.styles.visibility = "visible" #show select todo box
             #focus on select todo box
             self.select_todo_box.focus()
@@ -246,8 +248,18 @@ class goalmasterapp(App):
             #     return
             self.select_todo_box.styles.visibility = "hidden"
             if event.option_index == 0:  #selected add block events events of the match
+                if self.selec_match.status in ["NS","RS"]: #not started or resulted
+                    self.notify("match not started yet",severity="warning",timeout=5)
+                    #self.select_todo_box.styles.visibility = "hidden"
+                    self.screen.focus()
+                    return
                 self.add_block_events_match(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)
             if event.option_index == 1:  #selected add block stats of the match
+                if self.selec_match.status in ["NS","RS"]: #not started or resulted
+                    self.notify("match not started yet",severity="warning",timeout=5)
+                    #self.select_todo_box.styles.visibility = "hidden"
+                    self.screen.focus()
+                    return
                 self.add_block_stats_match(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)
 
 if __name__ == "__main__":

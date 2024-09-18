@@ -88,38 +88,44 @@ class ApiFootball:
         Returns:
             rich.table.Table: a rich.table.Table object representing the standings of the league
         """
+        # Get the standings of the league
         standings = self.get_standings(league)
-        table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
-        table.add_column("POS", style="cyan")
-        table.add_column("TEAM", style="magenta")
-        table.add_column("P", style="bold")
-        table.add_column("RO", style="green")
-        table.add_column("W", style="green")
-        table.add_column("D", style="green")
-        table.add_column("L", style="green")
-        table.add_column("GF(H)", style="yellow")
-        table.add_column("GA(H)", style="yellow")
-        table.add_column("GF(A)", style="yellow")
-        table.add_column("GA(A)", style="yellow")
-        table.add_column("MGF(H)", style="yellow")
-        table.add_column("MGA(A)", style="yellow")
-        table.add_column("Status", style="bold")
-     
 
+        # Create a rich.table.Table object
+        table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
+
+        # Add columns to the table
+        table.add_column("POS", style="cyan") # Position
+        table.add_column("TEAM", style="magenta") # Team name
+        table.add_column("P", style="bold") # Points
+        table.add_column("RO", style="green") # Rounds
+        table.add_column("W", style="green") # Wins
+        table.add_column("D", style="green") # Draws
+        table.add_column("L", style="green") # Losses
+        table.add_column("GF(H)", style="yellow") # Goals for at home
+        table.add_column("GA(H)", style="yellow") # Goals against at home
+        table.add_column("GF(A)", style="yellow") # Goals for away
+        table.add_column("GA(A)", style="yellow") # Goals against away
+        table.add_column("MGF(H)", style="yellow") # Average goals for at home
+        table.add_column("MGA(A)", style="yellow") # Average goals against away
+        table.add_column("Status", style="bold") # Status of the team
+
+        # Loop through the standings and add rows to the table
         for team in standings['response'][0]['league']['standings'][0]:
+            # Get the team's position, name, points, played games, wins, draws, losses, goals for and against at home and away
             position = str(team['rank'])
             team_name = team['team']['name']
+            points = str(team['points'])
             played_games = str(team['all']['played'])
             wins = str(team['all']['win'])
             draws = str(team['all']['draw'])
             losses = str(team['all']['lose'])
-            
             goals_for_home = team['home']['goals']['for']
             goals_against_home = team['home']['goals']['against']
             goals_for_away = team['away']['goals']['for']
             goals_against_away = team['away']['goals']['against']
-            
-            # Calcolo media gol
+
+            # Calculate average goals for and against at home and away
             try:
                 avg_goals_for_home = round(goals_for_home / team['home']['played'], 2)
                 avg_goals_for_away = round(goals_for_away / team['away']['played'], 2)
@@ -127,8 +133,7 @@ class ApiFootball:
                 avg_goals_for_home = 0
                 avg_goals_for_away = 0  
 
-        
-            # Ultime 5 partite (simboli colorati)
+            # Get the team's form (last 5 matches)
             form=""
             for result in list(str(team['form'])):
                 if result == 'W':
@@ -138,16 +143,16 @@ class ApiFootball:
                 elif result == 'L':
                     form += "[red]●[/red]"
 
-            points = str(team['points'])
-
+            # Add the row to the table
             table.add_row(
                 position, team_name, points, played_games, wins, draws, losses,
                 str(goals_for_home), str(goals_against_home),
                 str(goals_for_away), str(goals_against_away),
-                str(avg_goals_for_home), str(avg_goals_for_away),form
+                str(avg_goals_for_home), str(avg_goals_for_away),
+                form
             )
-        #create a list of Team objects from the table
-        #table = [Team(row) for row in table.rows]
+
+        # Return the table
         return table
     
     def get_fixtures(self,id_league,datefrom,dateto):
@@ -223,7 +228,10 @@ class ApiFootball:
         for event in events_list_flow:
             #color the event according to type
             if event.event == "Goal" or event.event == "Own Goal" or event.event == "Penalty" or event.event == "Normal Goal":
-                event.event = f"[green]{event.event}[/green]"
+                if event.event == "Goal" or event.event == "Normal Goal":
+                    event.event = f"[green]G O A L[/green]"
+                else:
+                    event.event = f"[green]{event.event}[/green]"
             elif event.event == "Yellow Card":
                 event.event = f"[yellow]{event.event}[/yellow]"
             elif event.event == "Red Card":
@@ -246,27 +254,38 @@ class ApiFootball:
         statistics = response.json()
         return statistics
     
-    def get_list_statistics_match(self,id_fixture):
+    def get_list_statistics_match(self, id_fixture: int) -> list[Stats]:
+        """
+        Get the statistics of a match from the API and return a list of Stats objects.
+
+        Args:
+            id_fixture (int): The id of the fixture to get the statistics for
+
+        Returns:
+            List[Stats]: A list of Stats objects
+        """
         statistics = self.get_statistics_match(id_fixture)
         list_teams_stats = []
         for team in statistics['response']:
-            list_teams_stats.append(Stats(team['team']['name'],
-                                          team['statistics'][0]['value'],
-                                          team['statistics'][1]['value'],
-                                          team['statistics'][2]['value'],
-                                          team['statistics'][3]['value'],
-                                          team['statistics'][4]['value'],
-                                          team['statistics'][5]['value'],
-                                          team['statistics'][6]['value'],
-                                          team['statistics'][7]['value'],
-                                          team['statistics'][8]['value'],
-                                          team['statistics'][9]['value'],
-                                          team['statistics'][10]['value'],
-                                          team['statistics'][11]['value'],
-                                          team['statistics'][12]['value'],
-                                          team['statistics'][13]['value'],
-                                          team['statistics'][14]['value'],
-                                          team['statistics'][15]['value']))
+            list_teams_stats.append(Stats(
+                team_name=team['team']['name'],
+                shots_on_goal=team['statistics'][0]['value'],
+                shots_off_goal=team['statistics'][1]['value'],
+                shots_insidebox=team['statistics'][2]['value'],
+                shots_outsidebox=team['statistics'][3]['value'],
+                total_shots=team['statistics'][4]['value'],
+                blocked_shots=team['statistics'][5]['value'],
+                fouls=team['statistics'][6]['value'],
+                corners_kicks=team['statistics'][7]['value'],
+                offsides=team['statistics'][8]['value'],
+                ball_possession=team['statistics'][9]['value'],
+                yellow_card=team['statistics'][10]['value'],
+                red_card=team['statistics'][11]['value'],
+                goalkeepers_saves=team['statistics'][12]['value'],
+                total_passes=team['statistics'][13]['value'],
+                passes_accurate=team['statistics'][14]['value'],
+                passes_percentage=team['statistics'][15]['value']
+            ))
         return list_teams_stats
     
     def print_table_standings(self,league):
