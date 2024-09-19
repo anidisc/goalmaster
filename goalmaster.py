@@ -6,11 +6,12 @@ from textual.app import App
 from textual.widgets import Header, Footer, Button, Static, Input, OptionList, Collapsible
 from textual.containers import ScrollableContainer, Vertical,Horizontal
 from rich import print as rich_print
+from rich.markdown import Markdown
 from _datetime import datetime,timedelta
 import shlex
 
 
-APPVERSION = "0.0.7"
+APPVERSION = "0.0.9"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -121,6 +122,19 @@ class goalmasterapp(App):
                                                             id=block_id,title="Statistic Match: "+team1+" vs "+team2,
                                                             collapsed=False)) #mount block and list_fixtures)
         self.query_one("#main_container").scroll_end()
+
+    def add_block_prediction(self,league_id,id_fixture,team1,team2,prompt):
+        self.input_box.styles.visibility = "hidden" # Hide the input box
+        self.block_counter += 1 # Increment the block counter
+        block_id = f"block_{self.block_counter}" # Create a unique block id
+        table_stats=af.ApiFootball().get_standings(league_id)
+        composed_prompt = f"The match is between {team1} vs {team2}, and view this standing: {table_stats}"
+        prediction=gemini_ai.gemini_ai_call(composed_prompt+prompt)
+        self.query_one("#main_container").mount(Collapsible(Static(Markdown(prediction)),
+                                                            id=block_id,title="Prediction Match: "+team1+" vs "+team2,
+                                                            collapsed=False)) #mount block and list_fixtures)
+        self.query_one("#main_container").scroll_end()
+        
 
     def on_mount(self):
         self.query_one("#input").styles.visibility = "hidden" # 
@@ -261,6 +275,26 @@ class goalmasterapp(App):
                     self.screen.focus()
                     return
                 self.add_block_stats_match(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)
+            if event.option_index == 2:  #selected add block standings of the league
+                prompt_request = f"""
+                Analyze the match between {self.selec_match.home_team} and {self.selec_match.away_team}.
+                CI ask you to analyze in detail the match that will take place between these two teams, 
+                considering the standings in this season with all the relevant statistics for each team. 
+                Therefore, take into account the goals scored and conceded at home and away, 
+                and try to make a prediction about the match that you believe is the most likely, 
+                providing objective reasoning for your answers. 
+                If possible, look up the historical matches between the two teams and how frequently 
+                the various results have occurred in previous games. Give me an assessment of a possible 
+                prediction based on how many goals either team might score, considering the goals scored this season. 
+                If there have been too few matches, you might also base it on last season's standings, 
+                which you should try to find online if you can. Finally, provide me with a probable exact score by analyzing the two teams.
+
+                """
+                if not (self.selec_match.status in ["NS","RS"]): #not started or resulted
+                    self.notify("Match in live",severity="warning",timeout=5)
+                else:
+                    self.notify(f"Analyze prediction... {self.selec_match.home_team} vs {self.selec_match.away_team}",severity="info",timeout=5)
+                self.add_block_prediction(self.league_selected,self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team,prompt_request)
 
 if __name__ == "__main__":
     app = goalmasterapp().run()

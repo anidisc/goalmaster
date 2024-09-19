@@ -315,7 +315,8 @@ class ApiFootball:
         return table
 
 #m=ApiFootball().get_table_standings(135)
-#rich_print(ApiFootball().get_table_standings(135))
+# testo=str(rich_print(ApiFootball().get_table_standings(135)))                                                                                                                                                                                                                                                                                                                                            
+# print(type(testo))
 #rich_print("Status remaining calls :", ApiFootball().get_status())
 #rich_print("standings italy 2023", ApiFootball(2023).get_table_standings(135))
 # dfrom=dt.date.today()
