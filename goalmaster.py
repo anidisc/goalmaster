@@ -11,7 +11,7 @@ from _datetime import datetime,timedelta
 import shlex
 
 
-APPVERSION = "0.0.9"
+APPVERSION = "0.1.0"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -130,7 +130,7 @@ class goalmasterapp(App):
         table_stats=af.ApiFootball().get_standings(league_id)
         composed_prompt = f"The match is between {team1} vs {team2}, and view this standing: {table_stats}"
         prediction=gemini_ai.gemini_ai_call(composed_prompt+prompt)
-        self.query_one("#main_container").mount(Collapsible(Static(Markdown(prediction)),
+        self.query_one("#main_container").mount(Collapsible(Static(Markdown(prediction),classes="predictions"),
                                                             id=block_id,title="Prediction Match: "+team1+" vs "+team2,
                                                             collapsed=False)) #mount block and list_fixtures)
         self.query_one("#main_container").scroll_end()
@@ -138,7 +138,8 @@ class goalmasterapp(App):
 
     def on_mount(self):
         self.query_one("#input").styles.visibility = "hidden" # 
-        self.select_todo_box.styles.visibility = "hidden" # hide the select todo box
+        #self.select_todo_box.styles.visibility = "hidden" # hide the select todo box
+        self.select_todo_box.display = False
         self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}"
         # self.boxmessage = self.query_one("#infolayout")
         # self.boxmessage.styles.visibility = "hidden"
@@ -247,7 +248,8 @@ class goalmasterapp(App):
 
             #     self.screen.focus()
             #     return
-            self.select_todo_box.styles.visibility = "visible" #show select todo box
+            #self.select_todo_box.styles.visibility = "visible" #show select todo box
+            self.select_todo_box.display = True
             #focus on select todo box
             self.select_todo_box.focus()
             
@@ -260,7 +262,8 @@ class goalmasterapp(App):
             #     self.select_todo_box.styles.visibility = "hidden"
             #     self.screen.focus()
             #     return
-            self.select_todo_box.styles.visibility = "hidden"
+            #self.select_todo_box.styles.visibility = "hidden"
+            self.select_todo_box.display = False
             if event.option_index == 0:  #selected add block events events of the match
                 if self.selec_match.status in ["NS","RS"]: #not started or resulted
                     self.notify("match not started yet",severity="warning",timeout=5)
@@ -278,20 +281,22 @@ class goalmasterapp(App):
             if event.option_index == 2:  #selected add block standings of the league
                 prompt_request = f"""
                 Analyze the match between {self.selec_match.home_team} and {self.selec_match.away_team}.
-                CI ask you to analyze in detail the match that will take place between these two teams, 
-                considering the standings in this season with all the relevant statistics for each team. 
-                Therefore, take into account the goals scored and conceded at home and away, 
-                and try to make a prediction about the match that you believe is the most likely, 
-                providing objective reasoning for your answers. 
-                If possible, look up the historical matches between the two teams and how frequently 
-                the various results have occurred in previous games. Give me an assessment of a possible 
-                prediction based on how many goals either team might score, considering the goals scored this season. 
-                If there have been too few matches, you might also base it on last season's standings, 
-                which you should try to find online if you can. Finally, provide me with a probable exact score by analyzing the two teams.
+                Try to analyze the match between the two teams, providing a precise context in which they 
+                will face each other, comparing their statistical performance in the league. 
+                Present this data using comparative tables and histograms where possible. 
+                Analyze well the behavior and performance of the teams at home and away, and base your judgment on this, 
+                which should be a calculated prediction 1 X 2, and where you are unsure, also provide a double chance 
+                (for example, 1X, X2, 12). Additionally, separate with a line the next judgment on how many 
+                goals the teams might score and whether it's likely to be GG (both teams to score) or NG 
+                (no goals from one or both teams). Further, 
+                identify the team with the highest probability of scoring at least one goal, which should exceed 70%, 
+                and the team with the lowest probability of scoring at least one goal, which should be below 30%. and of course, explain all your choices."
 
                 """
                 if not (self.selec_match.status in ["NS","RS"]): #not started or resulted
                     self.notify("Match in live",severity="warning",timeout=5)
+                elif self.selec_match.status == "FT":
+                    self.notify("Match finished",severity="warning",timeout=5)
                 else:
                     self.notify(f"Analyze prediction... {self.selec_match.home_team} vs {self.selec_match.away_team}",severity="info",timeout=5)
                 self.add_block_prediction(self.league_selected,self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team,prompt_request)
