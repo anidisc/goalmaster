@@ -1,4 +1,3 @@
-Ecco la versione tradotta in inglese del file `README.md`, con alcune informazioni aggiuntive sulle previsioni dei risultati e possibili sviluppi futuri:
 
 ```markdown
 # GoalMasterApp
