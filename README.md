@@ -1,6 +1,4 @@
-
-```markdown
-# GoalMasterApp
+## GoalMasterApp
 
 GoalMasterApp is an interactive application built with [Textual](https://textual.textualize.io/), designed to provide statistics, events, standings, and predictions for major football leagues. It leverages the [api_football](https://rapidapi.com/api-sports/api/api-football) API to fetch up-to-date match data and [gemini_ai](https://gemini.ai) for generating advanced match predictions.
 
@@ -23,31 +21,33 @@ GoalMasterApp is an interactive application built with [Textual](https://textual
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/goal-master-app.git
-   cd goal-master-app
-   ```
+  ```bash
+  git clone https://github.com/your-username/goal-master-app.git cd goal-master-app
 
 2. Create a virtual environment and activate it:
-   ```bash
-   python3.12 -m venv venv
-   source venv/bin/activate
-   ```
-
+  
+  ```bash
+  python3.12 -m venv venv
+  source venv/bin/activate
+  ```
+  
 3. Install the dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+  
+  ```bash
+  pip install -r requirements.txt
+  ```
+  
 
 ### Configuration
 
 To run the application, you'll need to configure the APIs.
 
 1. **api_football**:
-   - Get your API credentials from [api_football](https://rapidapi.com/api-sports/api/api-football) and configure them in the `api_football.py` file.
-
+  
+  - Get your API credentials from [api_football](https://rapidapi.com/api-sports/api/api-football) and configure them in the `api_football.py` file.
 2. **gemini_ai**:
-   - Register your account at [gemini_ai](https://gemini.ai) and configure the access token in the `gemini_ai.py` file.
+  
+  - Register your account at [gemini_ai](https://gemini.ai) and configure the access token in the `gemini_ai.py` file.
 
 ### Running the Application
 
@@ -100,19 +100,23 @@ To contribute to the development:
 
 1. Fork the project.
 2. Create a new branch:
-   ```bash
-   git checkout -b feature-new-functionality
-   ```
+  
+  ```bash
+  git checkout -b feature-new-functionality
+  ```
+  
 3. Make your changes and submit a pull request.
 
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+
 ```
 
 ---
 
 **Additional Features:**
+
 - Detailed predictions, including goals and scoring probabilities.
 - Future development focusing on visualizations, in-depth analysis, and expanded league support.
 
