@@ -23,7 +23,8 @@ af_map={
     "LIGUE2":{"id":62,"name":"Ligue 2","country":"France"},
     "SUPERLIG":{"id":203,"name":"Super Lig","country":"Turkey"},
     "UCL":{"id":2,"name":"UEFA Champions League","country":"Europe"},
-    "UEL":{"id":3,"name":"UEFA Europa League","country":"Europe"}
+    "UEL":{"id":3,"name":"UEFA Europa League","country":"Europe"},
+    "ERE":{"id":4,"name":"Eredivisie","country":"Netherlands"}
 }
 
 #class for structure data of a soccer team
@@ -45,6 +46,7 @@ class goalmasterapp(App):
         self.list_of_blocks = []
         self.selec_match = []
         self.last_focus_id =None
+        self.memory_standings = None  # Memory of the standings in list of dict
 
     def compose(self):
         yield Header()
@@ -81,7 +83,7 @@ class goalmasterapp(App):
         self.query_one("#main_container").scroll_end()
         self.query_one(f"#{block_id}").focus()
     def add_block_fixture(self,datefrom,dateto,live=False):
-        self.input_box.styles.visibility = "hidden" # Hide the input box
+        #self.input_box.styles.visibility = "hidden" # Hide the input box
         fixtures=af.ApiFootball().get_list_fixtures(self.league_selected,datefrom,dateto,live)
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
@@ -101,7 +103,7 @@ class goalmasterapp(App):
         #scrool maioncontainer on botton of list view
         self.query_one("#main_container").scroll_end()
     def add_block_events_match(self,id_fixture,team1,team2):
-        self.input_box.styles.visibility = "hidden" # Hide the input box
+        #self.input_box.styles.visibility = "hidden" # Hide the input box
         events_table=af.ApiFootball().get_table_event_flow(id_fixture)
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
@@ -114,7 +116,7 @@ class goalmasterapp(App):
         self.query_one("#main_container").scroll_end()
     
     def add_block_stats_match(self,id_fixture,team1,team2):
-        self.input_box.styles.visibility = "hidden" # Hide the input box
+        #self.input_box.styles.visibility = "hidden" # Hide the input box
         stats_table=af.ApiFootball().print_table_standings(id_fixture)
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
@@ -124,7 +126,7 @@ class goalmasterapp(App):
         self.query_one("#main_container").scroll_end()
 
     def add_block_prediction(self,league_id,id_fixture,team1,team2,prompt):
-        self.input_box.styles.visibility = "hidden" # Hide the input box
+        #self.input_box.styles.visibility = "hidden" # Hide the input box
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         table_stats=af.ApiFootball().get_standings(league_id)
@@ -137,7 +139,8 @@ class goalmasterapp(App):
         
 
     def on_mount(self):
-        self.query_one("#input").styles.visibility = "hidden" # 
+        #self.query_one("#input").styles.visibility = "hidden" # 
+        self.input_box.display = False # Hide the input box
         #self.select_todo_box.styles.visibility = "hidden" # hide the select todo box
         self.select_todo_box.display = False
         self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}"
@@ -153,8 +156,9 @@ class goalmasterapp(App):
 
     def on_key(self, event: Key):
         if event.key == "a":
-            self.YEAR_SELECT = af.ApiFootball().YEAR
-            self.add_block_standings(self.league_selected)
+            pass
+            # self.YEAR_SELECT = af.ApiFootball().YEAR
+            # self.add_block_standings(self.league_selected)
         if event.key == "r" and self.block_counter > 0:
             widget_id_to_remove =f"block_{self.block_counter}"
             self.query_one(f"#{widget_id_to_remove}").remove()
@@ -165,7 +169,8 @@ class goalmasterapp(App):
     #button pressed
 
     def action_insert_command(self):
-        self.input_box.styles.visibility = "visible" if self.input_box.styles.visibility == "hidden" else "hidden"
+        #self.input_box.styles.visibility = "visible" if self.input_box.styles.visibility == "hidden" else "hidden"
+        self.input_box.display = True
         self.input_box.focus()
     def action_change_year(self):
         self.yearsbox.styles.visibility = "visible" if self.yearsbox.styles.visibility == "hidden" else "hidden"
@@ -180,7 +185,7 @@ class goalmasterapp(App):
             return
         command = shlex.split(event.value.upper()) # Split the input string into a list of words
         #hide input box
-        self.input_box.styles.visibility = "hidden"
+        #self.input_box.styles.visibility = "hidden"
         #check if command is valid
         if command[0] == "LIVE":
             self.add_block_fixture(datetime.now().date(),datetime.now().date(),live=True)
@@ -213,10 +218,10 @@ class goalmasterapp(App):
                         self.add_block_fixture(dfrom,dto)
             else:
                 #self.show_message("error command syntax",titlebox="SYNTAX ERROR")
-                self.notify("error command syntax",severity="error",timeout=10)
+                self.notify("error command syntax",severity="error",timeout=5)
         else:
             #self.show_message("command not found",titlebox="INVALID COMMAND")
-            self.notify("command not found",severity="error",timeout=10)
+            self.notify("command not found",severity="error",timeout=5)
             # self.add_block_standings(self.league_selected)   
 
         # if command == "seriea":
@@ -229,7 +234,8 @@ class goalmasterapp(App):
         #     self.league_selected = 78
         #     self.add_block_standings(self.league_selected)
 
-        self.input_box.styles.visibility = "hidden"
+        #self.input_box.styles.visibility = "hidden"
+        self.input_box.display = False # Hide the input box
         self.input_box.value = ""
  
     def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
