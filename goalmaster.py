@@ -24,7 +24,8 @@ af_map={
     "SUPERLIG":{"id":203,"name":"Super Lig","country":"Turkey"},
     "UCL":{"id":2,"name":"UEFA Champions League","country":"Europe"},
     "UEL":{"id":3,"name":"UEFA Europa League","country":"Europe"},
-    "ERE":{"id":4,"name":"Eredivisie","country":"Netherlands"}
+    "ERE":{"id":88,"name":"Eredivisie","country":"Netherlands"},
+    "COPPAITALIA":{"id":142,"name":"Coppa Italia","country":"Italy"},
 }
 
 #class for structure data of a soccer team
@@ -74,7 +75,7 @@ class goalmasterapp(App):
     #create block to show the current standings of the league
     def add_block_standings(self,league,text="text to print"):
         standings = af.ApiFootball(self.YEAR_SELECT).get_table_standings(league)
-        self.input_box.styles.visibility = "hidden" # Hide the input box
+        #self.input_box.styles.visibility = "hidden" # Hide the input box
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         block = Static(standings,id=block_id+"_standings", name="block",classes="block")

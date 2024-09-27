@@ -205,4 +205,17 @@ class Stats:
         self.total_passes = total_passes
         self.passes_accurate = passes_accurate
         self.passes_percentage = passes_percentage
-    
+
+class Player:
+    def __init__(self,name,position,role,number) -> None:
+        self.name = name
+        self.role = role
+        self.position = position
+        self.number = number
+
+class Formation:
+    def __init__(self,team_name,formation,Player,coach) -> None:
+        self.team_name = team_name
+        self.formation = formation
+        self.player = Player
+        self.coach = coach

@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import datetime as dt
 from rich.table import Table
 from rich import print as rich_print
-from gm_data import Team, Match, Event, Stats
+from gm_data import Team, Match, Event, Stats, Formation, Player
 
 
 # Base URL e API key di API-FOOTBALL
@@ -313,6 +313,51 @@ class ApiFootball:
 
 
         return table
+    
+    def get_formation_teams(self, id_match) -> Formation:
+        
+        """
+        Get the formation of a team from the API and return a Formation object.
+
+        Args:
+            id_match (int): The id of the match to get the formation for
+
+        Returns:
+            Formation: A Formation object
+        """
+        url = f"{API_URL}/fixtures/lineups"
+        params = {
+            "fixture": id_match
+
+        }
+        response = requests.get(url, headers=self.headers, params=params)
+        t1=response.json()['response'][0]
+        t2=response.json()['response'][1]
+        t1formation=[]
+        t2formation=[]
+        for i in range(11):
+            t1formation.append(Player(t1['startXI'][i]['player']['name'],
+                                      t1['startXI'][i]['player']['grid'],
+                                      t1['startXI'][i]['player']['pos'],
+                                      t1['startXI'][i]['player']['number']))
+            t2formation.append(Player(t2['startXI'][i]['player']['name'],
+                                      t2['startXI'][i]['player']['grid'],
+                                      t2['startXI'][i]['player']['pos'],
+                                      t2['startXI'][i]['player']['number']))
+        #add substitutions
+        for i in t1['substitutes']:
+            t1formation.append(Player(i['player']['name'],
+                                      i['player']['grid'],
+                                      i['player']['pos'],
+                                      i['player']['number']))
+        for i in t2['substitutes']:
+            t2formation.append(Player(i['player']['name'],
+                                      i['player']['grid'],
+                                      i['player']['pos'],
+                                      i['player']['number']))
+        
+        return Formation(t1['team']['name'],t1['formation'],t1formation,t1['coach']['name']), Formation(t2['team']['name'],t2['formation'],t2formation,t2['coach']['name'])
+
 
 #m=ApiFootball().get_table_standings(135)
 # testo=str(rich_print(ApiFootball().get_table_standings(135)))                                                                                                                                                                                                                                                                                                                                            
@@ -328,3 +373,7 @@ class ApiFootball:
 #     rich_print(f"{r[i]}, {r[i].id}")
 
 #rich_print(ApiFootball().print_table_standings(1223632))
+f1,f2=ApiFootball().get_formation_teams(1223649)
+rich_print(f1.team_name,f1.formation,f1.coach)
+for i in f1.player:
+    rich_print(i.name,i.role,i.position,i.number)
