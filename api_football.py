@@ -358,7 +358,23 @@ class ApiFootball:
         
         return Formation(t1['team']['name'],t1['formation'],t1formation,t1['coach']['name']), Formation(t2['team']['name'],t2['formation'],t2formation,t2['coach']['name'])
 
-
+    def print_table_formations(self, id_match) -> None:
+        f1,f2=self.get_formation_teams(id_match)
+        #print table for team 1 and 2 with line between starting XI and substitutes and coach
+        table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
+        table.add_column(f"{f1.team_name}", style="cyan", justify="left")
+        table.add_column(f"{f2.team_name}", style="blue", justify="right")
+        c=0
+        for i,j in zip(f1.player,f2.player):
+            table.add_row(f"{i.role} {i.number} {i.name}",f"{j.name} {j.number} {j.role}")
+            c+=1
+            if c==11: #add line
+                table.add_row("-- Subst --","-- Subst --",style="bold green")
+            
+      
+        table.add_row("", "", style="bold blue")
+        table.add_row(f1.coach,f2.coach, style="bold magenta")
+        return table
 #m=ApiFootball().get_table_standings(135)
 # testo=str(rich_print(ApiFootball().get_table_standings(135)))                                                                                                                                                                                                                                                                                                                                            
 # print(type(testo))
@@ -373,7 +389,8 @@ class ApiFootball:
 #     rich_print(f"{r[i]}, {r[i].id}")
 
 #rich_print(ApiFootball().print_table_standings(1223632))
-f1,f2=ApiFootball().get_formation_teams(1223649)
-rich_print(f1.team_name,f1.formation,f1.coach)
-for i in f1.player:
-    rich_print(i.name,i.role,i.position,i.number)
+# f1,f2=ApiFootball().get_formation_teams(1223649)
+# rich_print(f1.team_name,f1.formation,f1.coach)
+# for i in f1.player:
+#     rich_print(i.name,i.role,i.position,i.number)
+#rich_print(ApiFootball().print_table_formations(1223649))
