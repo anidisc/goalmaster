@@ -11,7 +11,7 @@ from _datetime import datetime,timedelta
 import shlex
 
 
-APPVERSION = "0.1.0"
+APPVERSION = "0.1.5"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -145,6 +145,37 @@ class goalmasterapp(App):
         formtext=af.ApiFootball().print_table_formations(id_fixture)
         self.query_one("#main_container").mount(Collapsible(Static(formtext),id=block_id,title=f"Formations: {team1} vs {team2}",collapsed=False))
         self.query_one("#main_container").scroll_end()
+    
+    def add_block_help(self):
+        self.block_counter += 1 # Increment the block counter
+        block_id = f"block_{self.block_counter}" # Create a unique block id
+        HELPTEXT=f"""
+
+        GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}
+
+        KEYBOARD SHORTCUTS:
+
+        TAB - Switch between input and select todo boxes
+        ENTER - Add new todo
+        Press r - Remove focused block
+
+        INPUT BOX:
+        command:
+        -LIVE - show live matches define in ApiFootball and function get_fixture_live
+        -HELP - show this help
+        -LEAGUE -args: 
+            -S - standings
+            -T - timeshift days (example 1 is from today to today+1, or -1 is from today to today-1)
+        Available LEAGUES:
+            {af_map.keys()}
+        
+        
+        Press q - Exit
+
+        
+        """
+        self.query_one("#main_container").mount(Collapsible(Static(HELPTEXT),id=block_id,title="Help",collapsed=False))
+        self.query_one("#main_container").scroll_end()
 
     def on_mount(self):
         #self.query_one("#input").styles.visibility = "hidden" # 
@@ -168,9 +199,13 @@ class goalmasterapp(App):
             # self.YEAR_SELECT = af.ApiFootball().YEAR
             # self.add_block_standings(self.league_selected)
         if event.key == "r" and self.block_counter > 0:
-            widget_id_to_remove =f"block_{self.block_counter}"
-            self.query_one(f"#{widget_id_to_remove}").remove()
-            self.block_counter -= 1
+            # widget_id_to_remove =f"block_{self.block_counter}"
+            if self.focused.id == self.query_one("#main_container").id:
+                return None
+            if self.focused:
+                self.focused.parent.remove()
+            #self.query_one(f"#{widget_id_to_remove}").remove()
+            #self.block_counter -= 1
             #exit app if no block is left
             if self.block_counter == 0:
                 self.exit()
@@ -197,9 +232,13 @@ class goalmasterapp(App):
         #check if command is valid
         if command[0] == "LIVE":
             self.add_block_fixture(datetime.now().date(),datetime.now().date(),live=True)
+            self.input_box.display = False
             # show live matches define in ApiFootball and function get_fixture_live
             return
-
+        if command[0] == "HELP":
+            self.add_block_help()
+            self.input_box.display = False
+            return
 
         if command[0] in af_map:
             self.league_selected = af_map[command[0]]["id"]
@@ -282,14 +321,14 @@ class goalmasterapp(App):
                 if self.selec_match.status in ["NS","RS"]: #not started or resulted
                     self.notify("match not started yet",severity="warning",timeout=5)
                     #self.select_todo_box.styles.visibility = "hidden"
-                    self.screen.focus()
+                    self.focused.focus()
                     return
                 self.add_block_events_match(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)
             if event.option_index == 1:  #selected add block stats of the match
                 if self.selec_match.status in ["NS","RS"]: #not started or resulted
                     self.notify("match not started yet",severity="warning",timeout=5)
                     #self.select_todo_box.styles.visibility = "hidden"
-                    self.screen.focus()
+                    self.focused.focus()
                     return
                 self.add_block_stats_match(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)
             if event.option_index == 2:  #selected add block standings of the league
@@ -307,19 +346,23 @@ class goalmasterapp(App):
                 and the team with the lowest probability of scoring at least one goal, which should be below 30%. and of course, explain all your choices."
 
                 """
-                if not (self.selec_match.status in ["NS","RS"]): #not started or resulted
-                    self.notify("Match in live",severity="warning",timeout=5)
-                elif self.selec_match.status == "FT":
+                # if not (self.selec_match.status in ["NS","RS"]): #not started or resulted
+                #     self.notify("Match not started",severity="warning",timeout=5)
+                if self.selec_match.status == "FT":
                     self.notify("Match finished",severity="warning",timeout=5)
-                else:
-                    self.notify(f"Analyze prediction... {self.selec_match.home_team} vs {self.selec_match.away_team}",severity="info",timeout=5)
-                self.add_block_prediction(self.league_selected,self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team,prompt_request)
+                elif self.selec_match.status in ["1H","2H","HT","P"]: #live prediction
+                    self.notify("Match live",severity="warning",timeout=5)
+                    pass
+                else:  #not live prediction
+                    self.notify(f"Analyze prediction... {self.selec_match.home_team} vs {self.selec_match.away_team}",severity="info",timeout=8)
+                    self.add_block_prediction(self.league_selected,self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team,prompt_request)
             if event.option_index == 3:  #selected add block formations of selected match
                 if not (self.selec_match.status in ["NS","RS"]): #not started or resulted
                     self.add_block_formations(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)
                 else:
                     self.notify("Match not started",severity="warning",timeout=5)
-                    self.screen.focus()
+                    self.focused.focus()
+                    
                     return
 if __name__ == "__main__":
     app = goalmasterapp().run()

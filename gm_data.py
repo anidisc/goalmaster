@@ -122,8 +122,25 @@ class Match:
         self.referee = referee
         self.round = round
         self.country = country
+    def get_flag(self) -> str:
+        country_flag={
+            "ENGLAND": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+            "GERMANY": "🇩🇪",
+            "SPAIN": "🇪🇸",
+            "FRANCE": "🇫🇷",
+            "ITALY": "🇮🇹",
+            "NETHERLAND": "🇳🇱",
+            "PORTUGAL": "🇵🇹",
+            "JAPAN": "🇯🇵",
+            }
+        if self.country.upper() not in country_flag:
+            return " "
+        else:
+            return country_flag[self.country.upper()]
 
     def __str__(self) -> str:
+        # create a dick with the flag of the country
+
         # Tronca o aggiunge spazi ai nomi delle squadre
         team1_str = f"{self.home_team[:20]:<20}"
         team2_str = f"{self.away_team[:20]:<20}"
@@ -151,7 +168,7 @@ class Match:
         country_str = f"{self.country[:15]:<15}"
         
         # Costruisci la stringa finale con 1 spazio tra minuto, stato e data
-        result = f"{team1_str}{team2_str}{score_team1_str}{score_team2_str} {minute_str} {status_str} {datetime_str} | {country_str} {livestatus}"
+        result = f"{team1_str}{team2_str}{score_team1_str}{score_team2_str} {minute_str} {status_str} {datetime_str} | {self.get_flag()+"  "+country_str} {livestatus}"
         
         return result
 
