@@ -366,7 +366,7 @@ class ApiFootball:
         table.add_column(f"{f2.team_name}", style="blue", justify="right")
         c=0
         for i,j in zip(f1.player,f2.player):
-            table.add_row(f"{i.role} {i.number} {i.name}",f"{j.name} {j.number} {j.role}")
+            table.add_row(f"{i.role} {' '+str(i.number) if i.number<10 else i.number} {i.name}",f"{j.name} {str(j.number)+' ' if j.number<10 else j.number} {j.role}")
             c+=1
             if c==11: #add line
                 table.add_row("-- Subst --","-- Subst --",style="bold green")

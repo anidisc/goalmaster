@@ -7,11 +7,14 @@ from textual.widgets import Header, Footer, Button, Static, Input, OptionList, C
 from textual.containers import ScrollableContainer, Vertical,Horizontal
 from rich import print as rich_print
 from rich.markdown import Markdown
+from rich.table import Table
 from _datetime import datetime,timedelta
 import shlex
+from io import StringIO
+from rich.console import Console
 
 
-APPVERSION = "0.1.5"
+APPVERSION = "0.1.6"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -27,7 +30,25 @@ af_map={
     "ERE":{"id":88,"name":"Eredivisie","country":"Netherlands"},
     "COPPAITALIA":{"id":142,"name":"Coppa Italia","country":"Italy"},
 }
+def table_af_map():
+    #print a table with the a columm for keys and names if leagues
+    # t=Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
+    # t.add_column("Code", style="cyan")
+    # t.add_column("League name", style="magenta")
+    # t.add_column("Country", style="yellow")
+    s=""
 
+    for key in af_map:
+        s=s+(f"{key} - {af_map[key]['name']} {af_map[key]['country']} \n")
+
+    return s
+
+    # console = Console()
+    # with console.capture() as capture:
+    #     console.print(t)
+    
+    # # Restituisce la stringa correttamente formattata
+    # return capture.get()
 #class for structure data of a soccer team
 class goalmasterapp(App):
     BINDINGS = [("q", "quit", "Quit"),
@@ -149,6 +170,8 @@ class goalmasterapp(App):
     def add_block_help(self):
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
+        tabmap=table_af_map()
+        formatted_tabmap = tabmap.split("\n")[0] + "\n" +"\n".join("            " + line for line in tabmap.split("\n")[1:])
         HELPTEXT=f"""
 
         GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}
@@ -167,8 +190,8 @@ class goalmasterapp(App):
             -S - standings
             -T - timeshift days (example 1 is from today to today+1, or -1 is from today to today-1)
         Available LEAGUES:
-            {af_map.keys()}
-        
+
+            {formatted_tabmap}
         
         Press q - Exit
 
