@@ -27,28 +27,23 @@ af_map={
     "SUPERLIG":{"id":203,"name":"Super Lig","country":"Turkey"},
     "UCL":{"id":2,"name":"UEFA Champions League","country":"Europe"},
     "UEL":{"id":3,"name":"UEFA Europa League","country":"Europe"},
+    "UNL":{"id":5,"name":"UEFA Nations League","country":"Europe"},
     "ERE":{"id":88,"name":"Eredivisie","country":"Netherlands"},
     "COPPAITALIA":{"id":142,"name":"Coppa Italia","country":"Italy"},
 }
 def table_af_map():
     #print a table with the a columm for keys and names if leagues
-    # t=Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
-    # t.add_column("Code", style="cyan")
-    # t.add_column("League name", style="magenta")
-    # t.add_column("Country", style="yellow")
-    s=""
+    table = Table(show_header=True, header_style="bold magenta")
+    table.add_column("Key", style="dim", width=12)
+    table.add_column("Name", min_width=20)
+    table.add_column("Country", min_width=12)
 
-    for key in af_map:
-        s=s+(f"{key} - {af_map[key]['name']} {af_map[key]['country']} \n")
+    for key, value in af_map.items():
+        table.add_row(key, value['name'], value['country'])
 
-    return s
-
-    # console = Console()
-    # with console.capture() as capture:
-    #     console.print(t)
-    
-    # # Restituisce la stringa correttamente formattata
-    # return capture.get()
+    console = Console(record=True, width=100)
+    console.print(table)
+    return console.export_text()
 #class for structure data of a soccer team
 class goalmasterapp(App):
     BINDINGS = [("q", "quit", "Quit"),
@@ -260,6 +255,12 @@ class goalmasterapp(App):
             return
         if command[0] == "HELP":
             self.add_block_help()
+            self.input_box.display = False
+            return
+        if command[0] == "EXIT":
+            self.exit()
+            return
+        if command[0] == "X":  #if command is empty close input box
             self.input_box.display = False
             return
 

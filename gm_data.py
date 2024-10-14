@@ -236,3 +236,10 @@ class Formation:
         self.formation = formation
         self.player = Player
         self.coach = coach
+
+class League:
+    def __init__(self,id,name,type_league,country) -> None:
+        self.id = id
+        self.name = name
+        self.type = type_league
+        self.country = country

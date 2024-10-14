@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import datetime as dt
 from rich.table import Table
 from rich import print as rich_print
-from gm_data import Team, Match, Event, Stats, Formation, Player
+from gm_data import League, Team, Match, Event, Stats, Formation, Player
 
 
 # Base URL e API key di API-FOOTBALL
@@ -375,6 +375,21 @@ class ApiFootball:
         table.add_row("", "", style="bold blue")
         table.add_row(f1.coach,f2.coach, style="bold magenta")
         return table
+    #get list of all leagues
+    def get_list_leagues(self) -> list[League]:
+        url = f"{API_URL}/leagues"
+        response = requests.get(url, headers=self.headers)
+        l=[]
+        for league in response.json()['response']:
+            l.append(League(league['league']['id'],
+                            league['league']['name'],
+                            league['league']['type'],
+                            league['country']['name']))
+        #dsort listy by country
+        l.sort(key=lambda x: x.country)
+        return l
+    
+
 #m=ApiFootball().get_table_standings(135)
 # testo=str(rich_print(ApiFootball().get_table_standings(135)))                                                                                                                                                                                                                                                                                                                                            
 # print(type(testo))
@@ -394,3 +409,7 @@ class ApiFootball:
 # for i in f1.player:
 #     rich_print(i.name,i.role,i.position,i.number)
 #rich_print(ApiFootball().print_table_formations(1223649))
+
+# l=ApiFootball().get_list_leagues()
+# for i in l:
+#     rich_print(f"{i.id} {i.name} {i.country} {i.type}")
