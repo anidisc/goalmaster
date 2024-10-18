@@ -49,36 +49,39 @@ class ApiFootball:
             list: a list of Team objects representing the standings of the league
         """
         standings = self.get_standings(league)
-        #memorize the table in a list of Team objects
-        teams = []
-        for t in standings['response'][0]['league']['standings'][0]:
+        #memorize the table in a list of list of Team objects
+        nl=len(standings['response'][0]['league']['standings'])
+        teams = [[] for _ in range(nl)]
+
+        for n in range(nl):
+            for t in standings['response'][0]['league']['standings'][n]:
             # add the team to the list
-            teams.append(Team(t["team"]["id"],
-                                t["team"]["name"],   
-                                t["rank"],
-                                t["points"],
-                                t["all"]["played"],
-                                t["team"]["logo"],
-                                t["all"]["win"],
-                                t["all"]["draw"],
-                                t["all"]["lose"],
-                                t["all"]["goals"]["for"],
-                                t["all"]["goals"]["against"],
-                                t["home"]["win"],
-                                t["away"]["win"],
-                                t["home"]["draw"],
-                                t["away"]["draw"],
-                                t["home"]["lose"],
-                                t["away"]["lose"],
-                                t["home"]["goals"]["for"],
-                                t["away"]["goals"]["for"],
-                                t["home"]["goals"]["against"],
-                                t["away"]["goals"]["against"],
-                                t["form"],
-                                t["status"]
-                                ))
+                teams[n].append(Team(t["team"]["id"],
+                                    t["team"]["name"],   
+                                    t["rank"],
+                                    t["points"],
+                                    t["all"]["played"],
+                                    t["team"]["logo"],
+                                    t["all"]["win"],
+                                    t["all"]["draw"],
+                                    t["all"]["lose"],
+                                    t["all"]["goals"]["for"],
+                                    t["all"]["goals"]["against"],
+                                    t["home"]["win"],
+                                    t["away"]["win"],
+                                    t["home"]["draw"],
+                                    t["away"]["draw"],
+                                    t["home"]["lose"],
+                                    t["away"]["lose"],
+                                    t["home"]["goals"]["for"],
+                                    t["away"]["goals"]["for"],
+                                    t["home"]["goals"]["against"],
+                                    t["away"]["goals"]["against"],
+                                    t["form"],
+                                    t["status"]
+                                    ))
         return teams   
-    def get_table_standings(self,league):
+    def get_table_standings(self,league,group=0):
         """
         Get the standings of a league in a specific year from the api parameter and return a rich.table.Table object.
         
@@ -89,7 +92,7 @@ class ApiFootball:
             rich.table.Table: a rich.table.Table object representing the standings of the league
         """
         # Get the standings of the league
-        standings = self.get_standings(league)
+        standings = self.get_standings(league)['response'][0]['league']['standings'][group]
 
         # Create a rich.table.Table object
         table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
@@ -111,7 +114,7 @@ class ApiFootball:
         table.add_column("Status", style="bold") # Status of the team
 
         # Loop through the standings and add rows to the table
-        for team in standings['response'][0]['league']['standings'][0]:
+        for team in standings:
             # Get the team's position, name, points, played games, wins, draws, losses, goals for and against at home and away
             position = str(team['rank'])
             team_name = team['team']['name']
@@ -413,3 +416,6 @@ class ApiFootball:
 # l=ApiFootball().get_list_leagues()
 # for i in l:
 #     rich_print(f"{i.id} {i.name} {i.country} {i.type}")
+
+# s=ApiFootball().get_list_standings(5)
+# print(s)

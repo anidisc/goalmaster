@@ -89,8 +89,8 @@ class goalmasterapp(App):
         return league_name
     
     #create block to show the current standings of the league
-    def add_block_standings(self,league,text="text to print"):
-        standings = af.ApiFootball(self.YEAR_SELECT).get_table_standings(league)
+    def add_block_standings(self,league,text="text to print",group=0):
+        standings = af.ApiFootball(self.YEAR_SELECT).get_table_standings(league,group)
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
@@ -273,7 +273,15 @@ class goalmasterapp(App):
                 #                   titlebox=f"IMCOMPLETE COMMAND")
                 return
             if command[1] == "-S":
-                self.add_block_standings(self.league_selected)
+                #check if exist command[2]
+                if len(command) < 3:
+                    self.add_block_standings(self.league_selected)
+                else:
+                    if int(command[2]) in range(10):
+                        self.add_block_standings(self.league_selected,group=int(command[2]))
+                    else:
+                        #self.show_message("error command syntax",titlebox="SYNTAX ERROR")
+                        self.notify("error command syntax",severity="error",timeout=5)
             elif command[1] == "-T":
                 if len(command) < 3:
                     command.append("0")  #default value for days
