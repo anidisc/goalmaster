@@ -2,6 +2,7 @@
 from datetime import datetime
 class Team:
     def __init__(self, id, name, position, points, matches, logo,
+                 home_played, away_played,
                  wins, draws, losses, goals_for, goals_against,
                  win_home, win_away, home_draw, away_draw, lose_home, lose_away,
                  goals_for_home, goals_for_away,
@@ -38,6 +39,8 @@ class Team:
         self.position = position
         self.points = points
         self.matches = matches
+        self.home_played = home_played
+        self.away_played = away_played
         self.wins = wins
         self.draws = draws
         self.losses = losses

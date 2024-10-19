@@ -14,7 +14,7 @@ from io import StringIO
 from rich.console import Console
 
 
-APPVERSION = "0.1.6"
+APPVERSION = "0.1.7"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -90,13 +90,25 @@ class goalmasterapp(App):
     
     #create block to show the current standings of the league
     def add_block_standings(self,league,text="text to print",group=0):
-        standings = af.ApiFootball(self.YEAR_SELECT).get_table_standings(league,group)
+        s = af.ApiFootball(self.YEAR_SELECT).get_list_standings(self.league_selected)
+        if group =="all":
+            standings = [af.ApiFootball().get_table_standings(x) for x in s]
+        else:
+            standings = [af.ApiFootball().get_table_standings(s[group])]
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         self.block_counter += 1 # Increment the block counter
+        block=[] #block of standigs
         block_id = f"block_{self.block_counter}" # Create a unique block id
-        block = Static(standings,id=block_id+"_standings", name="block",classes="block")
-        block.border_title = f"Standings {self.find_league(league)}"
-        self.query_one("#main_container").mount(Collapsible(block,id=block_id,title=block.border_title,collapsed=False))
+        idcounter = 0
+        for b in standings:
+            block.append(Static(b,id=block_id+"_standings"+str(idcounter), name="block",classes="block"))
+            idcounter += 1
+        
+        content_title = f"Standings {self.find_league(league)}"
+        self.query_one("#main_container").mount(Collapsible(block[0],id=block_id,title=content_title,collapsed=False))
+        if len(block)>1:
+            for b in block[1:]:
+                self.query_one(f"#{block_id}").mount(b)
         self.query_one("#main_container").scroll_end()
         self.query_one(f"#{block_id}").focus()
     def add_block_fixture(self,datefrom,dateto,live=False):
@@ -277,7 +289,9 @@ class goalmasterapp(App):
                 if len(command) < 3:
                     self.add_block_standings(self.league_selected)
                 else:
-                    if int(command[2]) in range(10):
+                    if command[2] == "ALL":
+                        self.add_block_standings(self.league_selected,group="all")
+                    elif int(command[2]) in range(10):
                         self.add_block_standings(self.league_selected,group=int(command[2]))
                     else:
                         #self.show_message("error command syntax",titlebox="SYNTAX ERROR")

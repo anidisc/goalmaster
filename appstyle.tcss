@@ -19,7 +19,7 @@ Screen {
     width: 100%;
     height: auto;
     border: solid rgb(37, 163, 222);
-    background: black;
+    /* background: black; */
     margin: 1 0;
     padding: 1;
     layer: below;

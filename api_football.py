@@ -62,6 +62,8 @@ class ApiFootball:
                                     t["points"],
                                     t["all"]["played"],
                                     t["team"]["logo"],
+                                    t['home']['played'],
+                                    t['away']['played'],
                                     t["all"]["win"],
                                     t["all"]["draw"],
                                     t["all"]["lose"],
@@ -81,7 +83,7 @@ class ApiFootball:
                                     t["status"]
                                     ))
         return teams   
-    def get_table_standings(self,league,group=0):
+    def get_table_standings(self,standings):
         """
         Get the standings of a league in a specific year from the api parameter and return a rich.table.Table object.
         
@@ -92,7 +94,7 @@ class ApiFootball:
             rich.table.Table: a rich.table.Table object representing the standings of the league
         """
         # Get the standings of the league
-        standings = self.get_standings(league)['response'][0]['league']['standings'][group]
+        #standings = self.get_standings(league)['response'][0]['league']['standings'][group]
 
         # Create a rich.table.Table object
         table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
@@ -116,29 +118,29 @@ class ApiFootball:
         # Loop through the standings and add rows to the table
         for team in standings:
             # Get the team's position, name, points, played games, wins, draws, losses, goals for and against at home and away
-            position = str(team['rank'])
-            team_name = team['team']['name']
-            points = str(team['points'])
-            played_games = str(team['all']['played'])
-            wins = str(team['all']['win'])
-            draws = str(team['all']['draw'])
-            losses = str(team['all']['lose'])
-            goals_for_home = team['home']['goals']['for']
-            goals_against_home = team['home']['goals']['against']
-            goals_for_away = team['away']['goals']['for']
-            goals_against_away = team['away']['goals']['against']
+            position = str(team.position)
+            team_name = team.name
+            points = str(team.points)
+            played_games = str(team.matches)
+            wins = str(team.wins)
+            draws = str(team.draws)
+            losses = str(team.losses)
+            goals_for_home = team.goals_for_home
+            goals_against_home = team.goals_against_home
+            goals_for_away = team.goals_for_away
+            goals_against_away = team.goals_against_away
 
             # Calculate average goals for and against at home and away
             try:
-                avg_goals_for_home = round(goals_for_home / team['home']['played'], 2)
-                avg_goals_for_away = round(goals_for_away / team['away']['played'], 2)
+                avg_goals_for_home = round(goals_for_home / team.home_played, 2)
+                avg_goals_for_away = round(goals_for_away / team.away_played, 2)
             except ZeroDivisionError:
                 avg_goals_for_home = 0
                 avg_goals_for_away = 0  
 
             # Get the team's form (last 5 matches)
             form=""
-            for result in list(str(team['form'])):
+            for result in list(str(team.last_5_matches)):
                 if result == 'W':
                     form += "[green]●[/green]"
                 elif result == 'D':
@@ -417,5 +419,5 @@ class ApiFootball:
 # for i in l:
 #     rich_print(f"{i.id} {i.name} {i.country} {i.type}")
 
-# s=ApiFootball().get_list_standings(5)
-# print(s)
+# s=ApiFootball().get_list_standings(135)
+# rich_print(ApiFootball().get_table_standings(s[0]))
