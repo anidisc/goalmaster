@@ -1,4 +1,5 @@
 #library for my apifootball api
+import json
 import os
 import requests
 from datetime import datetime, timedelta
@@ -11,6 +12,7 @@ from gm_data import League, Team, Match, Event, Stats, Formation, Player
 # Base URL e API key di API-FOOTBALL
 API_URL = "https://v3.football.api-sports.io/"
 API_KEY = os.environ.get("APIFOOTBALL_KEY")
+PREDICTION_FILE_DB = "predictions.json"
 
 
 class ApiFootball:
@@ -234,7 +236,7 @@ class ApiFootball:
             #color the event according to type
             if event.event == "Goal" or event.event == "Own Goal" or event.event == "Penalty" or event.event == "Normal Goal":
                 if event.event == "Goal" or event.event == "Normal Goal":
-                    event.event = f"[green]G O A L[/green]"
+                    event.event = f"[green]●GOAL●[/green]"
                 else:
                     event.event = f"[green]{event.event}[/green]"
             elif event.event == "Yellow Card":

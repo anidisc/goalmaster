@@ -1,4 +1,9 @@
+#!/usr/bin/env python3
+
+import json
+import os
 from typing import Coroutine
+from pyparsing import NoMatch
 from textual.events import AppFocus, Key
 import gemini_ai
 import api_football as af
@@ -12,6 +17,7 @@ from _datetime import datetime,timedelta
 import shlex
 from io import StringIO
 from rich.console import Console
+import gm_data as gm
 
 
 APPVERSION = "0.1.7"
@@ -101,14 +107,17 @@ class goalmasterapp(App):
         block_id = f"block_{self.block_counter}" # Create a unique block id
         idcounter = 0
         for b in standings:
-            block.append(Static(b,id=block_id+"_standings"+str(idcounter), name="block",classes="block"))
+            bid=f"{block_id}_{idcounter}_{group}"
+            block.append(Static(b,id=bid,classes="block"))
             idcounter += 1
-        
+
+        if len(block) <= 1:
+            block_standings_pile = block[0]
+        else:
+            block_standings_pile = ScrollableContainer(*block)
+
         content_title = f"Standings {self.find_league(league)}"
-        self.query_one("#main_container").mount(Collapsible(block[0],id=block_id,title=content_title,collapsed=False))
-        if len(block)>1:
-            for b in block[1:]:
-                self.query_one(f"#{block_id}").mount(b)
+        self.query_one("#main_container").mount(Collapsible(block_standings_pile,id=block_id,title=content_title,collapsed=False))
         self.query_one("#main_container").scroll_end()
         self.query_one(f"#{block_id}").focus()
     def add_block_fixture(self,datefrom,dateto,live=False):
@@ -156,15 +165,33 @@ class goalmasterapp(App):
 
     def add_block_prediction(self,league_id,id_fixture,team1,team2,prompt):
         #self.input_box.styles.visibility = "hidden" # Hide the input box
+        json_file = gm.PREDICTION_FILE_DB
+        id_fixture = str(id_fixture) #convert to string
+        # Check if the file exists
+        if not os.path.exists(json_file):
+            predictions = {}  # Create an empty dictionary if the file doesn't exist
+        else:
+            # Load the existing predictions from the file
+            with open(json_file, "r") as f:
+                predictions = json.load(f)
+        
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         table_stats=af.ApiFootball().get_standings(league_id)
         composed_prompt = f"The match is between {team1} vs {team2}, and view this standing: {table_stats}"
-        prediction=gemini_ai.gemini_ai_call(composed_prompt+prompt)
+        if id_fixture in predictions:
+            prediction = predictions[id_fixture]
+        else:
+            prediction=gemini_ai.gemini_ai_call(composed_prompt+prompt) 
+            # Save the updated predictions back to the JSON file with indentation for readability
+            predictions[id_fixture] = prediction
+            with open(json_file, "w") as f:
+                json.dump(predictions, f, indent=4) 
         self.query_one("#main_container").mount(Collapsible(Static(Markdown(prediction),classes="predictions"),
                                                             id=block_id,title="Prediction Match: "+team1+" vs "+team2,
                                                             collapsed=False)) #mount block and list_fixtures)
         self.query_one("#main_container").scroll_end()
+  
 
     def add_block_formations(self,id_fixture,team1,team2):
         self.block_counter += 1 # Increment the block counter
@@ -402,6 +429,8 @@ class goalmasterapp(App):
                 else:  #not live prediction
                     self.notify(f"Analyze prediction... {self.selec_match.home_team} vs {self.selec_match.away_team}",severity="info",timeout=8)
                     self.add_block_prediction(self.league_selected,self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team,prompt_request)
+                    #update flag prediction match to true
+                    self.selec_match.prediction = True
             if event.option_index == 3:  #selected add block formations of selected match
                 if not (self.selec_match.status in ["NS","RS"]): #not started or resulted
                     self.add_block_formations(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)

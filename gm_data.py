@@ -1,5 +1,8 @@
 #data structure of the app
 from datetime import datetime
+import json
+
+PREDICTION_FILE_DB = "predictions.json"
 class Team:
     def __init__(self, id, name, position, points, matches, logo,
                  home_played, away_played,
@@ -102,7 +105,7 @@ class Team:
     
 
 class Match:
-    def __init__(self, id, date, round, home_team, away_team, home_score, away_score, status,minute,referee,country):
+    def __init__(self, id, date, round, home_team, away_team, home_score, away_score, status,minute,referee,country,prediction=False):
         """
         Class for structure data of a match.
 
@@ -125,6 +128,8 @@ class Match:
         self.referee = referee
         self.round = round
         self.country = country
+        self.prediction = prediction
+
     def get_flag(self) -> str:
         country_flag={
             "ENGLAND": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
@@ -140,6 +145,17 @@ class Match:
             return " "
         else:
             return country_flag[self.country.upper()]
+    
+    def check_prediction(self, id_match):
+        try:
+            with open(PREDICTION_FILE_DB, "r") as f:
+                predictions = json.load(f)
+        except FileNotFoundError:
+            return False
+        if str(id_match) in predictions:
+            return True
+        else:
+            return False
 
     def __str__(self) -> str:
         # create a dick with the flag of the country
@@ -169,9 +185,10 @@ class Match:
         # Format data e ora (15 caratteri)
         datetime_str = datetime.fromisoformat(self.date).strftime("%d/%m/%Y %H:%M")
         country_str = f"{self.country[:15]:<15}"
+        flag_prediction = "🎯" if self.check_prediction(self.id) else "  "
         
         # Costruisci la stringa finale con 1 spazio tra minuto, stato e data
-        result = f"{team1_str}{team2_str}{score_team1_str}{score_team2_str} {minute_str} {status_str} {datetime_str} | {self.get_flag()+"  "+country_str} {livestatus}"
+        result = f"{team1_str}{team2_str}{score_team1_str}{score_team2_str} {minute_str} {status_str} {datetime_str} | {flag_prediction} {self.get_flag()+"  "+country_str} {livestatus}"
         
         return result
 
