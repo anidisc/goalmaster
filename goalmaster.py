@@ -182,7 +182,12 @@ class goalmasterapp(App):
         if id_fixture in predictions:
             prediction = predictions[id_fixture]
         else:
-            prediction=gemini_ai.gemini_ai_call(composed_prompt+prompt) 
+            stats_prediction=f"This is data of prediction by agency between {team1} vs {team2}:{af.ApiFootball().get_prediction(id_fixture)}"
+            preprompt="""
+                Read data of prediction of this maatch, and analyze it. Stats of singol team, historical statistics of both teams.
+                Match passed h2h of both teams. Show this data in table format.
+                    """
+            prediction=gemini_ai.gemini_ai_call(composed_prompt+stats_prediction+preprompt+prompt) 
             # Save the updated predictions back to the JSON file with indentation for readability
             predictions[id_fixture] = prediction
             with open(json_file, "w") as f:

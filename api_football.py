@@ -40,10 +40,6 @@ class ApiFootball:
             "league": league,
             "season": self.YEAR
         }
-        #TODO before get the standings, memorize the headers in a file json with the first key as id league
-        #and the value as the headers but with a key of the current date. In this mode the headers will not be updated
-        #every time the class is called to get the standings for evite api calls if the date memorized is not expired
-        #read the headers from the file json
         current_date = str(dt.date.today())
         strleague = str(league)
         try:
@@ -433,6 +429,14 @@ class ApiFootball:
         l.sort(key=lambda x: x.country)
         return l
     
+    #get response from api_football of prediction function
+    def get_prediction(self, id_match):
+        url = f"{API_URL}/predictions"
+        params = {
+            "fixture": id_match
+        }
+        response = requests.get(url, headers=self.headers, params=params)
+        return response.json()['response']
 
 #m=ApiFootball().get_table_standings(135)
 # testo=str(rich_print(ApiFootball().get_table_standings(135)))                                                                                                                                                                                                                                                                                                                                            
@@ -460,3 +464,4 @@ class ApiFootball:
 
 # s=ApiFootball().get_list_standings(135)
 # rich_print(ApiFootball().get_table_standings(s[0]))
+#rich_print(ApiFootball().get_prediction(1234713 ))
