@@ -7,12 +7,14 @@ import datetime as dt
 from rich.table import Table
 from rich import print as rich_print
 from gm_data import League, Team, Match, Event, Stats, Formation, Player
+import datetime as dt
 
 
 # Base URL e API key di API-FOOTBALL
 API_URL = "https://v3.football.api-sports.io/"
 API_KEY = os.environ.get("APIFOOTBALL_KEY")
 PREDICTION_FILE_DB = "predictions.json"
+STANDINGS_FILE_DB = "standings.json"
 
 
 class ApiFootball:
@@ -26,7 +28,10 @@ class ApiFootball:
     def get_status_apicalls(self):
         url = f"{API_URL}/status"
         response = requests.get(url, headers=self.headers)
-        return 100 - int(response.json()['response']['requests']['current'])
+        try:
+            return 100 - int(response.json()['response']['requests']['current'])
+        except:
+            return 0
     def get_standings(self,league):
         # get standings from api_football in a specific year from the api parameter and return a table with the data
         # static method (there is no need to create an instance of the class)
@@ -35,10 +40,42 @@ class ApiFootball:
             "league": league,
             "season": self.YEAR
         }
+        #TODO before get the standings, memorize the headers in a file json with the first key as id league
+        #and the value as the headers but with a key of the current date. In this mode the headers will not be updated
+        #every time the class is called to get the standings for evite api calls if the date memorized is not expired
+        #read the headers from the file json
+        current_date = str(dt.date.today())
+        strleague = str(league)
+        try:
+            with open(STANDINGS_FILE_DB, "r") as f:
+                standing_to_disk = json.load(f)
+        except FileNotFoundError: #create file and structure data inside
+            response = requests.get(url, params=params, headers=self.headers)
+            standings = response.json()['response'][0]['league']['standings']
+            data={league:{
+                "standing":{
+                    "date":current_date,
+                    "standings":standings}
+                }}
+            with open(STANDINGS_FILE_DB, "w") as f:
+                json.dump(data, f)
+            return standings
+        #check if the headers from the file json are still valid
+        if strleague in standing_to_disk:
+            if standing_to_disk[strleague]["standing"]["date"] == current_date:
+                return standing_to_disk[strleague]["standing"]["standings"]
+        #otherwise get the standings from api_football
         response = requests.get(url, params=params, headers=self.headers)
-        standings = response.json()
-        self.rem = response.headers
+        standings = response.json()['response'][0]['league']['standings']
+        datanew={"standing":{"date":current_date,"standings":standings}}
+                
+        standing_to_disk[league] = datanew
+        #save the standigs in the file append the new standings
+        with open(STANDINGS_FILE_DB, "w") as f:
+            json.dump(standing_to_disk, f)
         return standings
+        #self.rem = response.headers
+        
     def get_list_standings(self,league):
         
         """
@@ -52,11 +89,11 @@ class ApiFootball:
         """
         standings = self.get_standings(league)
         #memorize the table in a list of list of Team objects
-        nl=len(standings['response'][0]['league']['standings'])
+        nl=len(standings)
         teams = [[] for _ in range(nl)]
 
         for n in range(nl):
-            for t in standings['response'][0]['league']['standings'][n]:
+            for t in standings[n]:
             # add the team to the list
                 teams[n].append(Team(t["team"]["id"],
                                     t["team"]["name"],   
