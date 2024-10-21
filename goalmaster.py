@@ -213,7 +213,7 @@ class goalmasterapp(App):
         formatted_tabmap = tabmap.split("\n")[0] + "\n" +"\n".join("            " + line for line in tabmap.split("\n")[1:])
         HELPTEXT=f"""
 
-        GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}
+        GOAL MASTER {APPVERSION}
 
         KEYBOARD SHORTCUTS:
 
@@ -225,6 +225,8 @@ class goalmasterapp(App):
         command:
         -LIVE - show live matches define in ApiFootball and function get_fixture_live
         -HELP - show this help
+        -STATUS - show status of api calls
+        -EXIT - exit the app
         -LEAGUE -args: 
             -S - standings
             -T - timeshift days (example 1 is from today to today+1, or -1 is from today to today-1)
@@ -307,12 +309,18 @@ class goalmasterapp(App):
         if command[0] == "X":  #if command is empty close input box
             self.input_box.display = False
             return
-
+        if command[0] == "STATUS":
+            #notify apicalls used
+            self.input_box.display = False #hide input box
+            self.notify(f"APICALLS USED: {100-af.ApiFootball().get_status_apicalls()}",severity="warning",timeout=7,title="STATUS")
+            #update title of app
+            self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}"
+            return
         if command[0] in af_map:
             self.league_selected = af_map[command[0]]["id"]
             #check if command is valid
             if len(command) == 1:
-                self.notify(f"insert options command for {self.find_league(self.league_selected)}",severity="warning",timeout=10)
+                self.notify(f"insert options command for {self.find_league(self.league_selected)}",severity="error",timeout=10,title="SYNTAX ERROR")
                 # self.show_message(f"insert options command for {self.find_league(self.league_selected)}",
                 #                   titlebox=f"IMCOMPLETE COMMAND")
                 return
@@ -327,7 +335,7 @@ class goalmasterapp(App):
                         self.add_block_standings(self.league_selected,group=int(command[2]))
                     else:
                         #self.show_message("error command syntax",titlebox="SYNTAX ERROR")
-                        self.notify("error command syntax",severity="error",timeout=5)
+                        self.notify("error command syntax or command not found",severity="error",timeout=5,title="SYNTAX ERROR")
             elif command[1] == "-T":
                 if len(command) < 3:
                     command.append("0")  #default value for days
