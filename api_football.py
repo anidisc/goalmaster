@@ -237,7 +237,16 @@ class ApiFootball:
         list_fixtures.sort(key=lambda x: x.date) 
         #and then sort by country   
         list_fixtures.sort(key=lambda x: x.country)
-            
+        #check if the predictions are available in the file json
+        try:
+            with open(PREDICTION_FILE_DB, "r") as f:
+                predictions = json.load(f)
+                for match in list_fixtures:
+                    if str(match.id) in predictions:
+                        match.prediction = True
+        except FileNotFoundError:
+            pass  # file doesn't exist and do nothing
+        
         return list_fixtures
     def get_list_events_fixtures(self,id_fixture):
         url=f"{API_URL}/fixtures/events"

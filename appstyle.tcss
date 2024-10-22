@@ -43,8 +43,7 @@ Screen {
 
 #select_todo_box {
     layer: above2;
-    border: panel white;
-    background: blue;
+    border: solid;
     width: 25%;
     height: auto;
     dock: top;

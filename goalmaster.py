@@ -20,7 +20,7 @@ from rich.console import Console
 import gm_data as gm
 
 
-APPVERSION = "0.2"
+APPVERSION = "0.2.1"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -434,13 +434,13 @@ class goalmasterapp(App):
                 """
                 # if not (self.selec_match.status in ["NS","RS"]): #not started or resulted
                 #     self.notify("Match not started",severity="warning",timeout=5)
-                if self.selec_match.status == "FT":
-                    self.notify("Match finished",severity="warning",timeout=5)
+                if self.selec_match.status == "FT" and self.selec_match.prediction == False:
+                    self.notify("Match finished",severity="warning",timeout=5,title="Prediction not available")
                 elif self.selec_match.status in ["1H","2H","HT","P"]: #live prediction
-                    self.notify("Match live",severity="warning",timeout=5)
+                    self.notify("Match live",severity="warning",timeout=5,title="Prediction not available")
                     pass
                 else:  #not live prediction
-                    self.notify(f"Analyze prediction... {self.selec_match.home_team} vs {self.selec_match.away_team}",severity="info",timeout=8)
+                    self.notify(f"Analyze prediction... {self.selec_match.home_team} vs {self.selec_match.away_team}",severity="info",timeout=8,title="PREDICT IN PROGRESS")
                     self.add_block_prediction(self.league_selected,self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team,prompt_request)
                     #update flag prediction match to true
                     self.selec_match.prediction = True
