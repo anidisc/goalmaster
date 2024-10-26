@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import datetime as dt
 from rich.table import Table
 from rich import print as rich_print
-from gm_data import League, Team, Match, Event, Stats, Formation, Player
+from gm_data import League, Team, Match, Event, Stats, Formation, Player, TopPlayer
 import datetime as dt
 
 
@@ -447,6 +447,62 @@ class ApiFootball:
         response = requests.get(url, headers=self.headers, params=params)
         return response.json()['response']
 
+    #get top scores from api_football
+    def get_top_scores(self,id_league) -> list[TopPlayer]:
+        url = f"{API_URL}/players/topscorers"
+        params = {
+            "league": id_league,
+            "season": self.YEAR
+        }
+        response = requests.get(url, headers=self.headers, params=params)
+        res_json = response.json()['response']
+        top_players = []
+        for player in res_json:
+            top_players.append(TopPlayer(player['player']['name'],
+                                         player['statistics'][0]['games']['position'],
+                                         "",
+                                         player['statistics'][0]['games']['number'],
+                                         player['statistics'][0]['team']['name'],
+                                         player['statistics'][0]['goals']['total'],
+                                         player['statistics'][0]['goals']['assists'],
+                                         player['statistics'][0]['cards']['yellow'],
+                                         player['statistics'][0]['cards']['red'],
+                                         player['player']['nationality'],
+                                         player['player']['age']))
+
+        return top_players
+      
+    #def a function to get table of top scorers from api_football
+    def table_top_scores(self,id_league) -> None:
+        
+        top_players = self.get_top_scores(id_league)
+
+        table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
+        
+        table.add_column("Player", style="white", justify="left")
+        table.add_column("Position", style="blue", justify="left")
+        table.add_column("Team", style="cyan", justify="left")
+        table.add_column("Goals", style="blue", justify="left")
+        table.add_column("Ass.", style="blue", justify="left")
+        table.add_column("YC", style="yellow", justify="left")
+        table.add_column("RC", style="red", justify="left")
+        table.add_column("Nationality", style="blue", justify="left")
+        table.add_column("Age", style="blue", justify="left")   
+        for player in top_players:
+            table.add_row(player.name,
+                          player.position,
+                          player.team,
+                          str(player.goals),
+                          str(player.assists),
+                          str(player.yellow_cards),
+                          str(player.red_cards),
+                          player.nationality,
+                          str(player.age)
+                          )
+
+        return table
+    
+
 #m=ApiFootball().get_table_standings(135)
 # testo=str(rich_print(ApiFootball().get_table_standings(135)))                                                                                                                                                                                                                                                                                                                                            
 # print(type(testo))
@@ -473,4 +529,8 @@ class ApiFootball:
 
 # s=ApiFootball().get_list_standings(135)
 # rich_print(ApiFootball().get_table_standings(s[0]))
-#rich_print(ApiFootball().get_prediction(1234713 ))
+#rich_print(ApiFootball().get_prediction(1234713))
+# topplayers=(ApiFootball().get_top_scores(135))
+# for i in topplayers:
+#     rich_print(i.name,i.position,i.team,i.number,i.goals,i.assists,i.nationality,i.age)
+rich_print(ApiFootball().table_top_scores(135))

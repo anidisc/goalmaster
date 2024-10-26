@@ -20,7 +20,7 @@ from rich.console import Console
 import gm_data as gm
 
 
-APPVERSION = "0.2.1"
+APPVERSION = "0.3.0"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -241,6 +241,14 @@ class goalmasterapp(App):
         self.query_one("#main_container").mount(Collapsible(Static(HELPTEXT),id=block_id,title="Help",collapsed=False))
         self.query_one("#main_container").scroll_end()
 
+    def add_block_topscorers(self,idleague):
+        self.block_counter += 1 # Increment the block counter
+        block_id = f"block_{self.block_counter}" # Create a unique block id
+        tabmap=af.ApiFootball().table_top_scores(idleague)
+        nameleague=self.find_league(idleague)
+        self.query_one("#main_container").mount(Collapsible(Static(tabmap),id=block_id,title=f"Top Scorers for {nameleague} for year {af.ApiFootball().YEAR}",collapsed=False))
+        self.query_one("#main_container").scroll_end()
+
     def on_mount(self):
         #self.query_one("#input").styles.visibility = "hidden" # 
         self.input_box.display = False # Hide the input box
@@ -349,6 +357,11 @@ class goalmasterapp(App):
                         dfrom=datetime.now().date()+timedelta(days=int(command[2]))
                         dto=datetime.now().date()
                         self.add_block_fixture(dfrom,dto)
+            elif command[1] == "-TOP":  
+                #print top scorers for league
+                #TODO dedfine and call function to add block for top scorers
+                self.add_block_topscorers(self.league_selected)
+                pass
             else:
                 #self.show_message("error command syntax",titlebox="SYNTAX ERROR")
                 self.notify("error command syntax",severity="error",timeout=5)

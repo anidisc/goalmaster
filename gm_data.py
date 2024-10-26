@@ -263,3 +263,14 @@ class League:
         self.name = name
         self.type = type_league
         self.country = country
+
+class TopPlayer(Player):
+    def __init__(self,name,position,role,number,team,goals,assists,yellow_cards,red_cards,nationality,age) -> None:
+        super().__init__(name,position,role,number)
+        self.team = team
+        self.goals = goals
+        self.assists = assists
+        self.yellow_cards = yellow_cards
+        self.red_cards = red_cards
+        self.nationality = nationality
+        self.age = age
