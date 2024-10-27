@@ -452,8 +452,8 @@ class ApiFootball:
         return response.json()['response']
 
     #get top scores from api_football
-    def get_top_scores(self,id_league) -> list[TopPlayer]:
-        url = f"{API_URL}/players/topscorers"
+    def get_top_scores(self,id_league,assists=False) -> list[TopPlayer]:
+        url = f"{API_URL}/players/topscorers" if not assists else f"{API_URL}/players/topassists"
         params = {
             "league": id_league,
             "season": self.YEAR
@@ -479,9 +479,9 @@ class ApiFootball:
         return top_players
       
     #def a function to get table of top scorers from api_football
-    def table_top_scores(self,id_league) -> None:
+    def table_top_scores(self,id_league,assists=False) -> None:
         
-        top_players = self.get_top_scores(id_league)
+        top_players = self.get_top_scores(id_league,assists)
 
         table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
         

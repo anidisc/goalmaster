@@ -20,7 +20,7 @@ from rich.console import Console
 import gm_data as gm
 
 
-APPVERSION = "0.3.2"
+APPVERSION = "0.3.3"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -28,6 +28,7 @@ af_map={
     "LIGUE1":{"id":61,"name":"Ligue 1","country":"France"},
     "PREMIERLEAGUE":{"id":39,"name":"Premier League","country":"England"},
     "SERIEB":{"id":136,"name":"Serie B","country":"Italy"},
+    "SERIEC":{"id":137,"name":"Serie C","country":"Italy"},
     "BUNDESLIGA2":{"id":79,"name":"Bundesliga 2","country":"Germany"},
     "LIGUE2":{"id":62,"name":"Ligue 2","country":"France"},
     "SUPERLIG":{"id":203,"name":"Super Lig","country":"Turkey"},
@@ -234,6 +235,7 @@ class goalmasterapp(App):
         -LEAGUE -args: 
             -S - standings
             -T - timeshift days (example 1 is from today to today+1, or -1 is from today to today-1)
+            -TOP 'S' - top scorers 'A' - top assists
         Available LEAGUES:
 
             {formatted_tabmap}
@@ -245,12 +247,13 @@ class goalmasterapp(App):
         self.query_one("#main_container").mount(Collapsible(Static(HELPTEXT),id=block_id,title="Help",collapsed=False))
         self.query_one("#main_container").scroll_end()
 
-    def add_block_topscorers(self,idleague):
+    def add_block_topscorers(self,idleague,assists=False):
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
-        tabmap=af.ApiFootball(self.YEAR_SELECT).table_top_scores(idleague)
+        tabmap=af.ApiFootball(self.YEAR_SELECT).table_top_scores(idleague,assists)
         nameleague=self.find_league(idleague)
-        self.query_one("#main_container").mount(Collapsible(Static(tabmap),id=block_id,title=f"Top Scorers for {nameleague} for year {self.YEAR_SELECT}",collapsed=False))
+        mode="Assists" if assists else "Scorers"
+        self.query_one("#main_container").mount(Collapsible(Static(tabmap),id=block_id,title=f"Top {mode} for {nameleague} for year {self.YEAR_SELECT}",collapsed=False))
         self.query_one("#main_container").scroll_end()
 
     def on_mount(self):
@@ -363,9 +366,17 @@ class goalmasterapp(App):
                         self.add_block_fixture(dfrom,dto)
             elif command[1] == "-TOP":  
                 #print top scorers for league
-                #TODO dedfine and call function to add block for top scorers
-                self.add_block_topscorers(self.league_selected)
-                pass
+                if len(command) < 3: 
+                    self.notify("insert options command for top scorers",severity="error",timeout=10,title="SYNTAX ERROR")
+                    return
+                else:
+                    if command[2] == "S": #selected top scorers
+                        self.add_block_topscorers(self.league_selected)
+                    elif command[2] == "A": #selected top assists
+                        self.add_block_topscorers(self.league_selected,assists=True)
+                    else:
+                        self.notify("must specify 'A' for top assists or 'S' for top scorers",severity="error",timeout=10,title="SYNTAX ERROR")
+                        return
             else:
                 #self.show_message("error command syntax",titlebox="SYNTAX ERROR")
                 self.notify("error command syntax",severity="error",timeout=5)
