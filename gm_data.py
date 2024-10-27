@@ -265,7 +265,8 @@ class League:
         self.country = country
 
 class TopPlayer(Player):
-    def __init__(self,name,position,role,number,team,goals,assists,yellow_cards,red_cards,nationality,age) -> None:
+    def __init__(self,name,position,role,number,team,goals,assists,yellow_cards,red_cards,nationality,age,
+                 penalty_scored,penalty_missed) -> None:
         super().__init__(name,position,role,number)
         self.team = team
         self.goals = goals
@@ -273,4 +274,6 @@ class TopPlayer(Player):
         self.yellow_cards = yellow_cards
         self.red_cards = red_cards
         self.nationality = nationality
-        self.age = age
+        self.age = age,
+        self.penalty_scored = penalty_scored
+        self.penalty_missed = penalty_missed

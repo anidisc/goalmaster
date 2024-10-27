@@ -142,6 +142,8 @@ class ApiFootball:
         table.add_column("W", style="green") # Wins
         table.add_column("D", style="green") # Draws
         table.add_column("L", style="green") # Losses
+        table.add_column("GF", style="yellow") # Goals for
+        table.add_column("GA", style="red") # Goals against
         table.add_column("GF(H)", style="yellow") # Goals for at home
         table.add_column("GA(H)", style="yellow") # Goals against at home
         table.add_column("GF(A)", style="yellow") # Goals for away
@@ -160,6 +162,8 @@ class ApiFootball:
             wins = str(team.wins)
             draws = str(team.draws)
             losses = str(team.losses)
+            goals_for=str(team.goals_for)
+            goals_against=str(team.goals_against)
             goals_for_home = team.goals_for_home
             goals_against_home = team.goals_against_home
             goals_for_away = team.goals_for_away
@@ -185,7 +189,7 @@ class ApiFootball:
 
             # Add the row to the table
             table.add_row(
-                position, team_name, points, played_games, wins, draws, losses,
+                position, team_name, points, played_games, wins, draws, losses, goals_for, goals_against,
                 str(goals_for_home), str(goals_against_home),
                 str(goals_for_away), str(goals_against_away),
                 str(avg_goals_for_home), str(avg_goals_for_away),
@@ -468,7 +472,9 @@ class ApiFootball:
                                          player['statistics'][0]['cards']['yellow'],
                                          player['statistics'][0]['cards']['red'],
                                          player['player']['nationality'],
-                                         player['player']['age']))
+                                         player['player']['age'],
+                                         player['statistics'][0]['penalty']['scored'],
+                                         player['statistics'][0]['penalty']['missed']))
 
         return top_players
       
@@ -484,6 +490,7 @@ class ApiFootball:
         table.add_column("Team", style="cyan", justify="left")
         table.add_column("Goals", style="blue", justify="left")
         table.add_column("Ass.", style="blue", justify="left")
+        table.add_column("Pen.S-M", style="cyan", justify="left")
         table.add_column("YC", style="yellow", justify="left")
         table.add_column("RC", style="red", justify="left")
         table.add_column("Nationality", style="blue", justify="left")
@@ -494,6 +501,7 @@ class ApiFootball:
                           player.team,
                           str(player.goals),
                           str(player.assists),
+                          str(player.penalty_scored)+"-"+str(player.penalty_missed),
                           str(player.yellow_cards),
                           str(player.red_cards),
                           player.nationality,
@@ -533,4 +541,4 @@ class ApiFootball:
 # topplayers=(ApiFootball().get_top_scores(135))
 # for i in topplayers:
 #     rich_print(i.name,i.position,i.team,i.number,i.goals,i.assists,i.nationality,i.age)
-rich_print(ApiFootball().table_top_scores(135))
+#rich_print(ApiFootball().table_top_scores(135))

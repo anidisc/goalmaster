@@ -20,7 +20,7 @@ from rich.console import Console
 import gm_data as gm
 
 
-APPVERSION = "0.3.0"
+APPVERSION = "0.3.2"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -37,6 +37,9 @@ af_map={
     "ERE":{"id":88,"name":"Eredivisie","country":"Netherlands"},
     "COPPAITALIA":{"id":142,"name":"Coppa Italia","country":"Italy"},
 }
+
+languege="italian"  #set here the language for the analysis of predictions
+
 def table_af_map():
     #print a table with the a columm for keys and names if leagues
     table = Table(show_header=True, header_style="bold magenta")
@@ -187,7 +190,8 @@ class goalmasterapp(App):
                 Read data of prediction of this maatch, and analyze it. Stats of singol team, historical statistics of both teams.
                 Match passed h2h of both teams. Show this data in table format.
                     """
-            prediction=gemini_ai.gemini_ai_call(composed_prompt+stats_prediction+preprompt+prompt) 
+            translate=f"Write this analysis in {languege}"
+            prediction=gemini_ai.gemini_ai_call(translate+composed_prompt+stats_prediction+preprompt+prompt) 
             # Save the updated predictions back to the JSON file with indentation for readability
             predictions[id_fixture] = prediction
             with open(json_file, "w") as f:
@@ -244,9 +248,9 @@ class goalmasterapp(App):
     def add_block_topscorers(self,idleague):
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
-        tabmap=af.ApiFootball().table_top_scores(idleague)
+        tabmap=af.ApiFootball(self.YEAR_SELECT).table_top_scores(idleague)
         nameleague=self.find_league(idleague)
-        self.query_one("#main_container").mount(Collapsible(Static(tabmap),id=block_id,title=f"Top Scorers for {nameleague} for year {af.ApiFootball().YEAR}",collapsed=False))
+        self.query_one("#main_container").mount(Collapsible(Static(tabmap),id=block_id,title=f"Top Scorers for {nameleague} for year {self.YEAR_SELECT}",collapsed=False))
         self.query_one("#main_container").scroll_end()
 
     def on_mount(self):
