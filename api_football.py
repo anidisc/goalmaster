@@ -32,7 +32,7 @@ class ApiFootball:
             return 100 - int(response.json()['response']['requests']['current'])
         except:
             return 0
-    def get_standings(self,league):
+    def get_standings(self,league,update=False):
         # get standings from api_football in a specific year from the api parameter and return a table with the data
         # static method (there is no need to create an instance of the class)
         url = f"{API_URL}/standings"
@@ -57,33 +57,33 @@ class ApiFootball:
                 json.dump(data, f)
             return standings
         #check if the headers from the file json are still valid
-        if strleague in standing_to_disk:
+        if (strleague in standing_to_disk) and (update == False):
             if standing_to_disk[strleague]["standing"]["date"] == current_date:
                 return standing_to_disk[strleague]["standing"]["standings"]
         #otherwise get the standings from api_football
         response = requests.get(url, params=params, headers=self.headers)
         standings = response.json()['response'][0]['league']['standings']
         datanew={"standing":{"date":current_date,"standings":standings}}
-                
+
         standing_to_disk[league] = datanew
         #save the standigs in the file append the new standings
         with open(STANDINGS_FILE_DB, "w") as f:
             json.dump(standing_to_disk, f)
         return standings
         #self.rem = response.headers
-        
-    def get_list_standings(self,league):
-        
+
+    def get_list_standings(self,league,update=False):
+
         """
         Get the standings of a league in a specific year from the api parameter and return a list of Team objects.
-        
+
         Args:
             league (int): the league to get the standings for
-        
+
         Returns:
             list: a list of Team objects representing the standings of the league
         """
-        standings = self.get_standings(league)
+        standings = self.get_standings(league,update)
         #memorize the table in a list of list of Team objects
         nl=len(standings)
         teams = [[] for _ in range(nl)]
@@ -92,7 +92,7 @@ class ApiFootball:
             for t in standings[n]:
             # add the team to the list
                 teams[n].append(Team(t["team"]["id"],
-                                    t["team"]["name"],   
+                                    t["team"]["name"],
                                     t["rank"],
                                     t["points"],
                                     t["all"]["played"],
@@ -117,14 +117,14 @@ class ApiFootball:
                                     t["form"],
                                     t["status"]
                                     ))
-        return teams   
+        return teams
     def get_table_standings(self,standings):
         """
         Get the standings of a league in a specific year from the api parameter and return a rich.table.Table object.
-        
+
         Args:
             league (int): the league to get the standings for
-        
+
         Returns:
             rich.table.Table: a rich.table.Table object representing the standings of the league
         """
@@ -175,7 +175,7 @@ class ApiFootball:
                 avg_goals_for_away = round(goals_for_away / team.away_played, 2)
             except ZeroDivisionError:
                 avg_goals_for_home = 0
-                avg_goals_for_away = 0  
+                avg_goals_for_away = 0
 
             # Get the team's form (last 5 matches)
             form=""
@@ -198,7 +198,7 @@ class ApiFootball:
 
         # Return the table
         return table
-    
+
     def get_fixtures(self,id_league,datefrom,dateto):
         url=f"{API_URL}/fixtures"
         params = {
@@ -238,8 +238,8 @@ class ApiFootball:
                                        fixture['fixture']['referee'],
                                        fixture['league']['country']))
         #sort list by date
-        list_fixtures.sort(key=lambda x: x.date) 
-        #and then sort by country   
+        list_fixtures.sort(key=lambda x: x.date)
+        #and then sort by country
         list_fixtures.sort(key=lambda x: x.country)
         #check if the predictions are available in the file json
         try:
@@ -250,7 +250,7 @@ class ApiFootball:
                         match.prediction = True
         except FileNotFoundError:
             pass  # file doesn't exist and do nothing
-        
+
         return list_fixtures
     def get_list_events_fixtures(self,id_fixture):
         url=f"{API_URL}/fixtures/events"
@@ -306,7 +306,7 @@ class ApiFootball:
         response = requests.get(url, params=params, headers=self.headers)
         statistics = response.json()
         return statistics
-    
+
     def get_list_statistics_match(self, id_fixture: int) -> list[Stats]:
         """
         Get the statistics of a match from the API and return a list of Stats objects.
@@ -340,7 +340,7 @@ class ApiFootball:
                 passes_percentage=team['statistics'][15]['value']
             ))
         return list_teams_stats
-    
+
     def print_table_standings(self,league):
         s=self.get_list_statistics_match(league)
         table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
@@ -366,9 +366,9 @@ class ApiFootball:
 
 
         return table
-    
+
     def get_formation_teams(self, id_match) -> Formation:
-        
+
         """
         Get the formation of a team from the API and return a Formation object.
 
@@ -408,7 +408,7 @@ class ApiFootball:
                                       i['player']['grid'],
                                       i['player']['pos'],
                                       i['player']['number']))
-        
+
         return Formation(t1['team']['name'],t1['formation'],t1formation,t1['coach']['name']), Formation(t2['team']['name'],t2['formation'],t2formation,t2['coach']['name'])
 
     def print_table_formations(self, id_match) -> None:
@@ -423,8 +423,8 @@ class ApiFootball:
             c+=1
             if c==11: #add line
                 table.add_row("-- Subst --","-- Subst --",style="bold green")
-            
-      
+
+
         table.add_row("", "", style="bold blue")
         table.add_row(f1.coach,f2.coach, style="bold magenta")
         return table
@@ -441,7 +441,7 @@ class ApiFootball:
         #dsort listy by country
         l.sort(key=lambda x: x.country)
         return l
-    
+
     #get response from api_football of prediction function
     def get_prediction(self, id_match):
         url = f"{API_URL}/predictions"
@@ -477,14 +477,14 @@ class ApiFootball:
                                          player['statistics'][0]['penalty']['missed']))
 
         return top_players
-      
+
     #def a function to get table of top scorers from api_football
     def table_top_scores(self,id_league,assists=False) -> None:
-        
+
         top_players = self.get_top_scores(id_league,assists)
 
         table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
-        
+
         table.add_column("Player", style="white", justify="left")
         table.add_column("Position", style="blue", justify="left")
         table.add_column("Team", style="cyan", justify="left")
@@ -494,7 +494,7 @@ class ApiFootball:
         table.add_column("YC", style="yellow", justify="left")
         table.add_column("RC", style="red", justify="left")
         table.add_column("Nationality", style="blue", justify="left")
-        table.add_column("Age", style="blue", justify="left")   
+        table.add_column("Age", style="blue", justify="left")
         for player in top_players:
             table.add_row(player.name,
                           player.position,
@@ -509,10 +509,10 @@ class ApiFootball:
                           )
 
         return table
-    
+
 
 #m=ApiFootball().get_table_standings(135)
-# testo=str(rich_print(ApiFootball().get_table_standings(135)))                                                                                                                                                                                                                                                                                                                                            
+# testo=str(rich_print(ApiFootball().get_table_standings(135)))
 # print(type(testo))
 #rich_print("Status remaining calls :", ApiFootball().get_status())
 #rich_print("standings italy 2023", ApiFootball(2023).get_table_standings(135))

@@ -20,15 +20,18 @@ from rich.console import Console
 import gm_data as gm
 
 
-APPVERSION = "0.3.3"
+APPVERSION = "0.3.4"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
     "BUNDESLIGA":{"id":78,"name":"Bundesliga","country":"Germany"},
     "LIGUE1":{"id":61,"name":"Ligue 1","country":"France"},
     "PREMIERLEAGUE":{"id":39,"name":"Premier League","country":"England"},
+    "PRIMERA":{"id":137,"name":"Primera División","country":"Spain"},
     "SERIEB":{"id":136,"name":"Serie B","country":"Italy"},
-    "SERIEC":{"id":137,"name":"Serie C","country":"Italy"},
+    "SERIEC1":{"id":138,"name":"Serie C","country":"Italy"},
+    "SERIEC2":{"id":942,"name":"Serie C","country":"Italy"},
+    "SERIEC3":{"id":943,"name":"Serie C","country":"Italy"},
     "BUNDESLIGA2":{"id":79,"name":"Bundesliga 2","country":"Germany"},
     "LIGUE2":{"id":62,"name":"Ligue 2","country":"France"},
     "SUPERLIG":{"id":203,"name":"Super Lig","country":"Turkey"},
@@ -87,7 +90,7 @@ class goalmasterapp(App):
         yield self.yearsbox
         #create an info box to show a varius texts
         # self.infobox = Static("info text to print",id="infobox")
-        # yield Vertical(self.infobox,Button("ok",id="ok_info_button"),id="infolayout") 
+        # yield Vertical(self.infobox,Button("ok",id="ok_info_button"),id="infolayout")
         self.select_todo_box = OptionList("EVENT TABLE","MATCH STATS","PREDICTION","FORM.LINEUPS","EXIT",id="select_todo_box")
         yield self.select_todo_box
     def find_league(self,league):
@@ -95,12 +98,12 @@ class goalmasterapp(App):
         for k,v in af_map.items():
             if v["id"] == self.league_selected:
                 league_name = f"{af_map[k]["name"]} Country: {af_map[k]["country"]}"
-                break 
+                break
         return league_name
-    
+
     #create block to show the current standings of the league
-    def add_block_standings(self,league,text="text to print",group=0):
-        s = af.ApiFootball(self.YEAR_SELECT).get_list_standings(self.league_selected)
+    def add_block_standings(self,league,text="text to print",group=0,update=False):
+        s = af.ApiFootball(self.YEAR_SELECT).get_list_standings(self.league_selected,update)
         if group =="all":
             standings = [af.ApiFootball().get_table_standings(x) for x in s]
         else:
@@ -156,7 +159,7 @@ class goalmasterapp(App):
         #events.focus()
         #scrool maioncontainer on botton of list view
         self.query_one("#main_container").scroll_end()
-    
+
     def add_block_stats_match(self,id_fixture,team1,team2):
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         stats_table=af.ApiFootball().print_table_standings(id_fixture)
@@ -178,7 +181,7 @@ class goalmasterapp(App):
             # Load the existing predictions from the file
             with open(json_file, "r") as f:
                 predictions = json.load(f)
-        
+
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         table_stats=af.ApiFootball().get_standings(league_id)
@@ -192,16 +195,16 @@ class goalmasterapp(App):
                 Match passed h2h of both teams. Show this data in table format.
                     """
             translate=f"Write this analysis in {languege}"
-            prediction=gemini_ai.gemini_ai_call(translate+composed_prompt+stats_prediction+preprompt+prompt) 
+            prediction=gemini_ai.gemini_ai_call(translate+composed_prompt+stats_prediction+preprompt+prompt)
             # Save the updated predictions back to the JSON file with indentation for readability
             predictions[id_fixture] = prediction
             with open(json_file, "w") as f:
-                json.dump(predictions, f, indent=4) 
+                json.dump(predictions, f, indent=4)
         self.query_one("#main_container").mount(Collapsible(Static(Markdown(prediction),classes="predictions"),
                                                             id=block_id,title="Prediction Match: "+team1+" vs "+team2,
                                                             collapsed=False)) #mount block and list_fixtures)
         self.query_one("#main_container").scroll_end()
-  
+
 
     def add_block_formations(self,id_fixture,team1,team2):
         self.block_counter += 1 # Increment the block counter
@@ -210,7 +213,7 @@ class goalmasterapp(App):
         formtext=af.ApiFootball().print_table_formations(id_fixture)
         self.query_one("#main_container").mount(Collapsible(Static(formtext),id=block_id,title=f"Formations: {team1} vs {team2}",collapsed=False))
         self.query_one("#main_container").scroll_end()
-    
+
     def add_block_help(self):
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
@@ -232,17 +235,21 @@ class goalmasterapp(App):
         -HELP - show this help
         -STATUS - show status of api calls
         -EXIT - exit the app
-        -LEAGUE -args: 
+        -LEAGUE -args:
             -S - standings
+               - ALL - all groups standings if league has groups
+               - #GROUPNUMBER - specific groups standings if league has groups
+               - UPDATE - update standings and not call from existing standings on disk
             -T - timeshift days (example 1 is from today to today+1, or -1 is from today to today-1)
             -TOP 'S' - top scorers 'A' - top assists
+
         Available LEAGUES:
 
             {formatted_tabmap}
-        
+
         Press q - Exit
 
-        
+
         """
         self.query_one("#main_container").mount(Collapsible(Static(HELPTEXT),id=block_id,title="Help",collapsed=False))
         self.query_one("#main_container").scroll_end()
@@ -257,7 +264,7 @@ class goalmasterapp(App):
         self.query_one("#main_container").scroll_end()
 
     def on_mount(self):
-        #self.query_one("#input").styles.visibility = "hidden" # 
+        #self.query_one("#input").styles.visibility = "hidden" #
         self.input_box.display = False # Hide the input box
         #self.select_todo_box.styles.visibility = "hidden" # hide the select todo box
         self.select_todo_box.display = False
@@ -346,10 +353,12 @@ class goalmasterapp(App):
                 else:
                     if command[2] == "ALL":
                         self.add_block_standings(self.league_selected,group="all")
+                    elif command[2] == "UPDATE": #call function to update standings without checking if exist
+                        self.add_block_standings(self.league_selected,group="all",update=True)
                     elif int(command[2]) in range(10):
                         self.add_block_standings(self.league_selected,group=int(command[2]))
-                    else:
                         #self.show_message("error command syntax",titlebox="SYNTAX ERROR")
+                    else:
                         self.notify("error command syntax or command not found",severity="error",timeout=5,title="SYNTAX ERROR")
             elif command[1] == "-T":
                 if len(command) < 3:
@@ -364,9 +373,9 @@ class goalmasterapp(App):
                         dfrom=datetime.now().date()+timedelta(days=int(command[2]))
                         dto=datetime.now().date()
                         self.add_block_fixture(dfrom,dto)
-            elif command[1] == "-TOP":  
+            elif command[1] == "-TOP":
                 #print top scorers for league
-                if len(command) < 3: 
+                if len(command) < 3:
                     self.notify("insert options command for top scorers",severity="error",timeout=10,title="SYNTAX ERROR")
                     return
                 else:
@@ -383,7 +392,7 @@ class goalmasterapp(App):
         else:
             #self.show_message("command not found",titlebox="INVALID COMMAND")
             self.notify("command not found",severity="error",timeout=5)
-            # self.add_block_standings(self.league_selected)   
+            # self.add_block_standings(self.league_selected)
 
         # if command == "seriea":
         #     self.league_selected = 135
@@ -398,7 +407,7 @@ class goalmasterapp(App):
         #self.input_box.styles.visibility = "hidden"
         self.input_box.display = False # Hide the input box
         self.input_box.value = ""
- 
+
     def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
         if event.option_list.id == "yearsbox":
             selected_option = event.option.prompt
@@ -419,7 +428,7 @@ class goalmasterapp(App):
             self.select_todo_box.display = True
             #focus on select todo box
             self.select_todo_box.focus()
-            
+
 
             self.notify(self.selec_match.home_team+" vs "+self.selec_match.away_team,severity="info",timeout=5)
             #TODO show live matches in the future
@@ -448,15 +457,15 @@ class goalmasterapp(App):
             if event.option_index == 2:  #selected add block standings of the league
                 prompt_request = f"""
                 Analyze the match between {self.selec_match.home_team} and {self.selec_match.away_team}.
-                Try to analyze the match between the two teams, providing a precise context in which they 
-                will face each other, comparing their statistical performance in the league. 
-                Present this data using comparative tables and histograms where possible. 
-                Analyze well the behavior and performance of the teams at home and away, and base your judgment on this, 
-                which should be a calculated prediction 1 X 2, and where you are unsure, also provide a double chance 
-                (for example, 1X, X2, 12). Additionally, separate with a line the next judgment on how many 
-                goals the teams might score and whether it's likely to be GG (both teams to score) or NG 
-                (no goals from one or both teams). Further, 
-                identify the team with the highest probability of scoring at least one goal, which should exceed 70%, 
+                Try to analyze the match between the two teams, providing a precise context in which they
+                will face each other, comparing their statistical performance in the league.
+                Present this data using comparative tables and histograms where possible.
+                Analyze well the behavior and performance of the teams at home and away, and base your judgment on this,
+                which should be a calculated prediction 1 X 2, and where you are unsure, also provide a double chance
+                (for example, 1X, X2, 12). Additionally, separate with a line the next judgment on how many
+                goals the teams might score and whether it's likely to be GG (both teams to score) or NG
+                (no goals from one or both teams). Further,
+                identify the team with the highest probability of scoring at least one goal, which should exceed 70%,
                 and the team with the lowest probability of scoring at least one goal, which should be below 30%. and of course, explain all your choices."
 
                 """
@@ -478,7 +487,7 @@ class goalmasterapp(App):
                 else:
                     self.notify("Match not started",severity="warning",timeout=5)
                     self.focused.focus()
-                    
+
                     return
 if __name__ == "__main__":
     app = goalmasterapp().run()
