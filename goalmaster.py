@@ -144,9 +144,10 @@ class goalmasterapp(App):
                                                             id=block_id+"_fixtures",title=list_fixtures_title,
                                                             collapsed=False)) #mount block and list_fixtures)
         #focus on list view
-        list_fixtures.focus()
+        #list_fixtures.focus()
         #scrool maioncontainer on botton of list view
         self.query_one("#main_container").scroll_end()
+        list_fixtures.focus()
     def add_block_events_match(self,id_fixture,team1,team2):
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         events_table=af.ApiFootball().get_table_event_flow(id_fixture)
