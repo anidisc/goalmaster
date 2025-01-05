@@ -20,7 +20,7 @@ from rich.console import Console
 import gm_data as gm
 
 
-APPVERSION = "0.3.4"
+APPVERSION = "0.4.0"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -171,7 +171,7 @@ class goalmasterapp(App):
                                                             collapsed=False)) #mount block and list_fixtures)
         self.query_one("#main_container").scroll_end()
 
-    def add_block_prediction(self,league_id,id_fixture,team1,team2,prompt):
+    def add_block_prediction(self,league_id,id_fixture,team1,team2,prompt,team1_id,team2_id):
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         json_file = gm.PREDICTION_FILE_DB
         id_fixture = str(id_fixture) #convert to string
@@ -190,10 +190,11 @@ class goalmasterapp(App):
         if id_fixture in predictions:
             prediction = predictions[id_fixture]
         else:
-            stats_prediction=f"This is data of prediction by agency between {team1} vs {team2}:{af.ApiFootball().get_prediction(id_fixture)}"
+            stats_prediction=f"This is data of prediction by agency between {team1} vs {team2}:{af.ApiFootball().get_prediction(id_fixture)} and data of detailed stattistic of both teams {team1}:{af.ApiFootball().get_team_statistics(team1_id,league_id)} and {team2}:{af.ApiFootball().get_team_statistics(team2_id,league_id)}"
             preprompt="""
                 Read data of prediction of this maatch, and analyze it. Stats of singol team, historical statistics of both teams.
-                Match passed h2h of both teams. Show this data in table format.
+                Match passed h2h of both teams. Show this data in table format. 
+                Print the datailed stats of both teams, in textual ascii instogram format.
                     """
             translate=f"Write this analysis in {languege}"
             prediction=gemini_ai.gemini_ai_call(translate+composed_prompt+stats_prediction+preprompt+prompt)
@@ -479,7 +480,7 @@ class goalmasterapp(App):
                     pass
                 else:  #not live prediction
                     self.notify(f"Analyze prediction... {self.selec_match.home_team} vs {self.selec_match.away_team}",severity="info",timeout=8,title="PREDICT IN PROGRESS")
-                    self.add_block_prediction(self.league_selected,self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team,prompt_request)
+                    self.add_block_prediction(self.league_selected,self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team,prompt_request,self.selec_match.id_home_team,self.selec_match.id_away_team)
                     #update flag prediction match to true
                     self.selec_match.prediction = True
             if event.option_index == 3:  #selected add block formations of selected match

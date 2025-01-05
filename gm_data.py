@@ -105,7 +105,7 @@ class Team:
     
 
 class Match:
-    def __init__(self, id, date, round, home_team, away_team, home_score, away_score, status,minute,referee,country,prediction=False):
+    def __init__(self, id, date, round, home_team, away_team, home_score, away_score, status,minute,referee,country,id_home_team,id_away_team,prediction=False):
         """
         Class for structure data of a match.
 
@@ -128,6 +128,8 @@ class Match:
         self.referee = referee
         self.round = round
         self.country = country
+        self.id_home_team = id_home_team
+        self.id_away_team = id_away_team
         self.prediction = prediction
 
     def get_flag(self) -> str:

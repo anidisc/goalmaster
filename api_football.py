@@ -23,7 +23,7 @@ class ApiFootball:
             "x-rapidapi-host": "v3.football.api-sports.io",
             "x-rapidapi-key": API_KEY
         }
-        self.YEAR = year
+        self.YEAR = 2024 if (year==2025) else year #TODO change to the current year ad start of the season
         self.timezone = timezone
     def get_status_apicalls(self):
         url = f"{API_URL}/status"
@@ -236,7 +236,9 @@ class ApiFootball:
                                        fixture['fixture']['status']['short'],
                                        fixture['fixture']['status']['elapsed'],
                                        fixture['fixture']['referee'],
-                                       fixture['league']['country']))
+                                       fixture['league']['country'],
+                                       fixture['teams']['home']['id'],
+                                       fixture['teams']['away']['id']))
         #sort list by date
         list_fixtures.sort(key=lambda x: x.date)
         #and then sort by country
@@ -510,7 +512,17 @@ class ApiFootball:
 
         return table
 
-
+    #def a function that get team statistic from api_football
+    def get_team_statistics(self,id_team,id_league):
+        url = f"{API_URL}/teams/statistics"
+        params = {
+            "team": id_team,
+            "league": id_league,
+            "season": self.YEAR
+        }
+        response = requests.get(url, headers=self.headers, params=params)
+        return response.json()['response']
+    
 #m=ApiFootball().get_table_standings(135)
 # testo=str(rich_print(ApiFootball().get_table_standings(135)))
 # print(type(testo))
