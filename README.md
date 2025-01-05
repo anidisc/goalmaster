@@ -111,19 +111,3 @@ git checkout -b feature-new-functionality
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
-
-```
-
----
-
-**Additional Features:**
-
-- Detailed predictions, including goals and scoring probabilities.
-- Future development focusing on visualizations, in-depth analysis, and expanded league support.
-
----
-
-**Suggestions:**
-**a.** Add usage examples for AI-powered predictions.  
-**b.** Consider including an FAQ section for common issues.
-```
