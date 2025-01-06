@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import datetime as dt
 from rich.table import Table
 from rich import print as rich_print
-from gm_data import League, Team, Match, Event, Stats, Formation, Player, TopPlayer
+from gm_data import League, Team, Match, Event, Stats, Formation, Player, TopPlayer, TeamStats
 import datetime as dt
 
 
@@ -15,6 +15,7 @@ API_URL = "https://v3.football.api-sports.io/"
 API_KEY = os.environ.get("APIFOOTBALL_KEY")
 PREDICTION_FILE_DB = "predictions.json"
 STANDINGS_FILE_DB = "standings.json"
+TEAM_STATISTICS_FILE_DB="team_statistics.json"
 
 
 class ApiFootball:
@@ -520,8 +521,114 @@ class ApiFootball:
             "league": id_league,
             "season": self.YEAR
         }
-        response = requests.get(url, headers=self.headers, params=params)
-        return response.json()['response']
+        #save response in json file if not exist
+        id_team=str(id_team)
+        data={}
+        try:
+            with open(TEAM_STATISTICS_FILE_DB, "r") as f:
+                team_statistics_to_disk = json.load(f)
+        except FileNotFoundError: #create file and structure data inside
+            with open(TEAM_STATISTICS_FILE_DB, "w") as f:
+                response = requests.get(url, headers=self.headers, params=params)
+                data[id_team]={"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
+                json.dump(data, f,indent=4)
+            return response.json()['response']
+        #check if the headers from the file json are still valid
+        #otherwise get the standings from api_football
+        #check if id_team is in the file json
+        if id_team in team_statistics_to_disk:
+            if team_statistics_to_disk[id_team]["data"]["date"] == datetime.now().strftime("%Y-%m-%d"):
+                return team_statistics_to_disk[id_team]["data"]["statistics"]
+        else:
+            response = requests.get(url, headers=self.headers, params=params)
+            #data={"id_team":id_team,"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
+            data[id_team]={"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
+            team_statistics_to_disk.update(data)
+            with open(TEAM_STATISTICS_FILE_DB, "w") as f:
+                json.dump(team_statistics_to_disk, f,indent=4)
+            return response.json()['response']
+        
+    #def a fun that print a table of team statistic from api_football to compare two teams
+    def print_table_compareteams(self,team1, team2):
+        
+        from rich import box
+        from rich.text import Text
+
+        # Campi da escludere
+        excluded_fields = [
+            "team_id", "team_logo", "league_id", "league_flag", "league_logo"#,"lineups","form"
+        ]
+
+
+        def add_rows_recursive(table, prefix, data1, data2):
+            """Aggiunge righe alla tabella per ogni campo trovato nei dizionari, escludendo quelli indicati."""
+            for key in (set(data1.keys()).union(data2.keys())):
+                if f"{prefix}{key}" in excluded_fields:
+                    continue  # Salta i campi esclusi
+
+                val1 = data1.get(key, "-")
+                val2 = data2.get(key, "-")
+
+                if key == "form":
+                    # Visualizza il campo `form` con pallini colorati
+                    val1 = format_form(val1)
+                    val2 = format_form(val2)
+                elif key == "lineups":
+                    # Visualizza `lineups` in maniera leggibile
+                    val1 = format_lineups(val1)
+                    val2 = format_lineups(val2)
+                elif isinstance(val1, dict) or isinstance(val2, dict):
+                    # Se il valore è un dizionario, continua la ricorsione
+                    sub_data1 = val1 if isinstance(val1, dict) else {}
+                    sub_data2 = val2 if isinstance(val2, dict) else {}
+                    #exclude to add row if value is None
+                    if sub_data1=={} and sub_data2=={}:
+                        continue
+                    add_rows_recursive(table, f"{prefix}{key}.", sub_data1, sub_data2)
+                    continue
+                else:
+                    val1 = str(val1 or "-")
+                    val2 = str(val2 or "-")
+                if val1 == "-" and val2 == "-":
+                    continue
+                table.add_row(f"{prefix}{key}", val1, val2)
+
+        def format_form(form_string):
+            """Formatta il campo `form` con pallini colorati."""
+            if not form_string or not isinstance(form_string, str):
+                return "N/A"
+            text = Text()
+            #make the char arrow right in the table
+            ch_green="🟩"
+            ch_yellow="🟨"
+            ch_red="🟥"
+            for char in form_string:
+                if char == "W":
+                    text.append(ch_green, style="green")
+                elif char == "D":
+                    text.append(ch_yellow, style="yellow")
+                elif char == "L":
+                    text.append(ch_red, style="red")
+                else:
+                    text.append(f"{char} ", style="dim")
+            return text
+
+        def format_lineups(lineups):
+            """Formatta il campo `lineups` in maniera leggibile."""
+            if not lineups or not isinstance(lineups, list):
+                return "N/A"
+            return "\n".join(f"Formation: {item['formation']} - Played: {item['played']}" for item in lineups)
+
+        # Creazione della tabella
+        table = Table(title="Team Comparison", show_lines=False, box=box.ROUNDED)
+        table.add_column("Attribute", justify="left", style="bold")
+        table.add_column(team1.team_name or "Team 1", justify="center", style="cyan")
+        table.add_column(team2.team_name or "Team 2", justify="center", style="magenta")
+
+        # Aggiunta delle righe
+        add_rows_recursive(table, "", team1.__dict__, team2.__dict__)
+        # Stampa la tabella
+        return table
     
 #m=ApiFootball().get_table_standings(135)
 # testo=str(rich_print(ApiFootball().get_table_standings(135)))
@@ -554,3 +661,11 @@ class ApiFootball:
 # for i in topplayers:
 #     rich_print(i.name,i.position,i.team,i.number,i.goals,i.assists,i.nationality,i.age)
 #rich_print(ApiFootball().table_top_scores(135))
+# response1=ApiFootball().get_team_statistics(492,135)
+# response2=ApiFootball().get_team_statistics(490,135)
+# ts1,ts2=TeamStats(),TeamStats()
+# ts1.Charge_Data(response1)
+# ts2.Charge_Data(response2)
+# rich_print(ApiFootball().print_table_compareteams(ts1,ts2))
+# #rich_print(ts1.get_table_stats())
+# #rich_print(ts1.get_table_stats())

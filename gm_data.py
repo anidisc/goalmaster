@@ -103,6 +103,74 @@ class Team:
         except ZeroDivisionError:
             return 0
     
+class TeamStats:
+    def __init__(self):
+        # League information
+        self.league_id = None
+        self.league_name = None
+        self.league_country = None
+        self.league_logo = None
+        self.league_flag = None
+        self.league_season = None
+
+        # Team information
+        self.team_id = None
+        self.team_name = None
+        self.team_logo = None
+
+        # Other attributes
+        self.form = None
+        self.fixtures = {}
+        self.goals = {}
+        self.against = {}
+        self.biggest = {}
+        self.clean_sheet = {}
+        self.failed_to_score = {}
+        self.penalty = {}
+        self.lineups = []
+        self.cards = {}
+    def Charge_Data(self,data):
+        """
+        Charge_Data parses data from the API and assigns values to the relevant attributes
+
+        Parameters
+        ----------
+        data : dict
+            The data returned from the API
+        id : int, optional
+            The league ID, by default None
+        year : int, optional
+            The year of the league season, by default None
+        time_data : dict, optional
+            The time data for the league, by default None
+        """
+        # Parse League
+        if 'league' in data:
+            self.league_id = data['league'].get('id')
+            self.league_name = data['league'].get('name')
+            self.league_country = data['league'].get('country')
+            self.league_logo = data['league'].get('logo')
+            self.league_flag = data['league'].get('flag')
+            self.league_season = data['league'].get('season')
+
+        # Parse Team
+        if 'team' in data:
+            self.team_id = data['team'].get('id')
+            self.team_name = data['team'].get('name')
+            self.team_logo = data['team'].get('logo')
+
+        # Populate other attributes
+        self.form = data.get('form')
+        self.fixtures = data.get('fixtures', {})
+        self.goals = data.get('goals', {})
+        self.against = data.get('against', {})
+        self.biggest = data.get('biggest', {})
+        self.clean_sheet = data.get('clean_sheet', {})
+        self.failed_to_score = data.get('failed_to_score', {})
+        self.penalty = data.get('penalty', {})
+        self.lineups = data.get('lineups', [])
+        self.cards = data.get('cards', {})
+
 
 class Match:
     def __init__(self, id, date, round, home_team, away_team, home_score, away_score, status,minute,referee,country,id_home_team,id_away_team,prediction=False):

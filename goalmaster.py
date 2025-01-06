@@ -20,7 +20,7 @@ from rich.console import Console
 import gm_data as gm
 
 
-APPVERSION = "0.4.0"
+APPVERSION = "0.4.5"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
