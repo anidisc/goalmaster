@@ -173,7 +173,7 @@ class TeamStats:
 
 
 class Match:
-    def __init__(self, id, date, round, home_team, away_team, home_score, away_score, status,minute,referee,country,id_home_team,id_away_team,prediction=False):
+    def __init__(self, id, date, round, home_team, away_team, home_score, away_score, status,minute,referee,country,id_home_team,id_away_team,prediction=False,id_league=None):
         """
         Class for structure data of a match.
 
@@ -199,6 +199,7 @@ class Match:
         self.id_home_team = id_home_team
         self.id_away_team = id_away_team
         self.prediction = prediction
+        self.id_league = id_league
 
     def get_flag(self) -> str:
         country_flag={

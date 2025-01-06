@@ -8,7 +8,7 @@ ToastRack {
 }
 
 Screen {   
-    layers: below above above2 above3;
+    layers: below above above2 above3 above4;
     align: center middle;
 }
 
@@ -48,6 +48,16 @@ Screen {
     width: 25%;
     height: auto;
 }
+
+#compare_teams_box {
+    layer: above4;
+    border: round green;
+    width: 60%;
+    height: 80%;
+    visibility: hidden;
+    align: center middle;
+}
+
 .predictions {
     border: double green;
     padding: 2;

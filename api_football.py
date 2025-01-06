@@ -239,7 +239,8 @@ class ApiFootball:
                                        fixture['fixture']['referee'],
                                        fixture['league']['country'],
                                        fixture['teams']['home']['id'],
-                                       fixture['teams']['away']['id']))
+                                       fixture['teams']['away']['id'],
+                                       id_league=league))
         #sort list by date
         list_fixtures.sort(key=lambda x: x.date)
         #and then sort by country

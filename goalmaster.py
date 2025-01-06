@@ -20,13 +20,14 @@ from rich.console import Console
 import gm_data as gm
 
 
-APPVERSION = "0.4.5"
+APPVERSION = "0.5.1"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
     "BUNDESLIGA":{"id":78,"name":"Bundesliga","country":"Germany"},
     "LIGUE1":{"id":61,"name":"Ligue 1","country":"France"},
     "PREMIERLEAGUE":{"id":39,"name":"Premier League","country":"England"},
+    "LIGA":{"id":141,"name":"Liga Purtugal","country":"Portugal"},
     "PRIMERA":{"id":137,"name":"Primera División","country":"Spain"},
     "SERIEB":{"id":136,"name":"Serie B","country":"Italy"},
     "SERIEC1":{"id":138,"name":"Serie C","country":"Italy"},
@@ -63,6 +64,7 @@ class goalmasterapp(App):
                 ("y", "change_year", "Change Year"),
                 ("i", "insert_command", "Insert Command"),
                 ("r","remove_block","Remove Block"),
+                ("s", "show_full_stats", "Show Full Stats"),
                 ("c", "collapse_or_expand(True)", "Collapse All")]
     CSS_PATH = "appstyle.tcss"
 
@@ -93,6 +95,10 @@ class goalmasterapp(App):
         # yield Vertical(self.infobox,Button("ok",id="ok_info_button"),id="infolayout")
         self.select_todo_box = OptionList("EVENT TABLE","MATCH STATS","PREDICTION","FORM.LINEUPS","EXIT",id="select_todo_box")
         yield self.select_todo_box
+        self.compare_text_box = Static("TEXt TEAM TO COMPARE",id="compare_text_box")
+        self.compare_teams_box = ScrollableContainer(self.compare_text_box,id="compare_teams_box")
+        yield self.compare_teams_box
+
     def find_league(self,league):
             #find name of league with de id of league
         for k,v in af_map.items():
@@ -190,11 +196,16 @@ class goalmasterapp(App):
         if id_fixture in predictions:
             prediction = predictions[id_fixture]
         else:
-            stats_prediction=f"This is data of prediction by agency between {team1} vs {team2}:{af.ApiFootball().get_prediction(id_fixture)} and data of detailed stattistic of both teams {team1}:{af.ApiFootball().get_team_statistics(team1_id,league_id)} and {team2}:{af.ApiFootball().get_team_statistics(team2_id,league_id)}"
+            rs1=(af.ApiFootball().get_team_statistics(team1_id,league_id))
+            rs2=(af.ApiFootball().get_team_statistics(team2_id,league_id))
+            ts1,ts2=gm.TeamStats(),gm.TeamStats()
+            ts1.Charge_Data(rs1)
+            ts2.Charge_Data(rs2)
+            big_team_stats=af.ApiFootball().print_table_compareteams(ts1,ts2)
+            stats_prediction=f"This is data of prediction by agency between {team1} vs {team2}:{af.ApiFootball().get_prediction(id_fixture)} and data of detailed statistics of both teams {big_team_stats}"
             preprompt="""
                 Read data of prediction of this maatch, and analyze it. Stats of singol team, historical statistics of both teams.
                 Match passed h2h of both teams. Show this data in table format. 
-                Print the datailed stats of both teams, in textual ascii instogram format.
                     """
             translate=f"Write this analysis in {languege}"
             prediction=gemini_ai.gemini_ai_call(translate+composed_prompt+stats_prediction+preprompt+prompt)
@@ -309,6 +320,16 @@ class goalmasterapp(App):
     def action_collapse_or_expand(self, collapse: bool) -> None:
         for child in self.walk_children(Collapsible):
             child.collapsed = collapse
+    def action_show_full_stats(self):
+        self.compare_teams_box.styles.visibility = "visible" if self.compare_teams_box.styles.visibility == "hidden" else "hidden"
+        self.compare_teams_box.focus()
+        r1=af.ApiFootball().get_team_statistics(self.selec_match.id_home_team,self.selec_match.id_league)
+        r2=af.ApiFootball().get_team_statistics(self.selec_match.id_away_team,self.selec_match.id_league)
+        t1,t2=gm.TeamStats(),gm.TeamStats()
+        t1.Charge_Data(r1)
+        t2.Charge_Data(r2)
+        text_stat_to_show = af.ApiFootball().print_table_compareteams(t1,t2)
+        self.compare_text_box.update(text_stat_to_show)
 
     def on_input_submitted(self, event: Input.Submitted):
         #validate di input is not void
@@ -433,6 +454,8 @@ class goalmasterapp(App):
 
 
             self.notify(self.selec_match.home_team+" vs "+self.selec_match.away_team,severity="info",timeout=5)
+            # fix selection match in the title
+            self.title = f"GOAL MASTER {APPVERSION} YEAR:{self.YEAR_SELECT} CALLS:{af.ApiFootball().get_status_apicalls()} - Match SELECTED:{self.selec_match.home_team} vs {self.selec_match.away_team}"
             #TODO show live matches in the future
         if event.option_list.id == "select_todo_box":
             # if self.selec_match.status in ["NS","RS"]: #not started or resulted
