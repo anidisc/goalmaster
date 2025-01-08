@@ -51,8 +51,8 @@ Screen {
 
 #compare_teams_box {
     layer: above4;
-    border: round green;
-    width: 60%;
+    border: round blueviolet;
+    width: 90%;
     height: 80%;
     visibility: hidden;
     align: center middle;

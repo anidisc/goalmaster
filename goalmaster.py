@@ -20,7 +20,7 @@ from rich.console import Console
 import gm_data as gm
 
 
-APPVERSION = "0.5.1"
+APPVERSION = "0.5.2"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -76,7 +76,7 @@ class goalmasterapp(App):
         #create a dict of all list of fixtures to reference them later
         self.blocklist = {}
         self.list_of_blocks = []
-        self.selec_match = []
+        self.selec_match = None
         self.last_focus_id =None
         self.memory_standings = None  # Memory of the standings in list of dict
 
@@ -321,6 +321,10 @@ class goalmasterapp(App):
         for child in self.walk_children(Collapsible):
             child.collapsed = collapse
     def action_show_full_stats(self):
+        #validate if a match is selected
+        if self.selec_match is None:
+            self.notify("No match selected",severity="warning",timeout=5)
+            return
         self.compare_teams_box.styles.visibility = "visible" if self.compare_teams_box.styles.visibility == "hidden" else "hidden"
         self.compare_teams_box.focus()
         r1=af.ApiFootball().get_team_statistics(self.selec_match.id_home_team,self.selec_match.id_league)

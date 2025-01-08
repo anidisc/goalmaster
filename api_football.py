@@ -523,7 +523,7 @@ class ApiFootball:
             "season": self.YEAR
         }
         #save response in json file if not exist
-        id_team=str(id_team)
+        id_team=str(id_team)+"-#"+str(id_league)
         data={}
         try:
             with open(TEAM_STATISTICS_FILE_DB, "r") as f:
@@ -538,7 +538,8 @@ class ApiFootball:
         #otherwise get the standings from api_football
         #check if id_team is in the file json
         if id_team in team_statistics_to_disk:
-            if team_statistics_to_disk[id_team]["data"]["date"] == datetime.now().strftime("%Y-%m-%d"):
+            date_limit = (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d")
+            if team_statistics_to_disk[id_team]["data"]["date"] >= date_limit: #== datetime.now().strftime("%Y-%m-%d"):
                 return team_statistics_to_disk[id_team]["data"]["statistics"]
         else:
             response = requests.get(url, headers=self.headers, params=params)
