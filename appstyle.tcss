@@ -55,7 +55,6 @@ Screen {
     width: 90%;
     height: 80%;
     visibility: hidden;
-    align: center middle;
 }
 
 .predictions {
@@ -64,14 +63,12 @@ Screen {
 
 }
 
-/*
 #input {
     layer: above3;
-    border: yellow;
+    border: round rgb(75, 75, 80);
     background: black;
-    width: 90%;
-    dock: bottom;
+    width: 50%;
     align: center middle;
 
 }
-*/
+

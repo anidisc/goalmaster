@@ -550,6 +550,10 @@ class ApiFootball:
                 json.dump(team_statistics_to_disk, f,indent=4)
             return response.json()['response']
         
+        
+        
+        
+        
     #def a fun that print a table of team statistic from api_football to compare two teams
     def print_table_compareteams(self,team1, team2):
         

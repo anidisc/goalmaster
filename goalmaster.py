@@ -18,9 +18,12 @@ import shlex
 from io import StringIO
 from rich.console import Console
 import gm_data as gm
+from markdown import markdown
+from weasyprint import HTML
+import mistune
 
 
-APPVERSION = "0.5.2"
+APPVERSION = "0.6.5"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -58,6 +61,106 @@ def table_af_map():
     console = Console(record=True, width=100)
     console.print(table)
     return console.export_text()
+
+#create a function to save the prediction in a file pdf named with che id_fixture.pdf
+def save_prediction_pdf(id_fixture,prediction):
+    #save the prediction in a file pdf named with che id_fixture.pdf
+    pathfilepdf=f"pdf/predictions/{id_fixture}.pdf"
+    try:
+        # Converti il Markdown in HTML
+        html_content = markdown(prediction, extensions=['tables'])
+        
+        # Aggiungi uno stile CSS base per migliorare l'aspetto delle tabelle
+        css = """
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        """
+        cssmini = """
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            margin: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 9px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 4px;
+        }
+        th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            margin: 5px 0;
+        }
+        p {
+            margin: 5px 0;
+        }
+        """
+     
+        # Combina l'HTML e lo stile CSS
+        full_html = f"""
+        <html>
+        <head>
+        <style>{cssmini}</style>
+        </head>
+        <body>
+        {html_content}
+        </body>
+        </html>
+        """
+        
+        # Genera il PDF usando WeasyPrint
+        HTML(string=full_html).write_pdf(pathfilepdf)
+    except Exception as e:
+        pass
+
+    # Converti il testo iniziale in HTML
+    # markdown_renderer = mistune.create_markdown()
+    # html_content = markdown_renderer(prediction)
+    # # Applica CSS 
+    # custom_css = """
+    #                     table {
+    #                         width: 100%;
+    #                         border-collapse: collapse;
+    #                         margin: 20px 0;
+    #                         font-size: 16px;
+    #                         text-align: left;
+    #                     }
+    #                     th, td {
+    #                         border: 1px solid #dddddd;
+    #                         padding: 8px;
+    #                     }
+    #                     th {
+    #                         background-color: #f2f2f2;
+    #                     }
+    #                     body {
+    #                         font-family: Arial, sans-serif;
+    #                         line-height: 1.6;
+    #                         margin: 20px;
+    #                     }
+    #                     """
+    # html_content = f"<style>{custom_css}</style>{html_content}"
+    # HTML(string=html_content).write_pdf(pathfilepdf)
+    return
+
 #class for structure data of a soccer team
 class goalmasterapp(App):
     BINDINGS = [("q", "quit", "Quit"),
@@ -79,6 +182,7 @@ class goalmasterapp(App):
         self.selec_match = None
         self.last_focus_id =None
         self.memory_standings = None  # Memory of the standings in list of dict
+        self.id_focused = None #Memory of the id of the focused widget
 
     def compose(self):
         yield Header()
@@ -131,8 +235,8 @@ class goalmasterapp(App):
 
         content_title = f"Standings {self.find_league(league)}"
         self.query_one("#main_container").mount(Collapsible(block_standings_pile,id=block_id,title=content_title,collapsed=False))
+        #self.query_one(f"#{block_id}").focus()
         self.query_one("#main_container").scroll_end()
-        self.query_one(f"#{block_id}").focus()
     def add_block_fixture(self,datefrom,dateto,live=False):
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         fixtures=af.ApiFootball().get_list_fixtures(self.league_selected,datefrom,dateto,live)
@@ -153,7 +257,9 @@ class goalmasterapp(App):
         #list_fixtures.focus()
         #scrool maioncontainer on botton of list view
         self.query_one("#main_container").scroll_end()
-        list_fixtures.focus()
+        self.set_timer(0.1, lambda: list_fixtures.focus())
+        #list_fixtures.focus()
+        #self.query_one(f"#{block_id}_fixtures").focus()
     def add_block_events_match(self,id_fixture,team1,team2):
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         events_table=af.ApiFootball().get_table_event_flow(id_fixture)
@@ -209,6 +315,8 @@ class goalmasterapp(App):
                     """
             translate=f"Write this analysis in {languege}"
             prediction=gemini_ai.gemini_ai_call(translate+composed_prompt+stats_prediction+preprompt+prompt)
+            #save in pdf this prediction
+            save_prediction_pdf(id_fixture,prediction)
             # Save the updated predictions back to the JSON file with indentation for readability
             predictions[id_fixture] = prediction
             with open(json_file, "w") as f:
@@ -312,6 +420,7 @@ class goalmasterapp(App):
 
     def action_insert_command(self):
         #self.input_box.styles.visibility = "visible" if self.input_box.styles.visibility == "hidden" else "hidden"
+        self.compare_teams_box.styles.visibility = "hidden"
         self.input_box.display = True
         self.input_box.focus()
     def action_change_year(self):
@@ -435,6 +544,7 @@ class goalmasterapp(App):
         self.input_box.display = False # Hide the input box
         self.input_box.value = ""
 
+ 
     def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
         if event.option_list.id == "yearsbox":
             selected_option = event.option.prompt
@@ -452,6 +562,7 @@ class goalmasterapp(App):
             #     self.screen.focus()
             #     return
             #self.select_todo_box.styles.visibility = "visible" #show select todo box
+            self.id_focused = event.option_list.id
             self.select_todo_box.display = True
             #focus on select todo box
             self.select_todo_box.focus()
@@ -518,6 +629,10 @@ class goalmasterapp(App):
                     self.focused.focus()
 
                     return
+            if event.option_index == 4:  #exit
+                self.query_one(f"#{self.id_focused}").focus()
+                return
+            
 if __name__ == "__main__":
     app = goalmasterapp().run()
 
