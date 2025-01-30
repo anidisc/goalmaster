@@ -2,20 +2,20 @@
 
 import json
 import os
-from typing import Coroutine
-from pyparsing import NoMatch
-from textual.events import AppFocus, Key
+# from typing import Coroutine
+# from pyparsing import NoMatch
+from textual.events import Key
 import gemini_ai
-import api_football as af
+import api_football 
 from textual.app import App
-from textual.widgets import Header, Footer, Button, Static, Input, OptionList, Collapsible
-from textual.containers import ScrollableContainer, Vertical,Horizontal
+from textual.widgets import Header, Footer, Static, Input, OptionList, Collapsible
+from textual.containers import ScrollableContainer
 from rich import print as rich_print
 from rich.markdown import Markdown
 from rich.table import Table
 from _datetime import datetime,timedelta
 import shlex
-from io import StringIO
+#from io import StringIO
 from rich.console import Console
 import gm_data as gm
 from markdown import markdown
@@ -23,7 +23,7 @@ from weasyprint import HTML
 import mistune
 
 
-APPVERSION = "0.6.5"
+APPVERSION = "0.6.7"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -47,6 +47,8 @@ af_map={
 }
 
 languege="italian"  #set here the language for the analysis of predictions
+
+af = api_football.ApiFootball()
 
 def table_af_map():
     #print a table with the a columm for keys and names if leagues
@@ -174,7 +176,7 @@ class goalmasterapp(App):
 
     def __init__(self):
         super().__init__()
-        self.YEAR_SELECT = af.ApiFootball().YEAR
+        self.YEAR_SELECT = af.YEAR
         self.league_selected = 0
         #create a dict of all list of fixtures to reference them later
         self.blocklist = {}
@@ -183,7 +185,6 @@ class goalmasterapp(App):
         self.last_focus_id =None
         self.memory_standings = None  # Memory of the standings in list of dict
         self.id_focused = None #Memory of the id of the focused widget
-
     def compose(self):
         yield Header()
         yield ScrollableContainer(id="main_container")
@@ -213,11 +214,11 @@ class goalmasterapp(App):
 
     #create block to show the current standings of the league
     def add_block_standings(self,league,text="text to print",group=0,update=False):
-        s = af.ApiFootball(self.YEAR_SELECT).get_list_standings(self.league_selected,update)
+        s = af.get_list_standings(self.league_selected,update)
         if group =="all":
-            standings = [af.ApiFootball().get_table_standings(x) for x in s]
+            standings = [af.get_table_standings(x) for x in s]
         else:
-            standings = [af.ApiFootball().get_table_standings(s[group])]
+            standings = [af.get_table_standings(s[group])]
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         self.block_counter += 1 # Increment the block counter
         block=[] #block of standigs
@@ -239,7 +240,7 @@ class goalmasterapp(App):
         self.query_one("#main_container").scroll_end()
     def add_block_fixture(self,datefrom,dateto,live=False):
         #self.input_box.styles.visibility = "hidden" # Hide the input box
-        fixtures=af.ApiFootball().get_list_fixtures(self.league_selected,datefrom,dateto,live)
+        fixtures=af.get_list_fixtures(self.league_selected,datefrom,dateto,live)
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         self.list_of_blocks.append(block_id)  #create e registry of blocks
@@ -262,7 +263,7 @@ class goalmasterapp(App):
         #self.query_one(f"#{block_id}_fixtures").focus()
     def add_block_events_match(self,id_fixture,team1,team2):
         #self.input_box.styles.visibility = "hidden" # Hide the input box
-        events_table=af.ApiFootball().get_table_event_flow(id_fixture)
+        events_table=af.get_table_event_flow(id_fixture)
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         self.query_one("#main_container").mount(Collapsible(Static(events_table),
@@ -275,7 +276,7 @@ class goalmasterapp(App):
 
     def add_block_stats_match(self,id_fixture,team1,team2):
         #self.input_box.styles.visibility = "hidden" # Hide the input box
-        stats_table=af.ApiFootball().print_table_standings(id_fixture)
+        stats_table=af.print_table_standings(id_fixture)
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         self.query_one("#main_container").mount(Collapsible(Static(stats_table),
@@ -297,18 +298,18 @@ class goalmasterapp(App):
 
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
-        table_stats=af.ApiFootball().get_standings(league_id)
+        table_stats=af.get_standings(league_id)
         composed_prompt = f"The match is between {team1} vs {team2}, and view this standing: {table_stats}"
         if id_fixture in predictions:
             prediction = predictions[id_fixture]
         else:
-            rs1=(af.ApiFootball().get_team_statistics(team1_id,league_id))
-            rs2=(af.ApiFootball().get_team_statistics(team2_id,league_id))
+            rs1=(af.get_team_statistics(team1_id,league_id))
+            rs2=(af.get_team_statistics(team2_id,league_id))
             ts1,ts2=gm.TeamStats(),gm.TeamStats()
             ts1.Charge_Data(rs1)
             ts2.Charge_Data(rs2)
-            big_team_stats=af.ApiFootball().print_table_compareteams(ts1,ts2)
-            stats_prediction=f"This is data of prediction by agency between {team1} vs {team2}:{af.ApiFootball().get_prediction(id_fixture)} and data of detailed statistics of both teams {big_team_stats}"
+            big_team_stats=af.print_table_compareteams(ts1,ts2)
+            stats_prediction=f"This is data of prediction by agency between {team1} vs {team2}:{af.get_prediction(id_fixture)} and data of detailed statistics of both teams {big_team_stats}"
             preprompt="""
                 Read data of prediction of this maatch, and analyze it. Stats of singol team, historical statistics of both teams.
                 Match passed h2h of both teams. Show this data in table format. 
@@ -331,7 +332,7 @@ class goalmasterapp(App):
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         #f1,f2=af.ApiFootball().get_formation_teams(id_fixture)
-        formtext=af.ApiFootball().print_table_formations(id_fixture)
+        formtext=af.print_table_formations(id_fixture)
         self.query_one("#main_container").mount(Collapsible(Static(formtext),id=block_id,title=f"Formations: {team1} vs {team2}",collapsed=False))
         self.query_one("#main_container").scroll_end()
 
@@ -389,7 +390,7 @@ class goalmasterapp(App):
         self.input_box.display = False # Hide the input box
         #self.select_todo_box.styles.visibility = "hidden" # hide the select todo box
         self.select_todo_box.display = False
-        self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}"
+        self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.YEAR} CALLS:{af.remains_calls}"
         # self.boxmessage = self.query_one("#infolayout")
         # self.boxmessage.styles.visibility = "hidden"
         self.query_one("#main_container").focus()
@@ -436,12 +437,12 @@ class goalmasterapp(App):
             return
         self.compare_teams_box.styles.visibility = "visible" if self.compare_teams_box.styles.visibility == "hidden" else "hidden"
         self.compare_teams_box.focus()
-        r1=af.ApiFootball().get_team_statistics(self.selec_match.id_home_team,self.selec_match.id_league)
-        r2=af.ApiFootball().get_team_statistics(self.selec_match.id_away_team,self.selec_match.id_league)
+        r1=af.get_team_statistics(self.selec_match.id_home_team,self.selec_match.id_league)
+        r2=af.get_team_statistics(self.selec_match.id_away_team,self.selec_match.id_league)
         t1,t2=gm.TeamStats(),gm.TeamStats()
         t1.Charge_Data(r1)
         t2.Charge_Data(r2)
-        text_stat_to_show = af.ApiFootball().print_table_compareteams(t1,t2)
+        text_stat_to_show = af.print_table_compareteams(t1,t2)
         self.compare_text_box.update(text_stat_to_show)
 
     def on_input_submitted(self, event: Input.Submitted):
@@ -470,9 +471,9 @@ class goalmasterapp(App):
         if command[0] == "STATUS":
             #notify apicalls used
             self.input_box.display = False #hide input box
-            self.notify(f"APICALLS USED: {100-af.ApiFootball().get_status_apicalls()}",severity="warning",timeout=7,title="STATUS")
+            self.notify(f"APICALLS USED: {100-af.remains_calls}",severity="warning",timeout=7,title="STATUS")
             #update title of app
-            self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.ApiFootball().YEAR} CALLS:{af.ApiFootball().get_status_apicalls()}"
+            self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.YEAR} CALLS:{af.remains_calls}"
             return
         if command[0] in af_map:
             self.league_selected = af_map[command[0]]["id"]
@@ -551,7 +552,7 @@ class goalmasterapp(App):
             self.yearsbox.border_subtitle = selected_option
             self.yearsbox.styles.visibility = "hidden"
             self.YEAR_SELECT = selected_option
-            self.title = f"GOAL MASTER {APPVERSION} YEAR:{self.YEAR_SELECT} CALLS:{af.ApiFootball().get_status_apicalls()}"
+            self.title = f"GOAL MASTER {APPVERSION} YEAR:{self.YEAR_SELECT} CALLS:{af.remains_calls}"
             return
         if event.option_list.id in self.list_of_blocks:
             self.selec_match = self.blocklist[event.option_list.id][event.option_index]
@@ -570,7 +571,7 @@ class goalmasterapp(App):
 
             self.notify(self.selec_match.home_team+" vs "+self.selec_match.away_team,severity="info",timeout=5)
             # fix selection match in the title
-            self.title = f"GOAL MASTER {APPVERSION} YEAR:{self.YEAR_SELECT} CALLS:{af.ApiFootball().get_status_apicalls()} - Match SELECTED:{self.selec_match.home_team} vs {self.selec_match.away_team}"
+            self.title = f"GOAL MASTER {APPVERSION} YEAR:{self.YEAR_SELECT} CALLS:{af.remains_calls} - Match SELECTED:{self.selec_match.home_team} vs {self.selec_match.away_team}"
             #TODO show live matches in the future
         if event.option_list.id == "select_todo_box":
             # if self.selec_match.status in ["NS","RS"]: #not started or resulted

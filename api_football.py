@@ -11,7 +11,7 @@ import datetime as dt
 
 
 # Base URL e API key di API-FOOTBALL
-API_URL = "https://v3.football.api-sports.io/"
+API_URL = "https://api-football-v1.p.rapidapi.com/v3" #rapidapi
 API_KEY = os.environ.get("APIFOOTBALL_KEY")
 PREDICTION_FILE_DB = "predictions.json"
 STANDINGS_FILE_DB = "standings.json"
@@ -21,18 +21,13 @@ TEAM_STATISTICS_FILE_DB="team_statistics.json"
 class ApiFootball:
     def __init__(self, year=datetime.now().year,timezone="Europe/Rome"):
         self.headers = {
-            "x-rapidapi-host": "v3.football.api-sports.io",
-            "x-rapidapi-key": API_KEY
+            "x-rapidapi-key": API_KEY,
+	        "x-rapidapi-host": "api-football-v1.p.rapidapi.com"
         }
         self.YEAR = 2024 if (year==2025) else year #TODO change to the current year ad start of the season
         self.timezone = timezone
-    def get_status_apicalls(self):
-        url = f"{API_URL}/status"
-        response = requests.get(url, headers=self.headers)
-        try:
-            return 100 - int(response.json()['response']['requests']['current'])
-        except:
-            return 0
+        self.remains_calls = 100
+
     def get_standings(self,league,update=False):
         # get standings from api_football in a specific year from the api parameter and return a table with the data
         # static method (there is no need to create an instance of the class)
@@ -64,6 +59,9 @@ class ApiFootball:
         #otherwise get the standings from api_football
         response = requests.get(url, params=params, headers=self.headers)
         standings = response.json()['response'][0]['league']['standings']
+        #update API_CALLS
+        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+
         datanew={"standing":{"date":current_date,"standings":standings}}
 
         standing_to_disk[league] = datanew
@@ -210,16 +208,23 @@ class ApiFootball:
             "timezone": self.timezone
         }
         response = requests.get(url, params=params, headers=self.headers)
+
+        #update API_CALLS
+        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+
         fixtures = response.json()
         return fixtures
     #get list of fixtures for live matches or speciafic league
     def get_fixture_live(self,leagues="all"):
-        url=f"{API_URL}/fixtures"
+        url=f"https://api-football-v1.p.rapidapi.com/v3/fixtures"
         params = {
             "timezone": self.timezone,
             "live": leagues
         }
         response = requests.get(url, params=params, headers=self.headers)
+        #update API_CALLS
+        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+
         fixtures = response.json()
         return fixtures
     def get_list_fixtures(self,league,datefrom,dateto,live=False)->Match:
@@ -262,6 +267,9 @@ class ApiFootball:
             "fixture": id_fixture
         }
         response = requests.get(url, params=params, headers=self.headers)
+        #update API_CALLS
+        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+
         events = response.json()
         events_list_flow = []
         for event in events['response']:
@@ -308,6 +316,8 @@ class ApiFootball:
             "fixture": id_fixture
         }
         response = requests.get(url, params=params, headers=self.headers)
+        #update API_CALLS
+        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
         statistics = response.json()
         return statistics
 
@@ -412,6 +422,9 @@ class ApiFootball:
                                       i['player']['grid'],
                                       i['player']['pos'],
                                       i['player']['number']))
+            
+        #update API_CALLS
+        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
 
         return Formation(t1['team']['name'],t1['formation'],t1formation,t1['coach']['name']), Formation(t2['team']['name'],t2['formation'],t2formation,t2['coach']['name'])
 
@@ -436,6 +449,9 @@ class ApiFootball:
     def get_list_leagues(self) -> list[League]:
         url = f"{API_URL}/leagues"
         response = requests.get(url, headers=self.headers)
+        #update API_CALLS
+        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+
         l=[]
         for league in response.json()['response']:
             l.append(League(league['league']['id'],
@@ -453,6 +469,9 @@ class ApiFootball:
             "fixture": id_match
         }
         response = requests.get(url, headers=self.headers, params=params)
+        #update API_CALLS
+        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+
         return response.json()['response']
 
     #get top scores from api_football
@@ -464,6 +483,9 @@ class ApiFootball:
         }
         response = requests.get(url, headers=self.headers, params=params)
         res_json = response.json()['response']
+        #update API_CALLS
+        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+
         top_players = []
         for player in res_json:
             top_players.append(TopPlayer(player['player']['name'],
@@ -531,6 +553,8 @@ class ApiFootball:
         except FileNotFoundError: #create file and structure data inside
             with open(TEAM_STATISTICS_FILE_DB, "w") as f:
                 response = requests.get(url, headers=self.headers, params=params)
+                #update API_CALLS
+                self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
                 data[id_team]={"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
                 json.dump(data, f,indent=4)
             return response.json()['response']
@@ -543,15 +567,14 @@ class ApiFootball:
                 return team_statistics_to_disk[id_team]["data"]["statistics"]
         else:
             response = requests.get(url, headers=self.headers, params=params)
+            #update API_CALLS
+            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
             #data={"id_team":id_team,"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
             data[id_team]={"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
             team_statistics_to_disk.update(data)
             with open(TEAM_STATISTICS_FILE_DB, "w") as f:
                 json.dump(team_statistics_to_disk, f,indent=4)
             return response.json()['response']
-        
-        
-        
         
         
     #def a fun that print a table of team statistic from api_football to compare two teams
