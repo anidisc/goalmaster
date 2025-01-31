@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import datetime as dt
 from rich.table import Table
 from rich import print as rich_print
-from gm_data import League, Team, Match, Event, Stats, Formation, Player, TopPlayer, TeamStats
+from gm_data import League, Team, Match, Event, Stats, Formation, Player, TopPlayer, TeamStats,PlayerInjury
 import datetime as dt
 
 
@@ -16,6 +16,7 @@ API_KEY = os.environ.get("APIFOOTBALL_KEY")
 PREDICTION_FILE_DB = "predictions.json"
 STANDINGS_FILE_DB = "standings.json"
 TEAM_STATISTICS_FILE_DB="team_statistics.json"
+INJURYPLAYER_FILE_DB="player_injury.json"
 
 
 class ApiFootball:
@@ -659,6 +660,67 @@ class ApiFootball:
         # Stampa la tabella
         return table
     
+    #def a funnction that extract the injuries player from api_football
+    def get_players_injuries(self,id_league,date):
+        url = f"{API_URL}/injuries"
+        params = {"league": id_league,
+                  "season": self.YEAR,
+                  "date": date}
+        response = requests.get(url, headers=self.headers, params=params)
+        #update API_CALLS
+        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+        return response.json()['response']
+    def get_list_injuries_by_date(self,id_league,date) -> dict:
+        #check if file of injuries exist
+        data={}
+        id_league=str(id_league)
+        if os.path.isfile(INJURYPLAYER_FILE_DB):
+            with open(INJURYPLAYER_FILE_DB, "r") as f:
+                injuries_to_disk=json.load(f)
+            if id_league in injuries_to_disk:
+                if injuries_to_disk[id_league]["date"]>=date:
+                    response=injuries_to_disk[id_league]["injuries"]
+                else:
+                    response=self.get_players_injuries(id_league,date)
+                    injuries_to_disk[id_league]={"date":date,"injuries":response}
+                    with open(INJURYPLAYER_FILE_DB,"w") as f:
+                        json.dump(injuries_to_disk,f,indent=4)
+            else:
+                response=self.get_players_injuries(id_league,date)
+                injuries_to_disk[id_league]={"date":date,"injuries":response}
+                with open(INJURYPLAYER_FILE_DB,"w") as f:
+                    json.dump(injuries_to_disk,f,indent=4)
+        else:
+            with open(INJURYPLAYER_FILE_DB, "w") as f:
+                response=self.get_players_injuries(id_league,date)
+                #save response in json file if not exist
+                data[id_league]={"date":date,"injuries":response}
+                json.dump(data,f,indent=4)
+        
+        list_injuries = {}
+
+        for res in response:
+            id = str(res['fixture']['id'])  # ID del fixture (può ripetersi)
+            idplayer = str(res['player']['id'])  # ID univoco del giocatore
+            playername = res['player']['name']
+            teamname = res['team']['name']
+            reason = res['player']['reason']
+
+            # Se l'ID non è presente, lo creiamo con un nuovo dizionario contenente idplayer
+            if id not in list_injuries:
+                list_injuries[id] = {}
+
+            # Aggiungiamo il giocatore al dizionario dell'ID senza sovrascrivere gli altri
+            list_injuries[id][idplayer] = {
+                "playername": playername,
+                "teamname": teamname,
+                "reason": reason
+            }
+
+
+        return list_injuries
+    
+
 #m=ApiFootball().get_table_standings(135)
 # testo=str(rich_print(ApiFootball().get_table_standings(135)))
 # print(type(testo))
@@ -698,3 +760,9 @@ class ApiFootball:
 # rich_print(ApiFootball().print_table_compareteams(ts1,ts2))
 # #rich_print(ts1.get_table_stats())
 # #rich_print(ts1.get_table_stats())
+
+# x=ApiFootball().get_list_injuries_by_date(78,"2025-02-01")
+# print(json.dumps(x,indent=4))
+# #print al player injuries
+# for i in x:
+#     rich_print(i.name,i.reason,i.team,i.idfixture)

@@ -492,7 +492,8 @@ class goalmasterapp(App):
                         self.add_block_standings(self.league_selected,group="all")
                     elif command[2] == "UPDATE": #call function to update standings without checking if exist
                         self.add_block_standings(self.league_selected,group="all",update=True)
-                    elif int(command[2]) in range(10):
+                    #cheif if command[2] is a number between 0 and 9 but w/o convert it to int
+                    elif command[2].isdigit():
                         self.add_block_standings(self.league_selected,group=int(command[2]))
                         #self.show_message("error command syntax",titlebox="SYNTAX ERROR")
                     else:

@@ -1,0 +1,2929 @@
+{
+    "140": {
+        "date": "2025-02-01",
+        "injuries": [
+            {
+                "player": {
+                    "id": 6168,
+                    "name": "O. Alderete",
+                    "photo": "https://media.api-sports.io/football/players/6168.png",
+                    "type": "Missing Fixture",
+                    "reason": "Yellow Cards"
+                },
+                "team": {
+                    "id": 546,
+                    "name": "Getafe",
+                    "logo": "https://media.api-sports.io/football/teams/546.png"
+                },
+                "fixture": {
+                    "id": 1208684,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T13:00:00+00:00",
+                    "timestamp": 1738414800
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 47407,
+                    "name": "A. Nyom",
+                    "photo": "https://media.api-sports.io/football/players/47407.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 546,
+                    "name": "Getafe",
+                    "logo": "https://media.api-sports.io/football/teams/546.png"
+                },
+                "fixture": {
+                    "id": 1208684,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T13:00:00+00:00",
+                    "timestamp": 1738414800
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 133110,
+                    "name": "T. Nianzou",
+                    "photo": "https://media.api-sports.io/football/players/133110.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 536,
+                    "name": "Sevilla",
+                    "logo": "https://media.api-sports.io/football/teams/536.png"
+                },
+                "fixture": {
+                    "id": 1208684,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T13:00:00+00:00",
+                    "timestamp": 1738414800
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 290740,
+                    "name": "I. Akhomach",
+                    "photo": "https://media.api-sports.io/football/players/290740.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 533,
+                    "name": "Villarreal",
+                    "logo": "https://media.api-sports.io/football/teams/533.png"
+                },
+                "fixture": {
+                    "id": 1208687,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T15:15:00+00:00",
+                    "timestamp": 1738422900
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 1702,
+                    "name": "A. Pedraza",
+                    "photo": "https://media.api-sports.io/football/players/1702.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 533,
+                    "name": "Villarreal",
+                    "logo": "https://media.api-sports.io/football/teams/533.png"
+                },
+                "fixture": {
+                    "id": 1208687,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T15:15:00+00:00",
+                    "timestamp": 1738422900
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 928,
+                    "name": "D. Parejo",
+                    "photo": "https://media.api-sports.io/football/players/928.png",
+                    "type": "Questionable",
+                    "reason": "Toe Injury"
+                },
+                "team": {
+                    "id": 533,
+                    "name": "Villarreal",
+                    "logo": "https://media.api-sports.io/football/teams/533.png"
+                },
+                "fixture": {
+                    "id": 1208687,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T15:15:00+00:00",
+                    "timestamp": 1738422900
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 48372,
+                    "name": "E. Comert",
+                    "photo": "https://media.api-sports.io/football/players/48372.png",
+                    "type": "Missing Fixture",
+                    "reason": "Hamstring Injury"
+                },
+                "team": {
+                    "id": 720,
+                    "name": "Valladolid",
+                    "logo": "https://media.api-sports.io/football/teams/720.png"
+                },
+                "fixture": {
+                    "id": 1208687,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T15:15:00+00:00",
+                    "timestamp": 1738422900
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 264470,
+                    "name": "R. Moro",
+                    "photo": "https://media.api-sports.io/football/players/264470.png",
+                    "type": "Missing Fixture",
+                    "reason": "Broken collarbone"
+                },
+                "team": {
+                    "id": 720,
+                    "name": "Valladolid",
+                    "logo": "https://media.api-sports.io/football/teams/720.png"
+                },
+                "fixture": {
+                    "id": 1208687,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T15:15:00+00:00",
+                    "timestamp": 1738422900
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 47566,
+                    "name": "J. Galan",
+                    "photo": "https://media.api-sports.io/football/players/47566.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 530,
+                    "name": "Atletico Madrid",
+                    "logo": "https://media.api-sports.io/football/teams/530.png"
+                },
+                "fixture": {
+                    "id": 1208683,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 2472,
+                    "name": "R. de Paul",
+                    "photo": "https://media.api-sports.io/football/players/2472.png",
+                    "type": "Missing Fixture",
+                    "reason": "Yellow Cards"
+                },
+                "team": {
+                    "id": 530,
+                    "name": "Atletico Madrid",
+                    "logo": "https://media.api-sports.io/football/teams/530.png"
+                },
+                "fixture": {
+                    "id": 1208683,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 414,
+                    "name": "O. Mascarell",
+                    "photo": "https://media.api-sports.io/football/players/414.png",
+                    "type": "Missing Fixture",
+                    "reason": "Red Card"
+                },
+                "team": {
+                    "id": 798,
+                    "name": "Mallorca",
+                    "logo": "https://media.api-sports.io/football/teams/798.png"
+                },
+                "fixture": {
+                    "id": 1208683,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 1701,
+                    "name": "M. Morlanes",
+                    "photo": "https://media.api-sports.io/football/players/1701.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 798,
+                    "name": "Mallorca",
+                    "logo": "https://media.api-sports.io/football/teams/798.png"
+                },
+                "fixture": {
+                    "id": 1208683,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 47514,
+                    "name": "Valery",
+                    "photo": "https://media.api-sports.io/football/players/47514.png",
+                    "type": "Missing Fixture",
+                    "reason": "Illness"
+                },
+                "team": {
+                    "id": 798,
+                    "name": "Mallorca",
+                    "logo": "https://media.api-sports.io/football/teams/798.png"
+                },
+                "fixture": {
+                    "id": 1208683,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 355327,
+                    "name": "J. Catala",
+                    "photo": "https://media.api-sports.io/football/players/355327.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 540,
+                    "name": "Espanyol",
+                    "logo": "https://media.api-sports.io/football/teams/540.png"
+                },
+                "fixture": {
+                    "id": 1212931,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T20:00:00+00:00",
+                    "timestamp": 1738440000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 46764,
+                    "name": "B. Olivan",
+                    "photo": "https://media.api-sports.io/football/players/46764.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 540,
+                    "name": "Espanyol",
+                    "logo": "https://media.api-sports.io/football/teams/540.png"
+                },
+                "fixture": {
+                    "id": 1212931,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T20:00:00+00:00",
+                    "timestamp": 1738440000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 733,
+                    "name": "D. Carvajal",
+                    "photo": "https://media.api-sports.io/football/players/733.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 541,
+                    "name": "Real Madrid",
+                    "logo": "https://media.api-sports.io/football/teams/541.png"
+                },
+                "fixture": {
+                    "id": 1212931,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T20:00:00+00:00",
+                    "timestamp": 1738440000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 372,
+                    "name": "Eder Militao",
+                    "photo": "https://media.api-sports.io/football/players/372.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 541,
+                    "name": "Real Madrid",
+                    "logo": "https://media.api-sports.io/football/teams/541.png"
+                },
+                "fixture": {
+                    "id": 1212931,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T20:00:00+00:00",
+                    "timestamp": 1738440000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 2207,
+                    "name": "E. Camavinga",
+                    "photo": "https://media.api-sports.io/football/players/2207.png",
+                    "type": "Questionable",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 541,
+                    "name": "Real Madrid",
+                    "logo": "https://media.api-sports.io/football/teams/541.png"
+                },
+                "fixture": {
+                    "id": 1212931,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T20:00:00+00:00",
+                    "timestamp": 1738440000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 741,
+                    "name": "J. Vallejo",
+                    "photo": "https://media.api-sports.io/football/players/741.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 541,
+                    "name": "Real Madrid",
+                    "logo": "https://media.api-sports.io/football/teams/541.png"
+                },
+                "fixture": {
+                    "id": 1212931,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T20:00:00+00:00",
+                    "timestamp": 1738440000
+                },
+                "league": {
+                    "id": 140,
+                    "season": 2024,
+                    "name": "La Liga",
+                    "country": "Spain",
+                    "logo": "https://media.api-sports.io/football/leagues/140.png",
+                    "flag": "https://media.api-sports.io/flags/es.svg"
+                }
+            }
+        ]
+    },
+    "135": {
+        "date": "2025-02-01",
+        "injuries": [
+            {
+                "player": {
+                    "id": 302432,
+                    "name": "A. Bianco",
+                    "photo": "https://media.api-sports.io/football/players/302432.png",
+                    "type": "Missing Fixture",
+                    "reason": "Yellow Cards"
+                },
+                "team": {
+                    "id": 1579,
+                    "name": "Monza",
+                    "logo": "https://media.api-sports.io/football/teams/1579.png"
+                },
+                "fixture": {
+                    "id": 1223821,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 30708,
+                    "name": "S. Birindelli",
+                    "photo": "https://media.api-sports.io/football/players/30708.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 1579,
+                    "name": "Monza",
+                    "logo": "https://media.api-sports.io/football/teams/1579.png"
+                },
+                "fixture": {
+                    "id": 1223821,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 30546,
+                    "name": "A. Cragno",
+                    "photo": "https://media.api-sports.io/football/players/30546.png",
+                    "type": "Missing Fixture",
+                    "reason": "Shoulder Injury"
+                },
+                "team": {
+                    "id": 1579,
+                    "name": "Monza",
+                    "logo": "https://media.api-sports.io/football/teams/1579.png"
+                },
+                "fixture": {
+                    "id": 1223821,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 203,
+                    "name": "R. Gagliardini",
+                    "photo": "https://media.api-sports.io/football/players/203.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 1579,
+                    "name": "Monza",
+                    "logo": "https://media.api-sports.io/football/teams/1579.png"
+                },
+                "fixture": {
+                    "id": 1223821,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 30436,
+                    "name": "M. Pessina",
+                    "photo": "https://media.api-sports.io/football/players/30436.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 1579,
+                    "name": "Monza",
+                    "logo": "https://media.api-sports.io/football/teams/1579.png"
+                },
+                "fixture": {
+                    "id": 1223821,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 15909,
+                    "name": "M. Frese",
+                    "photo": "https://media.api-sports.io/football/players/15909.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 504,
+                    "name": "Verona",
+                    "logo": "https://media.api-sports.io/football/teams/504.png"
+                },
+                "fixture": {
+                    "id": 1223821,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 37437,
+                    "name": "A. Harroui",
+                    "photo": "https://media.api-sports.io/football/players/37437.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 504,
+                    "name": "Verona",
+                    "logo": "https://media.api-sports.io/football/teams/504.png"
+                },
+                "fixture": {
+                    "id": 1223821,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 162703,
+                    "name": "C. Tengstedt",
+                    "photo": "https://media.api-sports.io/football/players/162703.png",
+                    "type": "Questionable",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 504,
+                    "name": "Verona",
+                    "logo": "https://media.api-sports.io/football/teams/504.png"
+                },
+                "fixture": {
+                    "id": 1223821,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 36916,
+                    "name": "K. Ehizibue",
+                    "photo": "https://media.api-sports.io/football/players/36916.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 494,
+                    "name": "Udinese",
+                    "logo": "https://media.api-sports.io/football/teams/494.png"
+                },
+                "fixture": {
+                    "id": 1223824,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 48047,
+                    "name": "J. Karlstrom",
+                    "photo": "https://media.api-sports.io/football/players/48047.png",
+                    "type": "Missing Fixture",
+                    "reason": "Yellow Cards"
+                },
+                "team": {
+                    "id": 494,
+                    "name": "Udinese",
+                    "logo": "https://media.api-sports.io/football/teams/494.png"
+                },
+                "fixture": {
+                    "id": 1223824,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 182560,
+                    "name": "O. Zarraga",
+                    "photo": "https://media.api-sports.io/football/players/182560.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 494,
+                    "name": "Udinese",
+                    "logo": "https://media.api-sports.io/football/teams/494.png"
+                },
+                "fixture": {
+                    "id": 1223824,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 6050,
+                    "name": "L. Giannetti",
+                    "photo": "https://media.api-sports.io/football/players/6050.png",
+                    "type": "Questionable",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 494,
+                    "name": "Udinese",
+                    "logo": "https://media.api-sports.io/football/teams/494.png"
+                },
+                "fixture": {
+                    "id": 1223824,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 195893,
+                    "name": "I. Toure",
+                    "photo": "https://media.api-sports.io/football/players/195893.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 494,
+                    "name": "Udinese",
+                    "logo": "https://media.api-sports.io/football/teams/494.png"
+                },
+                "fixture": {
+                    "id": 1223824,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 30770,
+                    "name": "A. Candela",
+                    "photo": "https://media.api-sports.io/football/players/30770.png",
+                    "type": "Missing Fixture",
+                    "reason": "Inactive"
+                },
+                "team": {
+                    "id": 517,
+                    "name": "Venezia",
+                    "logo": "https://media.api-sports.io/football/teams/517.png"
+                },
+                "fixture": {
+                    "id": 1223824,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 375321,
+                    "name": "R. Sagrado",
+                    "photo": "https://media.api-sports.io/football/players/375321.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 517,
+                    "name": "Venezia",
+                    "logo": "https://media.api-sports.io/football/teams/517.png"
+                },
+                "fixture": {
+                    "id": 1223824,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 7090,
+                    "name": "M. Svoboda",
+                    "photo": "https://media.api-sports.io/football/players/7090.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 517,
+                    "name": "Venezia",
+                    "logo": "https://media.api-sports.io/football/teams/517.png"
+                },
+                "fixture": {
+                    "id": 1223824,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 48406,
+                    "name": "D. Crnigoj",
+                    "photo": "https://media.api-sports.io/football/players/48406.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 517,
+                    "name": "Venezia",
+                    "logo": "https://media.api-sports.io/football/teams/517.png"
+                },
+                "fixture": {
+                    "id": 1223824,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 26095,
+                    "name": "M. Sverko",
+                    "photo": "https://media.api-sports.io/football/players/26095.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 517,
+                    "name": "Venezia",
+                    "logo": "https://media.api-sports.io/football/teams/517.png"
+                },
+                "fixture": {
+                    "id": 1223824,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:00:00+00:00",
+                    "timestamp": 1738418400
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 48119,
+                    "name": "O. Kossounou",
+                    "photo": "https://media.api-sports.io/football/players/48119.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 499,
+                    "name": "Atalanta",
+                    "logo": "https://media.api-sports.io/football/teams/499.png"
+                },
+                "fixture": {
+                    "id": 1223815,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:00:00+00:00",
+                    "timestamp": 1738429200
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 18767,
+                    "name": "A. Lookman",
+                    "photo": "https://media.api-sports.io/football/players/18767.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 499,
+                    "name": "Atalanta",
+                    "logo": "https://media.api-sports.io/football/teams/499.png"
+                },
+                "fixture": {
+                    "id": 1223815,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:00:00+00:00",
+                    "timestamp": 1738429200
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 30544,
+                    "name": "G. Scamacca",
+                    "photo": "https://media.api-sports.io/football/players/30544.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 499,
+                    "name": "Atalanta",
+                    "logo": "https://media.api-sports.io/football/teams/499.png"
+                },
+                "fixture": {
+                    "id": 1223815,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:00:00+00:00",
+                    "timestamp": 1738429200
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 1442,
+                    "name": "S. Kolasinac",
+                    "photo": "https://media.api-sports.io/football/players/1442.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 499,
+                    "name": "Atalanta",
+                    "logo": "https://media.api-sports.io/football/teams/499.png"
+                },
+                "fixture": {
+                    "id": 1223815,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:00:00+00:00",
+                    "timestamp": 1738429200
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 289761,
+                    "name": "G. Scalvini",
+                    "photo": "https://media.api-sports.io/football/players/289761.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 499,
+                    "name": "Atalanta",
+                    "logo": "https://media.api-sports.io/football/teams/499.png"
+                },
+                "fixture": {
+                    "id": 1223815,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:00:00+00:00",
+                    "timestamp": 1738429200
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 336573,
+                    "name": "E. Ilkhan",
+                    "photo": "https://media.api-sports.io/football/players/336573.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 503,
+                    "name": "Torino",
+                    "logo": "https://media.api-sports.io/football/teams/503.png"
+                },
+                "fixture": {
+                    "id": 1223815,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:00:00+00:00",
+                    "timestamp": 1738429200
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 343332,
+                    "name": "Z. Savva",
+                    "photo": "https://media.api-sports.io/football/players/343332.png",
+                    "type": "Missing Fixture",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 503,
+                    "name": "Torino",
+                    "logo": "https://media.api-sports.io/football/teams/503.png"
+                },
+                "fixture": {
+                    "id": 1223815,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:00:00+00:00",
+                    "timestamp": 1738429200
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 2495,
+                    "name": "D. Zapata",
+                    "photo": "https://media.api-sports.io/football/players/2495.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 503,
+                    "name": "Torino",
+                    "logo": "https://media.api-sports.io/football/teams/503.png"
+                },
+                "fixture": {
+                    "id": 1223815,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:00:00+00:00",
+                    "timestamp": 1738429200
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 46170,
+                    "name": "I. Ilic",
+                    "photo": "https://media.api-sports.io/football/players/46170.png",
+                    "type": "Questionable",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 503,
+                    "name": "Torino",
+                    "logo": "https://media.api-sports.io/football/teams/503.png"
+                },
+                "fixture": {
+                    "id": 1223815,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:00:00+00:00",
+                    "timestamp": 1738429200
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 8586,
+                    "name": "M. Vojvoda",
+                    "photo": "https://media.api-sports.io/football/players/8586.png",
+                    "type": "Questionable",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 503,
+                    "name": "Torino",
+                    "logo": "https://media.api-sports.io/football/teams/503.png"
+                },
+                "fixture": {
+                    "id": 1223815,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:00:00+00:00",
+                    "timestamp": 1738429200
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 951,
+                    "name": "M. Aebischer",
+                    "photo": "https://media.api-sports.io/football/players/951.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 500,
+                    "name": "Bologna",
+                    "logo": "https://media.api-sports.io/football/teams/500.png"
+                },
+                "fixture": {
+                    "id": 1223816,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T19:45:00+00:00",
+                    "timestamp": 1738439100
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 30438,
+                    "name": "N. Cambiaghi",
+                    "photo": "https://media.api-sports.io/football/players/30438.png",
+                    "type": "Missing Fixture",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 500,
+                    "name": "Bologna",
+                    "logo": "https://media.api-sports.io/football/teams/500.png"
+                },
+                "fixture": {
+                    "id": 1223816,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T19:45:00+00:00",
+                    "timestamp": 1738439100
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 319919,
+                    "name": "O. El Azzouzi",
+                    "photo": "https://media.api-sports.io/football/players/319919.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 500,
+                    "name": "Bologna",
+                    "logo": "https://media.api-sports.io/football/teams/500.png"
+                },
+                "fixture": {
+                    "id": 1223816,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T19:45:00+00:00",
+                    "timestamp": 1738439100
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 1929,
+                    "name": "J. Lucumi",
+                    "photo": "https://media.api-sports.io/football/players/1929.png",
+                    "type": "Missing Fixture",
+                    "reason": "Illness"
+                },
+                "team": {
+                    "id": 500,
+                    "name": "Bologna",
+                    "logo": "https://media.api-sports.io/football/teams/500.png"
+                },
+                "fixture": {
+                    "id": 1223816,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T19:45:00+00:00",
+                    "timestamp": 1738439100
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 30488,
+                    "name": "R. Orsolini",
+                    "photo": "https://media.api-sports.io/football/players/30488.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 500,
+                    "name": "Bologna",
+                    "logo": "https://media.api-sports.io/football/teams/500.png"
+                },
+                "fixture": {
+                    "id": 1223816,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T19:45:00+00:00",
+                    "timestamp": 1738439100
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 711,
+                    "name": "S. Posch",
+                    "photo": "https://media.api-sports.io/football/players/711.png",
+                    "type": "Missing Fixture",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 500,
+                    "name": "Bologna",
+                    "logo": "https://media.api-sports.io/football/teams/500.png"
+                },
+                "fixture": {
+                    "id": 1223816,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T19:45:00+00:00",
+                    "timestamp": 1738439100
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 172,
+                    "name": "D. Alli",
+                    "photo": "https://media.api-sports.io/football/players/172.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 895,
+                    "name": "Como",
+                    "logo": "https://media.api-sports.io/football/teams/895.png"
+                },
+                "fixture": {
+                    "id": 1223816,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T19:45:00+00:00",
+                    "timestamp": 1738439100
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 137,
+                    "name": "S. Roberto",
+                    "photo": "https://media.api-sports.io/football/players/137.png",
+                    "type": "Missing Fixture",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 895,
+                    "name": "Como",
+                    "logo": "https://media.api-sports.io/football/teams/895.png"
+                },
+                "fixture": {
+                    "id": 1223816,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T19:45:00+00:00",
+                    "timestamp": 1738439100
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 106257,
+                    "name": "A. Gabrielloni",
+                    "photo": "https://media.api-sports.io/football/players/106257.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 895,
+                    "name": "Como",
+                    "logo": "https://media.api-sports.io/football/teams/895.png"
+                },
+                "fixture": {
+                    "id": 1223816,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T19:45:00+00:00",
+                    "timestamp": 1738439100
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 129119,
+                    "name": "I. Van der Brempt",
+                    "photo": "https://media.api-sports.io/football/players/129119.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 895,
+                    "name": "Como",
+                    "logo": "https://media.api-sports.io/football/teams/895.png"
+                },
+                "fixture": {
+                    "id": 1223816,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T19:45:00+00:00",
+                    "timestamp": 1738439100
+                },
+                "league": {
+                    "id": 135,
+                    "season": 2024,
+                    "name": "Serie A",
+                    "country": "Italy",
+                    "logo": "https://media.api-sports.io/football/leagues/135.png",
+                    "flag": "https://media.api-sports.io/flags/it.svg"
+                }
+            }
+        ]
+    },
+    "78": {
+        "date": "2025-02-01",
+        "injuries": [
+            {
+                "player": {
+                    "id": 509,
+                    "name": "A. Davies",
+                    "photo": "https://media.api-sports.io/football/players/509.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 157,
+                    "name": "Bayern M\u00fcnchen",
+                    "logo": "https://media.api-sports.io/football/teams/157.png"
+                },
+                "fixture": {
+                    "id": 1224148,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 32893,
+                    "name": "H. Ito",
+                    "photo": "https://media.api-sports.io/football/players/32893.png",
+                    "type": "Missing Fixture",
+                    "reason": "Foot Injury"
+                },
+                "team": {
+                    "id": 157,
+                    "name": "Bayern M\u00fcnchen",
+                    "logo": "https://media.api-sports.io/football/teams/157.png"
+                },
+                "fixture": {
+                    "id": 1224148,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 126530,
+                    "name": "D. Peretz",
+                    "photo": "https://media.api-sports.io/football/players/126530.png",
+                    "type": "Missing Fixture",
+                    "reason": "Health problems"
+                },
+                "team": {
+                    "id": 157,
+                    "name": "Bayern M\u00fcnchen",
+                    "logo": "https://media.api-sports.io/football/teams/157.png"
+                },
+                "fixture": {
+                    "id": 1224148,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 175,
+                    "name": "E. Dier",
+                    "photo": "https://media.api-sports.io/football/players/175.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 157,
+                    "name": "Bayern M\u00fcnchen",
+                    "logo": "https://media.api-sports.io/football/teams/157.png"
+                },
+                "fixture": {
+                    "id": 1224148,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 48345,
+                    "name": "C. Johansson",
+                    "photo": "https://media.api-sports.io/football/players/48345.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 191,
+                    "name": "Holstein Kiel",
+                    "logo": "https://media.api-sports.io/football/teams/191.png"
+                },
+                "fixture": {
+                    "id": 1224148,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 162476,
+                    "name": "C. Kleine-Bekel",
+                    "photo": "https://media.api-sports.io/football/players/162476.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 191,
+                    "name": "Holstein Kiel",
+                    "logo": "https://media.api-sports.io/football/teams/191.png"
+                },
+                "fixture": {
+                    "id": 1224148,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 260898,
+                    "name": "N. Remberg",
+                    "photo": "https://media.api-sports.io/football/players/260898.png",
+                    "type": "Missing Fixture",
+                    "reason": "Yellow Cards"
+                },
+                "team": {
+                    "id": 191,
+                    "name": "Holstein Kiel",
+                    "logo": "https://media.api-sports.io/football/teams/191.png"
+                },
+                "fixture": {
+                    "id": 1224148,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 48456,
+                    "name": "M. Schulz",
+                    "photo": "https://media.api-sports.io/football/players/48456.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 191,
+                    "name": "Holstein Kiel",
+                    "logo": "https://media.api-sports.io/football/teams/191.png"
+                },
+                "fixture": {
+                    "id": 1224148,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 25609,
+                    "name": "P. Erras",
+                    "photo": "https://media.api-sports.io/football/players/25609.png",
+                    "type": "Questionable",
+                    "reason": "Concussion"
+                },
+                "team": {
+                    "id": 191,
+                    "name": "Holstein Kiel",
+                    "logo": "https://media.api-sports.io/football/teams/191.png"
+                },
+                "fixture": {
+                    "id": 1224148,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 25074,
+                    "name": "A. Losilla",
+                    "photo": "https://media.api-sports.io/football/players/25074.png",
+                    "type": "Questionable",
+                    "reason": "Illness"
+                },
+                "team": {
+                    "id": 176,
+                    "name": "VfL Bochum",
+                    "logo": "https://media.api-sports.io/football/teams/176.png"
+                },
+                "fixture": {
+                    "id": 1224153,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 26235,
+                    "name": "M. Gulde",
+                    "photo": "https://media.api-sports.io/football/players/26235.png",
+                    "type": "Missing Fixture",
+                    "reason": "Back Injury"
+                },
+                "team": {
+                    "id": 160,
+                    "name": "SC Freiburg",
+                    "logo": "https://media.api-sports.io/football/teams/160.png"
+                },
+                "fixture": {
+                    "id": 1224153,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 26239,
+                    "name": "L. Kubler",
+                    "photo": "https://media.api-sports.io/football/players/26239.png",
+                    "type": "Missing Fixture",
+                    "reason": "Yellow Cards"
+                },
+                "team": {
+                    "id": 160,
+                    "name": "SC Freiburg",
+                    "logo": "https://media.api-sports.io/football/teams/160.png"
+                },
+                "fixture": {
+                    "id": 1224153,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 25530,
+                    "name": "D. Kyereh",
+                    "photo": "https://media.api-sports.io/football/players/25530.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 160,
+                    "name": "SC Freiburg",
+                    "logo": "https://media.api-sports.io/football/teams/160.png"
+                },
+                "fixture": {
+                    "id": 1224153,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 25383,
+                    "name": "F. Muslija",
+                    "photo": "https://media.api-sports.io/football/players/25383.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 160,
+                    "name": "SC Freiburg",
+                    "logo": "https://media.api-sports.io/football/teams/160.png"
+                },
+                "fixture": {
+                    "id": 1224153,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 361393,
+                    "name": "B. Ogbus",
+                    "photo": "https://media.api-sports.io/football/players/361393.png",
+                    "type": "Missing Fixture",
+                    "reason": "Achilles Tendon Injury"
+                },
+                "team": {
+                    "id": 160,
+                    "name": "SC Freiburg",
+                    "logo": "https://media.api-sports.io/football/teams/160.png"
+                },
+                "fixture": {
+                    "id": 1224153,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 24904,
+                    "name": "N. Dorsch",
+                    "photo": "https://media.api-sports.io/football/players/24904.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 180,
+                    "name": "1. FC Heidenheim",
+                    "logo": "https://media.api-sports.io/football/teams/180.png"
+                },
+                "fixture": {
+                    "id": 1224150,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 203011,
+                    "name": "J. Niehues",
+                    "photo": "https://media.api-sports.io/football/players/203011.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 180,
+                    "name": "1. FC Heidenheim",
+                    "logo": "https://media.api-sports.io/football/teams/180.png"
+                },
+                "fixture": {
+                    "id": 1224150,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 24955,
+                    "name": "M. Honsak",
+                    "photo": "https://media.api-sports.io/football/players/24955.png",
+                    "type": "Questionable",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 180,
+                    "name": "1. FC Heidenheim",
+                    "logo": "https://media.api-sports.io/football/teams/180.png"
+                },
+                "fixture": {
+                    "id": 1224150,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 637,
+                    "name": "F. Nmecha",
+                    "photo": "https://media.api-sports.io/football/players/637.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 165,
+                    "name": "Borussia Dortmund",
+                    "logo": "https://media.api-sports.io/football/teams/165.png"
+                },
+                "fixture": {
+                    "id": 1224150,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 26243,
+                    "name": "N. Schlotterbeck",
+                    "photo": "https://media.api-sports.io/football/players/26243.png",
+                    "type": "Missing Fixture",
+                    "reason": "Red Card"
+                },
+                "team": {
+                    "id": 165,
+                    "name": "Borussia Dortmund",
+                    "logo": "https://media.api-sports.io/football/teams/165.png"
+                },
+                "fixture": {
+                    "id": 1224150,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 506,
+                    "name": "N. Sule",
+                    "photo": "https://media.api-sports.io/football/players/506.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 165,
+                    "name": "Borussia Dortmund",
+                    "logo": "https://media.api-sports.io/football/teams/165.png"
+                },
+                "fixture": {
+                    "id": 1224150,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 178425,
+                    "name": "S. Ahlers",
+                    "photo": "https://media.api-sports.io/football/players/178425.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 186,
+                    "name": "FC St. Pauli",
+                    "logo": "https://media.api-sports.io/football/teams/186.png"
+                },
+                "fixture": {
+                    "id": 1224154,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 25141,
+                    "name": "S. Burchert",
+                    "photo": "https://media.api-sports.io/football/players/25141.png",
+                    "type": "Missing Fixture",
+                    "reason": "Groin Injury"
+                },
+                "team": {
+                    "id": 186,
+                    "name": "FC St. Pauli",
+                    "logo": "https://media.api-sports.io/football/teams/186.png"
+                },
+                "fixture": {
+                    "id": 1224154,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 6904,
+                    "name": "C. Metcalfe",
+                    "photo": "https://media.api-sports.io/football/players/6904.png",
+                    "type": "Missing Fixture",
+                    "reason": "Leg Injury"
+                },
+                "team": {
+                    "id": 186,
+                    "name": "FC St. Pauli",
+                    "logo": "https://media.api-sports.io/football/teams/186.png"
+                },
+                "fixture": {
+                    "id": 1224154,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 48142,
+                    "name": "K. Mets",
+                    "photo": "https://media.api-sports.io/football/players/48142.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 186,
+                    "name": "FC St. Pauli",
+                    "logo": "https://media.api-sports.io/football/teams/186.png"
+                },
+                "fixture": {
+                    "id": 1224154,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 280024,
+                    "name": "R. Wagner",
+                    "photo": "https://media.api-sports.io/football/players/280024.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 186,
+                    "name": "FC St. Pauli",
+                    "logo": "https://media.api-sports.io/football/teams/186.png"
+                },
+                "fixture": {
+                    "id": 1224154,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 25084,
+                    "name": "S. Zoller",
+                    "photo": "https://media.api-sports.io/football/players/25084.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 186,
+                    "name": "FC St. Pauli",
+                    "logo": "https://media.api-sports.io/football/teams/186.png"
+                },
+                "fixture": {
+                    "id": 1224154,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 322508,
+                    "name": "Y. Kabadayi",
+                    "photo": "https://media.api-sports.io/football/players/322508.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 170,
+                    "name": "FC Augsburg",
+                    "logo": "https://media.api-sports.io/football/teams/170.png"
+                },
+                "fixture": {
+                    "id": 1224154,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 319858,
+                    "name": "H. Koudossou",
+                    "photo": "https://media.api-sports.io/football/players/319858.png",
+                    "type": "Missing Fixture",
+                    "reason": "Hamstring Injury"
+                },
+                "team": {
+                    "id": 170,
+                    "name": "FC Augsburg",
+                    "logo": "https://media.api-sports.io/football/teams/170.png"
+                },
+                "fixture": {
+                    "id": 1224154,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 25293,
+                    "name": "R. Oxford",
+                    "photo": "https://media.api-sports.io/football/players/25293.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 170,
+                    "name": "FC Augsburg",
+                    "logo": "https://media.api-sports.io/football/teams/170.png"
+                },
+                "fixture": {
+                    "id": 1224154,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 15901,
+                    "name": "M. Pedersen",
+                    "photo": "https://media.api-sports.io/football/players/15901.png",
+                    "type": "Questionable",
+                    "reason": "Groin Injury"
+                },
+                "team": {
+                    "id": 170,
+                    "name": "FC Augsburg",
+                    "logo": "https://media.api-sports.io/football/teams/170.png"
+                },
+                "fixture": {
+                    "id": 1224154,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 38112,
+                    "name": "J. Chabot",
+                    "photo": "https://media.api-sports.io/football/players/38112.png",
+                    "type": "Missing Fixture",
+                    "reason": "Yellow Cards"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224147,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 339230,
+                    "name": "L. Raimund",
+                    "photo": "https://media.api-sports.io/football/players/339230.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224147,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 194750,
+                    "name": "E. B. Toure",
+                    "photo": "https://media.api-sports.io/football/players/194750.png",
+                    "type": "Missing Fixture",
+                    "reason": "Foot Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224147,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 13,
+                    "name": "D. Zagadou",
+                    "photo": "https://media.api-sports.io/football/players/13.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224147,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 399,
+                    "name": "A. Nubel",
+                    "photo": "https://media.api-sports.io/football/players/399.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224147,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 20784,
+                    "name": "F. Honorat",
+                    "photo": "https://media.api-sports.io/football/players/20784.png",
+                    "type": "Missing Fixture",
+                    "reason": "Foot Injury"
+                },
+                "team": {
+                    "id": 163,
+                    "name": "Borussia M\u00f6nchengladbach",
+                    "logo": "https://media.api-sports.io/football/teams/163.png"
+                },
+                "fixture": {
+                    "id": 1224147,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 342173,
+                    "name": "S. Walde",
+                    "photo": "https://media.api-sports.io/football/players/342173.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 163,
+                    "name": "Borussia M\u00f6nchengladbach",
+                    "logo": "https://media.api-sports.io/football/teams/163.png"
+                },
+                "fixture": {
+                    "id": 1224147,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 318531,
+                    "name": "Y. Borges Sanches",
+                    "photo": "https://media.api-sports.io/football/players/318531.png",
+                    "type": "Questionable",
+                    "reason": "Illness"
+                },
+                "team": {
+                    "id": 163,
+                    "name": "Borussia M\u00f6nchengladbach",
+                    "logo": "https://media.api-sports.io/football/teams/163.png"
+                },
+                "fixture": {
+                    "id": 1224147,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T14:30:00+00:00",
+                    "timestamp": 1738420200
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 14605,
+                    "name": "I. Prtajin",
+                    "photo": "https://media.api-sports.io/football/players/14605.png",
+                    "type": "Missing Fixture",
+                    "reason": "Leg Injury"
+                },
+                "team": {
+                    "id": 182,
+                    "name": "Union Berlin",
+                    "logo": "https://media.api-sports.io/football/teams/182.png"
+                },
+                "fixture": {
+                    "id": 1224152,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 288206,
+                    "name": "L. Querfeld",
+                    "photo": "https://media.api-sports.io/football/players/288206.png",
+                    "type": "Missing Fixture",
+                    "reason": "Yellow Cards"
+                },
+                "team": {
+                    "id": 182,
+                    "name": "Union Berlin",
+                    "logo": "https://media.api-sports.io/football/teams/182.png"
+                },
+                "fixture": {
+                    "id": 1224152,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 1798,
+                    "name": "F. Ronnow",
+                    "photo": "https://media.api-sports.io/football/players/1798.png",
+                    "type": "Missing Fixture",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 182,
+                    "name": "Union Berlin",
+                    "logo": "https://media.api-sports.io/football/teams/182.png"
+                },
+                "fixture": {
+                    "id": 1224152,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 45892,
+                    "name": "A. Ilic",
+                    "photo": "https://media.api-sports.io/football/players/45892.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 182,
+                    "name": "Union Berlin",
+                    "logo": "https://media.api-sports.io/football/teams/182.png"
+                },
+                "fixture": {
+                    "id": 1224152,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 98,
+                    "name": "B. Henrichs",
+                    "photo": "https://media.api-sports.io/football/players/98.png",
+                    "type": "Missing Fixture",
+                    "reason": "Achilles Tendon Injury"
+                },
+                "team": {
+                    "id": 173,
+                    "name": "RB Leipzig",
+                    "logo": "https://media.api-sports.io/football/teams/173.png"
+                },
+                "fixture": {
+                    "id": 1224152,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 380978,
+                    "name": "A. Ouedraogo",
+                    "photo": "https://media.api-sports.io/football/players/380978.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 173,
+                    "name": "RB Leipzig",
+                    "logo": "https://media.api-sports.io/football/teams/173.png"
+                },
+                "fixture": {
+                    "id": 1224152,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 1095,
+                    "name": "X. Schlager",
+                    "photo": "https://media.api-sports.io/football/players/1095.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 173,
+                    "name": "RB Leipzig",
+                    "logo": "https://media.api-sports.io/football/teams/173.png"
+                },
+                "fixture": {
+                    "id": 1224152,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 2063,
+                    "name": "Andre Silva",
+                    "photo": "https://media.api-sports.io/football/players/2063.png",
+                    "type": "Questionable",
+                    "reason": "Calf Injury"
+                },
+                "team": {
+                    "id": 173,
+                    "name": "RB Leipzig",
+                    "logo": "https://media.api-sports.io/football/teams/173.png"
+                },
+                "fixture": {
+                    "id": 1224152,
+                    "timezone": "UTC",
+                    "date": "2025-02-01T17:30:00+00:00",
+                    "timestamp": 1738431000
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            }
+        ]
+    }
+}

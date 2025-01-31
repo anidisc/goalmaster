@@ -348,3 +348,12 @@ class TopPlayer(Player):
         self.age = age,
         self.penalty_scored = penalty_scored
         self.penalty_missed = penalty_missed
+
+class PlayerInjury():
+    def __init__(self,name,reason,team,idfixture,idplayer) -> None:
+        self.team = team
+        self.reason = reason  
+        self.name = name  
+        self.idfixture=idfixture
+        self.idplayer=idplayer
+        
