@@ -6,7 +6,7 @@ import os
 # from pyparsing import NoMatch
 from textual.events import Key
 import gemini_ai
-import api_football 
+import api_football
 from textual.app import App
 from textual.widgets import Header, Footer, Static, Input, OptionList, Collapsible
 from textual.containers import ScrollableContainer
@@ -23,7 +23,7 @@ from weasyprint import HTML
 import mistune
 
 
-APPVERSION = "0.6.7"
+APPVERSION = "0.7.0"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -71,7 +71,7 @@ def save_prediction_pdf(id_fixture,prediction):
     try:
         # Converti il Markdown in HTML
         html_content = markdown(prediction, extensions=['tables'])
-        
+
         # Aggiungi uno stile CSS base per migliorare l'aspetto delle tabelle
         css = """
         table {
@@ -116,7 +116,7 @@ def save_prediction_pdf(id_fixture,prediction):
             margin: 5px 0;
         }
         """
-     
+
         # Combina l'HTML e lo stile CSS
         full_html = f"""
         <html>
@@ -128,7 +128,7 @@ def save_prediction_pdf(id_fixture,prediction):
         </body>
         </html>
         """
-        
+
         # Genera il PDF usando WeasyPrint
         HTML(string=full_html).write_pdf(pathfilepdf)
     except Exception as e:
@@ -137,7 +137,7 @@ def save_prediction_pdf(id_fixture,prediction):
     # Converti il testo iniziale in HTML
     # markdown_renderer = mistune.create_markdown()
     # html_content = markdown_renderer(prediction)
-    # # Applica CSS 
+    # # Applica CSS
     # custom_css = """
     #                     table {
     #                         width: 100%;
@@ -312,7 +312,7 @@ class goalmasterapp(App):
             stats_prediction=f"This is data of prediction by agency between {team1} vs {team2}:{af.get_prediction(id_fixture)} and data of detailed statistics of both teams {big_team_stats}"
             preprompt="""
                 Read data of prediction of this maatch, and analyze it. Stats of singol team, historical statistics of both teams.
-                Match passed h2h of both teams. Show this data in table format. 
+                Match passed h2h of both teams. Show this data in table format.
                     """
             translate=f"Write this analysis in {languege}"
             prediction=gemini_ai.gemini_ai_call(translate+composed_prompt+stats_prediction+preprompt+prompt)
@@ -379,7 +379,7 @@ class goalmasterapp(App):
     def add_block_topscorers(self,idleague,assists=False):
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
-        tabmap=af.ApiFootball(self.YEAR_SELECT).table_top_scores(idleague,assists)
+        tabmap=af.table_top_scores(idleague,assists)
         nameleague=self.find_league(idleague)
         mode="Assists" if assists else "Scorers"
         self.query_one("#main_container").mount(Collapsible(Static(tabmap),id=block_id,title=f"Top {mode} for {nameleague} for year {self.YEAR_SELECT}",collapsed=False))
@@ -546,7 +546,7 @@ class goalmasterapp(App):
         self.input_box.display = False # Hide the input box
         self.input_box.value = ""
 
- 
+
     def on_option_list_option_selected(self, event: OptionList.OptionSelected) -> None:
         if event.option_list.id == "yearsbox":
             selected_option = event.option.prompt
@@ -597,19 +597,23 @@ class goalmasterapp(App):
                     return
                 self.add_block_stats_match(self.selec_match.id,self.selec_match.home_team,self.selec_match.away_team)
             if event.option_index == 2:  #selected add block standings of the league
+                injuried_players = af.get_list_injuries_by_date(self.selec_match.id_league,self.selec_match.date[:10])
+                top_score_players = af.get_top_scores(self.selec_match.id_league)
+                top_assists_players = af.get_top_assists(self.selec_match.id_league)
+                p_inj_fixture=json.dumps(injuried_players[str(self.selec_match.id)],indent=4)
                 prompt_request = f"""
                 Analyze the match between {self.selec_match.home_team} and {self.selec_match.away_team}.
                 Try to analyze the match between the two teams, providing a precise context in which they
                 will face each other, comparing their statistical performance in the league.
-                Present this data using comparative tables and histograms where possible.
+                Present this data using comparative tables where possible.
                 Analyze well the behavior and performance of the teams at home and away, and base your judgment on this,
                 which should be a calculated prediction 1 X 2, and where you are unsure, also provide a double chance
                 (for example, 1X, X2, 12). Additionally, separate with a line the next judgment on how many
                 goals the teams might score and whether it's likely to be GG (both teams to score) or NG
-                (no goals from one or both teams). Further,
-                identify the team with the highest probability of scoring at least one goal, which should exceed 70%,
-                and the team with the lowest probability of scoring at least one goal, which should be below 30%. and of course, explain all your choices."
-
+                (no goals from one or both teams).
+                Keep in mind this list of unavailable players as well {p_inj_fixture}, and try to determine if they are
+                important players for either team by considering if they have contributed with assists
+                or goals in the current season by checking the top players by assists and goals {top_assists_players} and {top_score_players} update.
                 """
                 # if not (self.selec_match.status in ["NS","RS"]): #not started or resulted
                 #     self.notify("Match not started",severity="warning",timeout=5)
@@ -634,7 +638,7 @@ class goalmasterapp(App):
             if event.option_index == 4:  #exit
                 self.query_one(f"#{self.id_focused}").focus()
                 return
-            
+
 if __name__ == "__main__":
     app = goalmasterapp().run()
 

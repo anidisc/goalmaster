@@ -476,39 +476,143 @@ class ApiFootball:
         return response.json()['response']
 
     #get top scores from api_football
-    def get_top_scores(self,id_league,assists=False) -> list[TopPlayer]:
-        url = f"{API_URL}/players/topscorers" if not assists else f"{API_URL}/players/topassists"
-        params = {
-            "league": id_league,
-            "season": self.YEAR
-        }
-        response = requests.get(url, headers=self.headers, params=params)
-        res_json = response.json()['response']
-        #update API_CALLS
-        self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+    # def get_top_scores(self,id_league,assists=False) -> list[TopPlayer]:
+    #     url = f"{API_URL}/players/topscorers" if not assists else f"{API_URL}/players/topassists"
+    #     params = {
+    #         "league": id_league,
+    #         "season": self.YEAR
+    #     }
+    #     response = requests.get(url, headers=self.headers, params=params)
+    #     res_json = response.json()['response']
+    #     #update API_CALLS
+    #     self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
 
+    #     top_players = []
+    #     for player in res_json:
+    #         top_players.append(TopPlayer(player['player']['name'],
+    #                                      player['statistics'][0]['games']['position'],
+    #                                      "",
+    #                                      player['statistics'][0]['games']['number'],
+    #                                      player['statistics'][0]['team']['name'],
+    #                                      player['statistics'][0]['goals']['total'],
+    #                                      player['statistics'][0]['goals']['assists'],
+    #                                      player['statistics'][0]['cards']['yellow'],
+    #                                      player['statistics'][0]['cards']['red'],
+    #                                      player['player']['nationality'],
+    #                                      player['player']['age'],
+    #                                      player['statistics'][0]['penalty']['scored'],
+    #                                      player['statistics'][0]['penalty']['missed']))
+
+    #     return top_players
+    
+    def get_top_scores(self, id_league) -> list[TopPlayer]:
+        file_path = "topscore_players.json"
+        today = datetime.today().date()
+
+        # Se il file esiste, carica i dati
+        if os.path.exists(file_path):
+            with open(file_path, "r") as f:
+                try:
+                    cache = json.load(f)
+                except json.JSONDecodeError:
+                    cache = {}
+        else:
+            cache = {}
+
+        # Controlla se i dati sono aggiornati a meno di 4 giorni
+        if (str(id_league) in cache and datetime.strptime(cache[str(id_league)]["date"], "%Y-%m-%d").date() >= today - timedelta(days=4)):
+            res_json = cache[str(id_league)]["response"]
+        else:
+            url = f"{API_URL}/players/topscorers"
+            params = {"league": id_league, "season": self.YEAR}
+            response = requests.get(url, headers=self.headers, params=params)
+            res_json = response.json()['response']
+            
+            # Aggiorna API_CALLS
+            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining', 0))
+            
+            # Salva i dati nel file
+            cache[str(id_league)] = {"date": today.strftime("%Y-%m-%d"), "response": res_json}
+            with open(file_path, "w") as f:
+                json.dump(cache, f, indent=4)
+
+        # Continua con la creazione della lista dei TopPlayer
         top_players = []
         for player in res_json:
-            top_players.append(TopPlayer(player['player']['name'],
-                                         player['statistics'][0]['games']['position'],
-                                         "",
-                                         player['statistics'][0]['games']['number'],
-                                         player['statistics'][0]['team']['name'],
-                                         player['statistics'][0]['goals']['total'],
-                                         player['statistics'][0]['goals']['assists'],
-                                         player['statistics'][0]['cards']['yellow'],
-                                         player['statistics'][0]['cards']['red'],
-                                         player['player']['nationality'],
-                                         player['player']['age'],
-                                         player['statistics'][0]['penalty']['scored'],
-                                         player['statistics'][0]['penalty']['missed']))
+            top_players.append(TopPlayer(
+                player['player']['name'],
+                player['statistics'][0]['games']['position'],
+                "",
+                player['statistics'][0]['games']['number'],
+                player['statistics'][0]['team']['name'],
+                player['statistics'][0]['goals']['total'],
+                player['statistics'][0]['goals']['assists'],
+                player['statistics'][0]['cards']['yellow'],
+                player['statistics'][0]['cards']['red'],
+                player['player']['nationality'],
+                player['player']['age'],
+                player['statistics'][0]['penalty']['scored'],
+                player['statistics'][0]['penalty']['missed']
+            ))
 
         return top_players
-
     #def a function to get table of top scorers from api_football
+
+    def get_top_assists(self, id_league) -> list[TopPlayer]:
+        file_path = "topassist_players.json"
+        today = datetime.today().date()
+
+        # Se il file esiste, carica i dati
+        if os.path.exists(file_path):
+            with open(file_path, "r") as f:
+                try:
+                    cache = json.load(f)
+                except json.JSONDecodeError:
+                    cache = {}
+        else:
+            cache = {}
+
+        # Controlla se i dati sono aggiornati a meno di 4 giorni
+        if (str(id_league) in cache and datetime.strptime(cache[str(id_league)]["date"], "%Y-%m-%d").date() >= today - timedelta(days=4)):
+            res_json = cache[str(id_league)]["response"]
+        else:
+            url = f"{API_URL}/players/topassists"
+            params = {"league": id_league, "season": self.YEAR}
+            response = requests.get(url, headers=self.headers, params=params)
+            res_json = response.json()['response']
+            
+            # Aggiorna API_CALLS
+            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining', 0))
+            
+            # Salva i dati nel file
+            cache[str(id_league)] = {"date": today.strftime("%Y-%m-%d"), "response": res_json}
+            with open(file_path, "w") as f:
+                json.dump(cache, f, indent=4)
+
+        # Continua con la creazione della lista dei TopPlayer
+        top_players = []
+        for player in res_json:
+            top_players.append(TopPlayer(
+                player['player']['name'],
+                player['statistics'][0]['games']['position'],
+                "",
+                player['statistics'][0]['games']['number'],
+                player['statistics'][0]['team']['name'],
+                player['statistics'][0]['goals']['total'],
+                player['statistics'][0]['goals']['assists'],
+                player['statistics'][0]['cards']['yellow'],
+                player['statistics'][0]['cards']['red'],
+                player['player']['nationality'],
+                player['player']['age'],
+                player['statistics'][0]['penalty']['scored'],
+                player['statistics'][0]['penalty']['missed']
+            ))
+
+        return top_players
+    
     def table_top_scores(self,id_league,assists=False) -> None:
 
-        top_players = self.get_top_scores(id_league,assists)
+        top_players = self.get_top_scores(id_league) if not assists else self.get_top_assists(id_league)
 
         table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
 
@@ -761,8 +865,9 @@ class ApiFootball:
 # #rich_print(ts1.get_table_stats())
 # #rich_print(ts1.get_table_stats())
 
-# x=ApiFootball().get_list_injuries_by_date(78,"2025-02-01")
-# print(json.dumps(x,indent=4))
+# x=ApiFootball().get_list_injuries_by_date(135,"2025-02-01")
+# inj=(json.dumps(x["1223820"],indent=4))
+# rich_print(inj)
 # #print al player injuries
 # for i in x:
 #     rich_print(i.name,i.reason,i.team,i.idfixture)
