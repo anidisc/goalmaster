@@ -14,6 +14,4 @@ def gemini_ai_call(prompt):
     return response.text
 
 #print(gemini_ai_call("come si gioca a tris"))
-``
-
 #gemini_ai_call("come si gioca a tris")
