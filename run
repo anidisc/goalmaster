@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Nome della virtualenv
+VENV_NAME="gmv313"
+VENV_PATH="$VENV_NAME"  # Modifica con il percorso corretto se necessario
+
+# Controlla se l'ambiente virtuale è attivo
+if [[ -z "$VIRTUAL_ENV" || "$(basename $VIRTUAL_ENV)" != "$VENV_NAME" ]]; then
+    echo "L'ambiente virtuale $VENV_NAME non è attivo. Attivazione in corso..."
+    
+    # Controlla se la virtualenv esiste
+    if [[ -d "$VENV_PATH" ]]; then
+        source "$VENV_PATH/bin/activate"
+    else
+        echo "Errore: l'ambiente virtuale $VENV_NAME non esiste!"
+        exit 1
+    fi
+else
+    echo "L'ambiente virtuale $VENV_NAME è già attivo."
+fi
+
+# Avvia lo script Python
+echo "Avvio di goalmaster.py..."
+python3 goalmaster.py
+

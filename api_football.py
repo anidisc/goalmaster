@@ -763,7 +763,6 @@ class ApiFootball:
         add_rows_recursive(table, "", team1.__dict__, team2.__dict__)
         # Stampa la tabella
         return table
-    
     #def a funnction that extract the injuries player from api_football
     def get_players_injuries(self,id_league,date):
         url = f"{API_URL}/injuries"
@@ -782,6 +781,7 @@ class ApiFootball:
             with open(INJURYPLAYER_FILE_DB, "r") as f:
                 injuries_to_disk=json.load(f)
             if id_league in injuries_to_disk:
+                date_limit = (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d")
                 if injuries_to_disk[id_league]["date"]>=date:
                     response=injuries_to_disk[id_league]["injuries"]
                 else:
@@ -824,6 +824,61 @@ class ApiFootball:
 
         return list_injuries
     
+    def generate_injury_table(self, id_league, date, id_fixture) -> Table:
+        """
+        Genera una tabella Rich Text con gli infortuni per un specifico fixture
+        Args:
+            id_league: ID della lega
+            date: Data di riferimento
+            id_fixture: ID del fixture da visualizzare
+        Returns:
+            Oggetto Table di Rich
+        """
+        # Ottieni la lista degli infortuni
+        injuries_data = self.get_list_injuries_by_date(id_league, date)
+        
+        # Converti l'ID in stringa per compatibilità
+        id_fixture = str(id_fixture)
+        
+        # Controlla se ci sono infortuni per questo fixture
+        if id_fixture not in injuries_data:
+            table = Table(title=f"Nessun infortunio trovato - Fixture {id_fixture}")
+            table.add_column("Info")
+            table.add_row("Nessun giocatore infortunato per questo match")
+            return table
+        
+        # Estrai i dati degli infortuni
+        fixture_data = injuries_data[id_fixture]
+        
+        # Raggruppa giocatori per squadra
+        teams = {}
+        for player in fixture_data.values():
+            team_name = player['teamname']
+            if team_name not in teams:
+                teams[team_name] = []
+            teams[team_name].append(player)
+        
+        # Crea la tabella
+        table = Table(title=f"Infortuni Fixture {id_fixture}")
+        table.add_column("Squadra", style="cyan", no_wrap=True)
+        table.add_column("Giocatore", style="magenta")
+        table.add_column("Motivazione", style="yellow")
+        
+        # Popola la tabella
+        for team, players in teams.items():
+            # Aggiungi una riga separatrice tra le squadre
+            if len(table.rows) > 0:
+                table.add_section()
+            
+            for i, player in enumerate(players):
+                table.add_row(
+                    team if i == 0 else "",  # Mostra il nome squadra solo una volta
+                    player['playername'],
+                    player['reason']
+                )
+        
+        return table
+
 
 #m=ApiFootball().get_table_standings(135)
 # testo=str(rich_print(ApiFootball().get_table_standings(135)))
@@ -856,14 +911,16 @@ class ApiFootball:
 # for i in topplayers:
 #     rich_print(i.name,i.position,i.team,i.number,i.goals,i.assists,i.nationality,i.age)
 #rich_print(ApiFootball().table_top_scores(135))
+
 # response1=ApiFootball().get_team_statistics(492,135)
 # response2=ApiFootball().get_team_statistics(490,135)
 # ts1,ts2=TeamStats(),TeamStats()
 # ts1.Charge_Data(response1)
 # ts2.Charge_Data(response2)
 # rich_print(ApiFootball().print_table_compareteams(ts1,ts2))
-# #rich_print(ts1.get_table_stats())
-# #rich_print(ts1.get_table_stats())
+
+#rich_print(ts1.get_table_stats())
+#rich_print(ts1.get_table_stats())
 
 # x=ApiFootball().get_list_injuries_by_date(135,"2025-02-01")
 # inj=(json.dumps(x["1223820"],indent=4))
@@ -871,3 +928,5 @@ class ApiFootball:
 # #print al player injuries
 # for i in x:
 #     rich_print(i.name,i.reason,i.team,i.idfixture)
+
+#rich_print(ApiFootball().generate_injury_table(135,"2025-02-01",1223820))

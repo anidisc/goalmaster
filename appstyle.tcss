@@ -8,7 +8,7 @@ ToastRack {
 }
 
 Screen {   
-    layers: below above above2 above3 above4;
+    layers: below above above2 above3 above4 above5;
     align: center middle;
 }
 
@@ -54,6 +54,14 @@ Screen {
     border: round blueviolet;
     width: 90%;
     height: 80%;
+    visibility: hidden;
+}
+
+#injury_players_box {
+    layer: above5;
+    border: round #ec3819;
+    width: 50%;
+    height: 50%;
     visibility: hidden;
 }
 

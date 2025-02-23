@@ -2,3 +2,8 @@ gm_venv/
 test/
 gmv313/
 pdf/predictions/
+predictions.json
+standings.json
+team_statistics.json
+topassist_players.json
+topscore_players.json

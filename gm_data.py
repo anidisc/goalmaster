@@ -256,7 +256,8 @@ class Match:
         # Format data e ora (15 caratteri)
         datetime_str = datetime.fromisoformat(self.date).strftime("%d/%m/%Y %H:%M")
         country_str = f"{self.country[:15]:<15}"
-        flag_prediction = "🎯" if self.check_prediction(self.id) else "  "
+        flag_prediction = "(P)" if self.check_prediction(self.id) else "  " 
+        
         
         # Costruisci la stringa finale con 1 spazio tra minuto, stato e data
         result = f"{team1_str}{team2_str}{score_team1_str}{score_team2_str} {minute_str} {status_str} {datetime_str} | {flag_prediction} {self.get_flag()+"  "+country_str} {livestatus}"

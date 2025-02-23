@@ -50,6 +50,34 @@ languege="italian"  #set here the language for the analysis of predictions
 
 af = api_football.ApiFootball()
 
+from PyPDF2 import PdfMerger
+from datetime import datetime
+
+def merge_pdfs(id_league,id_fixtures, output_folder="pdf/reports/") -> bool:
+    input_folder = "pdf/predictions/"
+    date_of_report=datetime.now().strftime("%Y-%m-%d")
+    merger = PdfMerger()
+    
+    flagmerge=False
+    for id_fixture in id_fixtures:
+        pdf_path = os.path.join(input_folder, f"{id_fixture}.pdf")
+        if os.path.exists(pdf_path):
+            merger.append(pdf_path)
+            flagmerge=True
+     
+    if not flagmerge:
+        return False
+    
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    
+    output_file = os.path.join(output_folder, f"report_{id_league}_{datetime.today().strftime('%Y-%m-%d')}.pdf")
+    merger.write(output_file)
+    merger.close()
+    #print(f"PDF unito creato: {output_file}")
+    return True
+
+
 def table_af_map():
     #print a table with the a columm for keys and names if leagues
     table = Table(show_header=True, header_style="bold magenta")
@@ -170,6 +198,7 @@ class goalmasterapp(App):
                 ("i", "insert_command", "Insert Command"),
                 ("r","remove_block","Remove Block"),
                 ("s", "show_full_stats", "Show Full Stats"),
+                ("j", "show_injuries", "Show Injuries"),
                 ("c", "collapse_or_expand(True)", "Collapse All")]
     CSS_PATH = "appstyle.tcss"
 
@@ -203,6 +232,9 @@ class goalmasterapp(App):
         self.compare_text_box = Static("TEXt TEAM TO COMPARE",id="compare_text_box")
         self.compare_teams_box = ScrollableContainer(self.compare_text_box,id="compare_teams_box")
         yield self.compare_teams_box
+        self.injury_players_text = Static("INJURIES",id="injury_players_text")
+        self.injury_players_box = ScrollableContainer(self.injury_players_text,id="injury_players_box")
+        yield self.injury_players_box
 
     def find_league(self,league):
             #find name of league with de id of league
@@ -364,7 +396,8 @@ class goalmasterapp(App):
                - UPDATE - update standings and not call from existing standings on disk
             -T - timeshift days (example 1 is from today to today+1, or -1 is from today to today-1)
             -TOP 'S' - top scorers 'A' - top assists
-
+        REPORT args:
+            args - create a mergded report of all prediction of a league in pdf format
         Available LEAGUES:
 
             {formatted_tabmap}
@@ -424,6 +457,13 @@ class goalmasterapp(App):
         self.compare_teams_box.styles.visibility = "hidden"
         self.input_box.display = True
         self.input_box.focus()
+    def action_show_injuries(self):
+        if self.selec_match is None:
+            self.notify("No match selected",severity="warning",timeout=5)
+            return
+        self.injury_players_text.update(af.generate_injury_table(self.selec_match.id_league,self.selec_match.date[:10],self.selec_match.id))
+        self.injury_players_box.styles.visibility = "visible" if self.injury_players_box.styles.visibility == "hidden" else "hidden"
+        self.injury_players_box.focus()
     def action_change_year(self):
         self.yearsbox.styles.visibility = "visible" if self.yearsbox.styles.visibility == "hidden" else "hidden"
         self.yearsbox.focus()
@@ -453,6 +493,21 @@ class goalmasterapp(App):
         #hide input box
         #self.input_box.styles.visibility = "hidden"
         #check if command is valid
+        if command[0] == "REPORT":
+            if len(command) < 1:
+                self.notify("Invalid command",severity="warning",timeout=5)
+                return
+            elif command[1] not in af_map:
+                self.notify("Invalid command",severity="warning",timeout=5)
+                return
+            lf=af.get_list_fixtures(af_map[command[1]]["id"],datetime.now().date(),datetime.now().date())
+            lf_ids = [x.id for x in lf]
+            if merge_pdfs(af_map[command[1]]["id"],lf_ids):
+                self.notify("Report generated",severity="success",timeout=5)
+            else:
+                self.notify("Report not generated",severity="warning",timeout=5)
+            self.input_box.display = False
+            return
         if command[0] == "LIVE":
             self.add_block_fixture(datetime.now().date(),datetime.now().date(),live=True)
             self.input_box.display = False
@@ -501,6 +556,13 @@ class goalmasterapp(App):
             elif command[1] == "-T":
                 if len(command) < 3:
                     command.append("0")  #default value for days
+                #check if we have 4 parameters and if it is a "REPORT"
+                # if len(command) < 4 and ((command[2] == "REPORT") or (command[3] == "REPORT")):
+                #     self.notify("selected command report for id_league {command[0]}",severity="info",timeout=10,title="selected report")
+                #     return
+                # else:
+                #     self.notify("error command syntax or command not found",severity="error",timeout=5,title="SYNTAX ERROR")
+                #     return
                 #validate if the time parameter is valid in range -150 to 150
                 if -150 <= int(command[2]) <= 150:
                     if int(command[2]) >= 0:
@@ -608,12 +670,16 @@ class goalmasterapp(App):
                 Present this data using comparative tables where possible.
                 Analyze well the behavior and performance of the teams at home and away, and base your judgment on this,
                 which should be a calculated prediction 1 X 2, and where you are unsure, also provide a double chance
-                (for example, 1X, X2, 12). Additionally, separate with a line the next judgment on how many
+                (for example, 1X, X2, 12). When you are in doubt, you can also provide a double chance (for example, 12 and not 1X or X2 if you
+                think that the match will end in a draw necessarily). Additionally, separate with a line the next judgment on how many
                 goals the teams might score and whether it's likely to be GG (both teams to score) or NG
                 (no goals from one or both teams).
                 Keep in mind this list of unavailable players as well {p_inj_fixture}, and try to determine if they are
                 important players for either team by considering if they have contributed with assists
-                or goals in the current season by checking the top players by assists and goals {top_assists_players} and {top_score_players} update.
+                or goals in the current season by checking the top players by assists and goals {top_assists_players} and {top_score_players} update. 
+                If the player is not in the list, not invent or search for the player on internet if you not find it, because you wrong evertimes the
+                judgment of the player in the match. At the begin  of report not speak abaout the your prediciotn example with say "sure" or "certanly" etc etc,
+                but only the prediction and the reason of it and the Title of toy report in H1.
                 """
                 # if not (self.selec_match.status in ["NS","RS"]): #not started or resulted
                 #     self.notify("Match not started",severity="warning",timeout=5)
