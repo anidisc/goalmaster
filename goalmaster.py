@@ -197,9 +197,12 @@ class goalmasterapp(App):
                 ("y", "change_year", "Change Year"),
                 ("i", "insert_command", "Insert Command"),
                 ("r","remove_block","Remove Block"),
-                ("s", "show_full_stats", "Show Full Stats"),
+                ("c","collapse_all","Collapse All"),
+                ("e","expand_all","Expand All"),
+                ("s", "show_full_stats", "Full Stats"),
                 ("j", "show_injuries", "Show Injuries"),
-                ("c", "collapse_or_expand(True)", "Collapse All")]
+                ("l", "select_league", "Select League"),
+                ]
     CSS_PATH = "appstyle.tcss"
 
 
@@ -207,13 +210,15 @@ class goalmasterapp(App):
         super().__init__()
         self.YEAR_SELECT = af.YEAR
         self.league_selected = 0
+        self.block_counter = 0
         #create a dict of all list of fixtures to reference them later
         self.blocklist = {}
         self.list_of_blocks = []
         self.selec_match = None
-        self.last_focus_id =None
+        self.last_focus_id = None
         self.memory_standings = None  # Memory of the standings in list of dict
-        self.id_focused = None #Memory of the id of the focused widget
+        self.id_focused = "main_container" #Memory of the id of the focused widget
+
     def compose(self):
         yield Header()
         yield ScrollableContainer(id="main_container")
@@ -224,6 +229,33 @@ class goalmasterapp(App):
         self.yearsbox=OptionList("2020","2021","2022","2023","2024",id="yearsbox")
         self.yearsbox.border_title = "Select Year"
         yield self.yearsbox
+        
+        # Add championship selection dropdown
+        league_options = []
+        for key, value in af_map.items():
+            league_options.append(f"{key}: {value['name']} ({value['country']})")
+        # Create the OptionList with all options
+        self.leaguebox = OptionList(*league_options, id="leaguebox")
+        self.leaguebox.border_title = "Select Championship"
+        yield self.leaguebox
+        
+        # Add league actions menu
+        self.league_actions = OptionList(
+            "Match of the day", 
+            "Match Shift",
+            "Standing",
+            "Top Player score",
+            "Top Player assist",
+            "Exit",
+            id="league_actions"
+        )
+        self.league_actions.border_title = "League Actions"
+        yield self.league_actions
+        
+        # Add match shift input box
+        self.shift_days_input = Input(id="shift_days_input", name="shift_days_input", placeholder="Days (+ or -)")
+        yield self.shift_days_input
+        
         #create an info box to show a varius texts
         # self.infobox = Static("info text to print",id="infobox")
         # yield Vertical(self.infobox,Button("ok",id="ok_info_button"),id="infolayout")
@@ -318,28 +350,49 @@ class goalmasterapp(App):
 
     def add_block_prediction(self,league_id,id_fixture,team1,team2,prompt,team1_id,team2_id):
         #self.input_box.styles.visibility = "hidden" # Hide the input box
-        json_file = gm.PREDICTION_FILE_DB
+        json_file = "predictions.json"  # Usa il percorso diretto invece di gm.PREDICTION_FILE_DB
         id_fixture = str(id_fixture) #convert to string
+        
+        # Aggiunta log per debug
+        self.notify(f"Cercando la previsione per id_fixture: {id_fixture}", severity="info", timeout=5)
+        
+        predictions = {}
         # Check if the file exists
         if not os.path.exists(json_file):
+            self.notify(f"File {json_file} non trovato, creazione nuovo file", severity="info", timeout=5)
             predictions = {}  # Create an empty dictionary if the file doesn't exist
         else:
-            # Load the existing predictions from the file
-            with open(json_file, "r") as f:
-                predictions = json.load(f)
+            try:
+                # Load the existing predictions from the file
+                with open(json_file, "r", encoding="utf-8") as f:
+                    predictions = json.load(f)
+                    # Aggiunta log per debug
+                    self.notify(f"Caricato file con {len(predictions)} previsioni", severity="info", timeout=3)
+            except json.JSONDecodeError:
+                self.notify(f"Errore nel decodificare il file JSON, creazione nuovo file", severity="error", timeout=5)
+                predictions = {}
 
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         table_stats=af.get_standings(league_id)
         composed_prompt = f"The match is between {team1} vs {team2}, and view this standing: {table_stats}"
+        
+        # Aggiunta log per debug
         if id_fixture in predictions:
+            self.notify(f"Trovata previsione esistente per {team1} vs {team2}", severity="info", timeout=3)
             prediction = predictions[id_fixture]
         else:
+            self.notify(f"Generazione nuova previsione per {team1} vs {team2}", severity="info", timeout=3)
+            # Il resto del codice rimane invariato
             rs1=(af.get_team_statistics(team1_id,league_id))
             rs2=(af.get_team_statistics(team2_id,league_id))
             ts1,ts2=gm.TeamStats(),gm.TeamStats()
-            ts1.Charge_Data(rs1)
-            ts2.Charge_Data(rs2)
+            if (rs2 is not None) and (rs1 is not None):
+                ts1.Charge_Data(rs1)
+                ts2.Charge_Data(rs2)
+            else:
+                self.notify(f"Unable to get statistics for {team2} or {team1}", severity="error", timeout=5)
+                return
             big_team_stats=af.print_table_compareteams(ts1,ts2)
             stats_prediction=f"This is data of prediction by agency between {team1} vs {team2}:{af.get_prediction(id_fixture)} and data of detailed statistics of both teams {big_team_stats}"
             preprompt="""
@@ -352,13 +405,17 @@ class goalmasterapp(App):
             save_prediction_pdf(id_fixture,prediction)
             # Save the updated predictions back to the JSON file with indentation for readability
             predictions[id_fixture] = prediction
-            with open(json_file, "w") as f:
-                json.dump(predictions, f, indent=4)
+            try:
+                with open(json_file, "w", encoding="utf-8") as f:
+                    json.dump(predictions, f, indent=4, ensure_ascii=False)
+                self.notify(f"Previsione salvata nel file {json_file}", severity="info", timeout=3)
+            except Exception as e:
+                self.notify(f"Errore nel salvare la previsione: {str(e)}", severity="error", timeout=5)
+    
         self.query_one("#main_container").mount(Collapsible(Static(Markdown(prediction),classes="predictions"),
                                                             id=block_id,title="Prediction Match: "+team1+" vs "+team2,
                                                             collapsed=False)) #mount block and list_fixtures)
         self.query_one("#main_container").scroll_end()
-
 
     def add_block_formations(self,id_fixture,team1,team2):
         self.block_counter += 1 # Increment the block counter
@@ -415,7 +472,7 @@ class goalmasterapp(App):
         tabmap=af.table_top_scores(idleague,assists)
         nameleague=self.find_league(idleague)
         mode="Assists" if assists else "Scorers"
-        self.query_one("#main_container").mount(Collapsible(Static(tabmap),id=block_id,title=f"Top {mode} for {nameleague} for year {self.YEAR_SELECT}",collapsed=False))
+        self.query_one("#main_container").mount(Collapsible(Static(tabmap),id=block_id,title=f"Top {mode} for {nameleague} for year {af.YEAR}",collapsed=False))
         self.query_one("#main_container").scroll_end()
 
     def on_mount(self):
@@ -423,6 +480,9 @@ class goalmasterapp(App):
         self.input_box.display = False # Hide the input box
         #self.select_todo_box.styles.visibility = "hidden" # hide the select todo box
         self.select_todo_box.display = False
+        self.leaguebox.display = False # Hide the league selection box initially
+        self.league_actions.display = False # Hide the league actions menu initially
+        self.shift_days_input.display = False # Hide the shift days input box initially
         self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.YEAR} CALLS:{af.remains_calls}"
         # self.boxmessage = self.query_one("#infolayout")
         # self.boxmessage.styles.visibility = "hidden"
@@ -435,11 +495,22 @@ class goalmasterapp(App):
     #     self.title = self.last_focus_id if self.last_focus_id else "GOAL MASTER"
 
     def on_key(self, event: Key):
-        if event.key == "a":
-            pass
-            # self.YEAR_SELECT = af.ApiFootball().YEAR
-            # self.add_block_standings(self.league_selected)
-        if event.key == "r" and self.block_counter > 0:
+        if event.key == "i":
+            #self.input_box.styles.visibility = "visible"
+            self.input_box.display = True
+            self.input_box.focus()
+            self.id_focused = self.focused.id
+        elif event.key == "y":
+            self.yearsbox.display = True
+            self.yearsbox.focus()
+            self.id_focused = self.focused.id
+        elif event.key == "l":
+            self.leaguebox.display = True
+            self.leaguebox.focus()
+            self.id_focused = self.focused.id
+        elif event.key == "j":
+            self.action_show_injuries()
+        elif event.key == "r" and self.block_counter > 0:
             # widget_id_to_remove =f"block_{self.block_counter}"
             if self.focused.id == self.query_one("#main_container").id:
                 return None
@@ -450,6 +521,10 @@ class goalmasterapp(App):
             #exit app if no block is left
             if self.block_counter == 0:
                 self.exit()
+        elif event.key == "c":
+            self.action_collapse_or_expand(True)
+        elif event.key == "e":
+            self.action_collapse_or_expand(False)
     #button pressed
 
     def action_insert_command(self):
@@ -485,11 +560,42 @@ class goalmasterapp(App):
         text_stat_to_show = af.print_table_compareteams(t1,t2)
         self.compare_text_box.update(text_stat_to_show)
 
-    def on_input_submitted(self, event: Input.Submitted):
+    def on_input_submitted(self, event: Input.Submitted) -> None:
+        if event.input.id == "shift_days_input":
+            try:
+                days = int(event.value)
+                if -150 <= days <= 150:
+                    if days >= 0:
+                        dfrom = datetime.now().date()
+                        dto = datetime.now().date() + timedelta(days=days)
+                    else:
+                        dfrom = datetime.now().date() + timedelta(days=days)
+                        dto = datetime.now().date()
+                    
+                    self.add_block_fixture(dfrom, dto)
+                else:
+                    self.notify("Days must be between -150 and 150", severity="error", timeout=5)
+            except ValueError:
+                self.notify("Invalid input. Please enter a number.", severity="error", timeout=5)
+            
+            # Hide the shift days input box and return focus to previous element
+            self.shift_days_input.display = False
+            self.shift_days_input.value = ""
+            self.query_one(f"#{self.id_focused}").focus()
+            return
+            
         #validate di input is not void
         if event.value == "":
             return
-        command = shlex.split(event.value.upper()) # Split the input string into a list of words
+        
+        try:
+            command = shlex.split(event.value.upper()) # Split the input string into a list of words
+        except ValueError as e:
+            # Handle the case where shlex.split fails due to unclosed quotes or escape characters
+            self.notify(f"Invalid command syntax: {str(e)}", severity="error", timeout=5)
+            self.input_box.display = False
+            return
+            
         #hide input box
         #self.input_box.styles.visibility = "hidden"
         #check if command is valid
@@ -613,11 +719,34 @@ class goalmasterapp(App):
         if event.option_list.id == "yearsbox":
             selected_option = event.option.prompt
             self.yearsbox.border_subtitle = selected_option
-            self.yearsbox.styles.visibility = "hidden"
-            self.YEAR_SELECT = selected_option
-            self.title = f"GOAL MASTER {APPVERSION} YEAR:{self.YEAR_SELECT} CALLS:{af.remains_calls}"
-            return
-        if event.option_list.id in self.list_of_blocks:
+            self.yearsbox.display = False
+            af.YEAR = selected_option
+            self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.YEAR} CALLS:{af.remains_calls}"
+            self.query_one(f"#{self.id_focused}").focus()
+        
+        elif event.option_list.id == "leaguebox":
+            # Get the selected league key from the option text
+            option_text = event.option_list.get_option_at_index(event.option_index).prompt
+            league_key = option_text.split(":")[0].strip()
+            
+            if league_key in af_map:
+                self.league_selected = af_map[league_key]["id"]
+                self.league_name = af_map[league_key]["name"]
+                self.notify(f"Selected: {af_map[league_key]['name']}", severity="info", timeout=3)
+                
+                # Hide the league selection box
+                self.leaguebox.display = False
+                
+                # Show the league actions menu
+                self.league_actions.border_title = f"Actions for {self.league_name}"
+                self.league_actions.display = True
+                self.league_actions.focus()
+            else:
+                # Hide the league selection box and return focus to previous element
+                self.leaguebox.display = False
+                self.query_one(f"#{self.id_focused}").focus()
+        
+        elif event.option_list.id in self.list_of_blocks:
             self.selec_match = self.blocklist[event.option_list.id][event.option_index]
             # if self.selec_match.status in ["NS","RS"]: #not started or resulted
             #     self.notify("match not started yet",severity="warning",timeout=5)
@@ -634,9 +763,47 @@ class goalmasterapp(App):
 
             self.notify(self.selec_match.home_team+" vs "+self.selec_match.away_team,severity="info",timeout=5)
             # fix selection match in the title
-            self.title = f"GOAL MASTER {APPVERSION} YEAR:{self.YEAR_SELECT} CALLS:{af.remains_calls} - Match SELECTED:{self.selec_match.home_team} vs {self.selec_match.away_team}"
+            self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.YEAR} CALLS:{af.remains_calls} - Match SELECTED:{self.selec_match.home_team} vs {self.selec_match.away_team}"
             #TODO show live matches in the future
-        if event.option_list.id == "select_todo_box":
+        
+        elif event.option_list.id == "league_actions":
+            option_index = event.option_index
+            
+            # Hide the league actions menu
+            self.league_actions.display = False
+            
+            if option_index == 0:  # Match of the day
+                # Show matches for today
+                dfrom = datetime.now().date()
+                dto = datetime.now().date()
+                self.add_block_fixture(dfrom, dto)
+                self.query_one(f"#{self.id_focused}").focus()
+            
+            elif option_index == 1:  # Match Shift
+                # Show the shift days input box
+                self.shift_days_input.display = True
+                self.shift_days_input.focus()
+            
+            elif option_index == 2:  # Standing
+                # Show standings
+                self.add_block_standings(self.league_selected)
+                self.query_one(f"#{self.id_focused}").focus()
+            
+            elif option_index == 3:  # Top Player score
+                # Show top scorers
+                self.add_block_topscorers(self.league_selected, assists=False)
+                self.query_one(f"#{self.id_focused}").focus()
+            
+            elif option_index == 4:  # Top Player assist
+                # Show top assists
+                self.add_block_topscorers(self.league_selected, assists=True)
+                self.query_one(f"#{self.id_focused}").focus()
+            
+            elif option_index == 5:  # Exit
+                # Return focus to previous element
+                self.query_one(f"#{self.id_focused}").focus()
+        
+        elif event.option_list.id == "select_todo_box":
             # if self.selec_match.status in ["NS","RS"]: #not started or resulted
             #     self.notify("match not started yet",severity="warning",timeout=5)
             #     self.select_todo_box.styles.visibility = "hidden"
@@ -707,4 +874,3 @@ class goalmasterapp(App):
 
 if __name__ == "__main__":
     app = goalmasterapp().run()
-

@@ -652,117 +652,70 @@ class ApiFootball:
         #save response in json file if not exist
         id_team=str(id_team)+"-#"+str(id_league)
         data={}
+        team_statistics_to_disk = {}
+        
+        # Gestione più robusta della lettura del file
         try:
-            with open(TEAM_STATISTICS_FILE_DB, "r") as f:
-                team_statistics_to_disk = json.load(f)
+            with open(TEAM_STATISTICS_FILE_DB, "r", encoding="utf-8") as f:
+                try:
+                    team_statistics_to_disk = json.load(f)
+                    #print(f"Statistics loaded for {len(team_statistics_to_disk)} teams")
+                except json.JSONDecodeError:
+                    print(f"Error decoding {TEAM_STATISTICS_FILE_DB}, creating new file")
+                    team_statistics_to_disk = {}
         except FileNotFoundError: #create file and structure data inside
-            with open(TEAM_STATISTICS_FILE_DB, "w") as f:
+            print(f"File {TEAM_STATISTICS_FILE_DB} not found, creating new file")
+            # Non facciamo nulla qui, il file verrà creato sotto
+        
+        # Se il file era vuoto o non esisteva, facciamo una chiamata API e creiamo il file
+        if not team_statistics_to_disk:
+            try:
                 response = requests.get(url, headers=self.headers, params=params)
                 #update API_CALLS
                 self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
-                data[id_team]={"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
-                json.dump(data, f,indent=4)
-            return response.json()['response']
-        #check if the headers from the file json are still valid
-        #otherwise get the standings from api_football
-        #check if id_team is in the file json
+                
+                # Verifica che la risposta contenga i dati attesi
+                if 'response' in response.json():
+                    data[id_team]={"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
+                    with open(TEAM_STATISTICS_FILE_DB, "w", encoding="utf-8") as f:
+                        json.dump(data, f, indent=4, ensure_ascii=False)
+                    return response.json()['response']
+                else:
+                    print(f"API response does not contain expected data: {response.json()}")
+                    return None
+            except Exception as e:
+                print(f"Error fetching team statistics: {str(e)}")
+                return None
+        
+        # Se abbiamo caricato i dati dal file, verifichiamo se contengono i dati della squadra richiesta
         if id_team in team_statistics_to_disk:
-            date_limit = (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d")
-            if team_statistics_to_disk[id_team]["data"]["date"] >= date_limit: #== datetime.now().strftime("%Y-%m-%d"):
-                return team_statistics_to_disk[id_team]["data"]["statistics"]
-        else:
+            try:
+                date_limit = (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d")
+                if team_statistics_to_disk[id_team]["data"]["date"] >= date_limit: #== datetime.now().strftime("%Y-%m-%d"):
+                    return team_statistics_to_disk[id_team]["data"]["statistics"]
+            except KeyError as e:
+                print(f"Data structure error for team {id_team}: {str(e)}")
+                # Continua con una nuova richiesta API
+        
+        # Se arriviamo qui, i dati non ci sono o sono obsoleti, facciamo una nuova richiesta
+        try:
             response = requests.get(url, headers=self.headers, params=params)
             #update API_CALLS
             self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
-            #data={"id_team":id_team,"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
-            data[id_team]={"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
-            team_statistics_to_disk.update(data)
-            with open(TEAM_STATISTICS_FILE_DB, "w") as f:
-                json.dump(team_statistics_to_disk, f,indent=4)
-            return response.json()['response']
-        
-        
-    #def a fun that print a table of team statistic from api_football to compare two teams
-    def print_table_compareteams(self,team1, team2):
-        
-        from rich import box
-        from rich.text import Text
-
-        # Campi da escludere
-        excluded_fields = [
-            "team_id", "team_logo", "league_id", "league_flag", "league_logo"#,"lineups","form"
-        ]
-
-
-        def add_rows_recursive(table, prefix, data1, data2):
-            """Aggiunge righe alla tabella per ogni campo trovato nei dizionari, escludendo quelli indicati."""
-            for key in (set(data1.keys()).union(data2.keys())):
-                if f"{prefix}{key}" in excluded_fields:
-                    continue  # Salta i campi esclusi
-
-                val1 = data1.get(key, "-")
-                val2 = data2.get(key, "-")
-
-                if key == "form":
-                    # Visualizza il campo `form` con pallini colorati
-                    val1 = format_form(val1)
-                    val2 = format_form(val2)
-                elif key == "lineups":
-                    # Visualizza `lineups` in maniera leggibile
-                    val1 = format_lineups(val1)
-                    val2 = format_lineups(val2)
-                elif isinstance(val1, dict) or isinstance(val2, dict):
-                    # Se il valore è un dizionario, continua la ricorsione
-                    sub_data1 = val1 if isinstance(val1, dict) else {}
-                    sub_data2 = val2 if isinstance(val2, dict) else {}
-                    #exclude to add row if value is None
-                    if sub_data1=={} and sub_data2=={}:
-                        continue
-                    add_rows_recursive(table, f"{prefix}{key}.", sub_data1, sub_data2)
-                    continue
-                else:
-                    val1 = str(val1 or "-")
-                    val2 = str(val2 or "-")
-                if val1 == "-" and val2 == "-":
-                    continue
-                table.add_row(f"{prefix}{key}", val1, val2)
-
-        def format_form(form_string):
-            """Formatta il campo `form` con pallini colorati."""
-            if not form_string or not isinstance(form_string, str):
-                return "N/A"
-            text = Text()
-            #make the char arrow right in the table
-            ch_green="🟩"
-            ch_yellow="🟨"
-            ch_red="🟥"
-            for char in form_string:
-                if char == "W":
-                    text.append(ch_green, style="green")
-                elif char == "D":
-                    text.append(ch_yellow, style="yellow")
-                elif char == "L":
-                    text.append(ch_red, style="red")
-                else:
-                    text.append(f"{char} ", style="dim")
-            return text
-
-        def format_lineups(lineups):
-            """Formatta il campo `lineups` in maniera leggibile."""
-            if not lineups or not isinstance(lineups, list):
-                return "N/A"
-            return "\n".join(f"Formation: {item['formation']} - Played: {item['played']}" for item in lineups)
-
-        # Creazione della tabella
-        table = Table(title="Team Comparison", show_lines=False, box=box.ROUNDED)
-        table.add_column("Attribute", justify="left", style="bold")
-        table.add_column(team1.team_name or "Team 1", justify="center", style="cyan")
-        table.add_column(team2.team_name or "Team 2", justify="center", style="magenta")
-
-        # Aggiunta delle righe
-        add_rows_recursive(table, "", team1.__dict__, team2.__dict__)
-        # Stampa la tabella
-        return table
+            
+            # Verifica che la risposta contenga i dati attesi
+            if 'response' in response.json():
+                data[id_team]={"data":{"date":datetime.now().strftime("%Y-%m-%d"),"statistics":response.json()['response']}}
+                team_statistics_to_disk.update(data)
+                with open(TEAM_STATISTICS_FILE_DB, "w", encoding="utf-8") as f:
+                    json.dump(team_statistics_to_disk, f, indent=4, ensure_ascii=False)
+                return response.json()['response']
+            else:
+                print(f"API response does not contain expected data: {response.json()}")
+                return None
+        except Exception as e:
+            print(f"Error fetching or saving team statistics: {str(e)}")
+            return None
     #def a funnction that extract the injuries player from api_football
     def get_players_injuries(self,id_league,date):
         url = f"{API_URL}/injuries"
@@ -880,53 +833,89 @@ class ApiFootball:
         return table
 
 
-#m=ApiFootball().get_table_standings(135)
-# testo=str(rich_print(ApiFootball().get_table_standings(135)))
-# print(type(testo))
-#rich_print("Status remaining calls :", ApiFootball().get_status())
-#rich_print("standings italy 2023", ApiFootball(2023).get_table_standings(135))
-# dfrom=dt.date.today()
-# dto=dt.date.today()+timedelta(days=-30)
-# rich_print(dfrom,dto)
+    #def a function that print a table of team statistic from api_football to compare two teams
+    def print_table_compareteams(self,team1, team2):
+        
+        from rich import box
+        from rich.text import Text
 
-# r=ApiFootball().get_list_fixtures(135,dto,dfrom)
-# for i in range(len(r)):
-#     rich_print(f"{r[i]}, {r[i].id}")
+        # Campi da escludere
+        excluded_fields = [
+            "team_id", "team_logo", "league_id", "league_flag", "league_logo"#,"lineups","form"
+        ]
 
-#rich_print(ApiFootball().print_table_standings(1223632))
-# f1,f2=ApiFootball().get_formation_teams(1223649)
-# rich_print(f1.team_name,f1.formation,f1.coach)
-# for i in f1.player:
-#     rich_print(i.name,i.role,i.position,i.number)
-#rich_print(ApiFootball().print_table_formations(1223649))
 
-# l=ApiFootball().get_list_leagues()
-# for i in l:
-#     rich_print(f"{i.id} {i.name} {i.country} {i.type}")
+        def add_rows_recursive(table, prefix, data1, data2):
+            """Aggiunge righe alla tabella per ogni campo trovato nei dizionari, escludendo quelli indicati."""
+            for key in (set(data1.keys()).union(data2.keys())):
+                if f"{prefix}{key}" in excluded_fields:
+                    continue  # Salta i campi esclusi
 
-# s=ApiFootball().get_list_standings(135)
-# rich_print(ApiFootball().get_table_standings(s[0]))
-#rich_print(ApiFootball().get_prediction(1234713))
-# topplayers=(ApiFootball().get_top_scores(135))
-# for i in topplayers:
-#     rich_print(i.name,i.position,i.team,i.number,i.goals,i.assists,i.nationality,i.age)
-#rich_print(ApiFootball().table_top_scores(135))
+                val1 = data1.get(key, "-")
+                val2 = data2.get(key, "-")
 
-# response1=ApiFootball().get_team_statistics(492,135)
-# response2=ApiFootball().get_team_statistics(490,135)
-# ts1,ts2=TeamStats(),TeamStats()
-# ts1.Charge_Data(response1)
-# ts2.Charge_Data(response2)
-# rich_print(ApiFootball().print_table_compareteams(ts1,ts2))
+                if key == "form":
+                    # Visualizza il campo `form` con pallini colorati
+                    val1 = format_form(val1)
+                    val2 = format_form(val2)
+                elif key == "lineups":
+                    # Visualizza `lineups` in maniera leggibile
+                    val1 = format_lineups(val1)
+                    val2 = format_lineups(val2)
+                elif isinstance(val1, dict) or isinstance(val2, dict):
+                    # Se il valore è un dizionario, continua la ricorsione
+                    sub_data1 = val1 if isinstance(val1, dict) else {}
+                    sub_data2 = val2 if isinstance(val2, dict) else {}
+                    #exclude to add row if value is None
+                    if sub_data1=={} and sub_data2=={}:
+                        continue
+                    add_rows_recursive(table, f"{prefix}{key}.", sub_data1, sub_data2)
+                    continue
+                else:
+                    val1 = str(val1 or "-")
+                    val2 = str(val2 or "-")
+                if val1 == "-" and val2 == "-":
+                    continue
+                table.add_row(f"{prefix}{key}", val1, val2)
 
-#rich_print(ts1.get_table_stats())
-#rich_print(ts1.get_table_stats())
+        def format_form(form_string):
+            """Formatta il campo `form` con pallini colorati."""
+            if not form_string or not isinstance(form_string, str):
+                return "N/A"
+            text = Text()
+            #make the char arrow right in the table
+            ch_green="🟩"
+            ch_yellow="🟨"
+            ch_red="🟥"
+            for char in form_string:
+                if char == "W":
+                    text.append(ch_green, style="green")
+                elif char == "D":
+                    text.append(ch_yellow, style="yellow")
+                elif char == "L":
+                    text.append(ch_red, style="red")
+                else:
+                    text.append(f"{char} ", style="dim")
+            return text
 
-# x=ApiFootball().get_list_injuries_by_date(135,"2025-02-01")
-# inj=(json.dumps(x["1223820"],indent=4))
-# rich_print(inj)
-# #print al player injuries
-# for i in x:
-#     rich_print(i.name,i.reason,i.team,i.idfixture)
+        def format_lineups(lineups):
+            """Formatta il campo `lineups` in maniera leggibile."""
+            if not lineups or not isinstance(lineups, list):
+                return "N/A"
+            return "\n".join(f"Formation: {item['formation']} - Played: {item['played']}" for item in lineups)
 
-#rich_print(ApiFootball().generate_injury_table(135,"2025-02-01",1223820))
+        # Creazione della tabella
+        table = Table(title="Team Comparison", show_lines=False, box=box.ROUNDED)
+        table.add_column("Attribute", justify="left", style="bold")
+        table.add_column(team1.team_name or "Team 1", justify="center", style="cyan")
+        table.add_column(team2.team_name or "Team 2", justify="center", style="magenta")
+
+        # Aggiunta delle righe
+        add_rows_recursive(table, "", team1.__dict__, team2.__dict__)
+        # Stampa la tabella
+        return table
+        
+
+
+
+    #def a function that extract the injuries player from api_football
