@@ -23,7 +23,7 @@ from weasyprint import HTML
 import mistune
 
 
-APPVERSION = "0.7.0"
+APPVERSION = "0.8.0"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -218,6 +218,7 @@ class goalmasterapp(App):
         self.last_focus_id = None
         self.memory_standings = None  # Memory of the standings in list of dict
         self.id_focused = "main_container" #Memory of the id of the focused widget
+        self.injury_box_visible = False  # Flag per tracciare lo stato del box infortuni
 
     def compose(self):
         yield Header()
@@ -266,6 +267,7 @@ class goalmasterapp(App):
         yield self.compare_teams_box
         self.injury_players_text = Static("INJURIES",id="injury_players_text")
         self.injury_players_box = ScrollableContainer(self.injury_players_text,id="injury_players_box")
+        self.injury_players_box.styles.visibility = "hidden" # Imposta la visibilità iniziale a hidden
         yield self.injury_players_box
 
     def find_league(self,league):
@@ -326,8 +328,19 @@ class goalmasterapp(App):
         #list_fixtures.focus()
         #self.query_one(f"#{block_id}_fixtures").focus()
     def add_block_events_match(self,id_fixture,team1,team2):
+        #check if match has started
+        if self.selec_match.status in ["NS","RS"]: #not started or resulted
+            self.notify("Match not started", severity="warning", timeout=5, title="Events not available")
+            return
+        
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         events_table=af.get_table_event_flow(id_fixture)
+        
+        # Check if there are any events to display
+        if not events_table or events_table.strip() == "":
+            self.notify("Non ci sono eventi da visualizzare", severity="warning", timeout=5, title="Nessun evento")
+            return
+        
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         self.query_one("#main_container").mount(Collapsible(Static(events_table),
@@ -339,6 +352,11 @@ class goalmasterapp(App):
         self.query_one("#main_container").scroll_end()
 
     def add_block_stats_match(self,id_fixture,team1,team2):
+        #check if match has started
+        if self.selec_match.status in ["NS","RS"]: #not started or resulted
+            self.notify("Match not started", severity="warning", timeout=5, title="Statistics not available")
+            return
+        
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         stats_table=af.print_table_standings(id_fixture)
         self.block_counter += 1 # Increment the block counter
@@ -505,11 +523,13 @@ class goalmasterapp(App):
             self.yearsbox.focus()
             self.id_focused = self.focused.id
         elif event.key == "l":
-            self.leaguebox.display = True
-            self.leaguebox.focus()
-            self.id_focused = self.focused.id
-        elif event.key == "j":
-            self.action_show_injuries()
+            # Controlla se il menu è già visibile e in tal caso lo nasconde
+            if self.leaguebox.display:
+                self.leaguebox.display = False
+            else:
+                self.leaguebox.display = True
+                self.leaguebox.focus()
+                self.id_focused = self.focused.id
         elif event.key == "r" and self.block_counter > 0:
             # widget_id_to_remove =f"block_{self.block_counter}"
             if self.focused.id == self.query_one("#main_container").id:
@@ -532,13 +552,37 @@ class goalmasterapp(App):
         self.compare_teams_box.styles.visibility = "hidden"
         self.input_box.display = True
         self.input_box.focus()
+    #action show injuries
     def action_show_injuries(self):
         if self.selec_match is None:
             self.notify("No match selected",severity="warning",timeout=5)
             return
-        self.injury_players_text.update(af.generate_injury_table(self.selec_match.id_league,self.selec_match.date[:10],self.selec_match.id))
-        self.injury_players_box.styles.visibility = "visible" if self.injury_players_box.styles.visibility == "hidden" else "hidden"
-        self.injury_players_box.focus()
+            
+        # Genero la tabella degli infortuni
+        injury_table = af.generate_injury_table(self.selec_match.id_league,self.selec_match.date[:10],self.selec_match.id)
+        
+        # Incremento il contatore dei blocchi
+        self.block_counter += 1
+        
+        # Creo un ID unico per questo box basato sul contatore
+        block_id = f"block_{self.block_counter}"
+        
+        # Creo un Collapsible contenente la tabella degli infortuni e lo aggiungo al container principale
+        self.query_one("#main_container").mount(
+            Collapsible(
+                Static(injury_table),
+                id=block_id,
+                title=f"Injuries Players: {self.selec_match.home_team} vs {self.selec_match.away_team}",
+                collapsed=False
+            )
+        )
+        
+        # Notifica l'aggiunta del nuovo blocco
+        self.notify("Injuries block added", severity="information", timeout=2)
+        
+        # Scorro alla fine del container per mostrare il nuovo box
+        self.query_one("#main_container").scroll_end()
+
     def action_change_year(self):
         self.yearsbox.styles.visibility = "visible" if self.yearsbox.styles.visibility == "hidden" else "hidden"
         self.yearsbox.focus()
@@ -829,7 +873,15 @@ class goalmasterapp(App):
                 injuried_players = af.get_list_injuries_by_date(self.selec_match.id_league,self.selec_match.date[:10])
                 top_score_players = af.get_top_scores(self.selec_match.id_league)
                 top_assists_players = af.get_top_assists(self.selec_match.id_league)
-                p_inj_fixture=json.dumps(injuried_players[str(self.selec_match.id)],indent=4)
+                
+                # Check if there are injuries for this specific match
+                fixture_id = str(self.selec_match.id)
+                if fixture_id in injuried_players:
+                    p_inj_fixture = json.dumps(injuried_players[fixture_id], indent=4)
+                else:
+                    # No injuries for this match
+                    p_inj_fixture = json.dumps({}, indent=4)
+                
                 prompt_request = f"""
                 Analyze the match between {self.selec_match.home_team} and {self.selec_match.away_team}.
                 Try to analyze the match between the two teams, providing a precise context in which they

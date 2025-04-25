@@ -730,28 +730,37 @@ class ApiFootball:
         #check if file of injuries exist
         data={}
         id_league=str(id_league)
+        
+        # Utilizziamo la data corrente del sistema come riferimento per gli aggiornamenti
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        # Calcoliamo la data limite per l'aggiornamento (4 giorni fa)
+        date_limit = (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d")
+        
         if os.path.isfile(INJURYPLAYER_FILE_DB):
             with open(INJURYPLAYER_FILE_DB, "r") as f:
                 injuries_to_disk=json.load(f)
             if id_league in injuries_to_disk:
-                date_limit = (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d")
-                if injuries_to_disk[id_league]["date"]>=date:
+                # Verifichiamo se i dati sono vecchi (più di 4 giorni)
+                stored_date = injuries_to_disk[id_league]["date"]
+                if stored_date >= date_limit:
+                    # Dati ancora validi, li utilizziamo
                     response=injuries_to_disk[id_league]["injuries"]
                 else:
+                    # Dati troppo vecchi, aggiorniamo con la data corrente
                     response=self.get_players_injuries(id_league,date)
-                    injuries_to_disk[id_league]={"date":date,"injuries":response}
+                    injuries_to_disk[id_league]={"date":current_date,"injuries":response}
                     with open(INJURYPLAYER_FILE_DB,"w") as f:
                         json.dump(injuries_to_disk,f,indent=4)
             else:
                 response=self.get_players_injuries(id_league,date)
-                injuries_to_disk[id_league]={"date":date,"injuries":response}
+                injuries_to_disk[id_league]={"date":current_date,"injuries":response}
                 with open(INJURYPLAYER_FILE_DB,"w") as f:
                     json.dump(injuries_to_disk,f,indent=4)
         else:
             with open(INJURYPLAYER_FILE_DB, "w") as f:
                 response=self.get_players_injuries(id_league,date)
                 #save response in json file if not exist
-                data[id_league]={"date":date,"injuries":response}
+                data[id_league]={"date":current_date,"injuries":response}
                 json.dump(data,f,indent=4)
         
         list_injuries = {}
