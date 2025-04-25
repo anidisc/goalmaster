@@ -1,19 +1,19 @@
 ## GoalMasterApp v0.8.0
 
-GoalMasterApp è un'applicazione interattiva costruita con [Textual](https://textual.textualize.io/), progettata per fornire statistiche, eventi, classifiche e previsioni per i principali campionati di calcio. Utilizza l'API [api_football](https://rapidapi.com/api-sports/api/api-football) per recuperare dati aggiornati sulle partite e [gemini_ai](https://gemini.ai) per generare previsioni avanzate sulle partite.
+GoalMasterApp is an interactive application built with [Textual](https://textual.textualize.io/), designed to provide statistics, events, rankings, and predictions for major football (soccer) leagues. It uses the [api_football](https://rapidapi.com/api-sports/api/api-football) API to retrieve up-to-date match data and [gemini_ai](https://gemini.ai) to generate advanced match predictions.
 
-## Funzionalità
+## Features
 
-- **Classifiche dei Campionati**: Visualizza le classifiche aggiornate dei principali campionati di calcio, tra cui Serie A, Premier League, LaLiga e altri.
-- **Statistiche ed Eventi delle Partite**: Visualizza i principali eventi delle partite come gol, ammonizioni, e sostituzioni, insieme a statistiche dettagliate.
-- **Previsioni delle Partite**: Genera previsioni sulle partite con un'analisi dettagliata delle squadre, incluse le probabilità di vittoria, doppia chance e gol previsti.
-- **Informazioni sui Giocatori Infortunati**: Visualizza gli infortuni dei giocatori per le squadre selezionate, con dettagli sul tipo di infortunio.
-- **Navigazione Interattiva**: Utilizza comandi da tastiera e menu interattivi per esplorare le informazioni sulle partite.
+- **League Standings**: View updated standings of major football leagues, including Serie A, Premier League, LaLiga, and others.
+- **Match Statistics and Events**: View key match events such as goals, bookings, and substitutions, along with detailed statistics.
+- **Match Predictions**: Generate match predictions with detailed team analysis, including win probabilities, double chance, and expected goals.
+- **Injured Player Information**: View injured players for selected teams, with details on injury type.
+- **Interactive Navigation**: Use keyboard commands and interactive menus to explore match information.
 
-## Requisiti
+## Requirements
 
 - Python 3.12+
-- Librerie Python: 
+- Python Libraries: 
   - `textual`
   - `gemini_ai`
   - `api_football`
@@ -21,117 +21,117 @@ GoalMasterApp è un'applicazione interattiva costruita con [Textual](https://tex
   - `weasyprint`
   - `mistune`
 
-### Installazione
+### Installation
 
-1. Clona il repository:
+1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/goal-master-app.git
-cd goal-master-app
+git clone https://github.com/anidisc/goalmaster.git
+cd goalmaster
 ```
 
-2. Crea un ambiente virtuale e attivalo:
+2. Create a virtual environment and activate it:
 
 ```bash
 python3.12 -m venv venv
 source venv/bin/activate
 ```
 
-3. Installa le dipendenze:
+3. Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Configurazione
+### Configuration
 
-Per eseguire l'applicazione, dovrai configurare le API:
+To run the application, you'll need to configure the APIs:
 
 1. **api_football**:
-   - Ottieni le tue credenziali API da [api_football](https://rapidapi.com/api-sports/api/api-football) e configurale nel file `api_football.py`.
+   - Get your API credentials from [api_football](https://rapidapi.com/api-sports/api/api-football) and configure them in the `api_football.py` file.
 
 2. **gemini_ai**:
-   - Registra il tuo account su [gemini_ai](https://gemini.ai) e configura il token di accesso nel file `gemini_ai.py`.
+   - Register your account on [gemini_ai](https://gemini.ai) and configure the access token in the `gemini_ai.py` file.
 
-### Esecuzione dell'Applicazione
+### Running the Application
 
-Per eseguire l'applicazione, usa il seguente comando:
+To run the application, use the following command:
 
 ```bash
 python3.12 goalmaster.py
 ```
 
-## Comandi
+## Commands
 
-L'applicazione offre una serie di comandi interattivi che possono essere eseguiti tramite la tastiera:
+The application offers a series of interactive commands that can be executed via the keyboard:
 
-- `q`: Chiudi l'applicazione
-- `y`: Cambia l'anno della stagione calcistica selezionata
-- `i`: Inserisci un comando manuale per visualizzare informazioni su un campionato o una partita
-- `l`: Apre/chiude il menu di selezione del campionato
-- `j`: Visualizza gli infortuni dei giocatori per la partita selezionata
-- `r`: Rimuovi l'ultimo blocco visualizzato
-- `c`: Comprimi tutte le sezioni visualizzate
-- `e`: Espandi tutte le sezioni visualizzate
-- `s`: Mostra statistiche complete delle squadre
+- `q`: Close the application
+- `y`: Change the year of the selected football season
+- `i`: Insert a manual command to view information about a league or match
+- `l`: Open/close the league selection menu
+- `j`: View player injuries for the selected match
+- `r`: Remove the last displayed block
+- `c`: Collapse all displayed sections
+- `e`: Expand all displayed sections
+- `s`: Show complete team statistics
 
-### Utilizzo di Esempio
+### Example Usage
 
-- Per visualizzare la classifica della Serie A, inserisci il comando `SERIEA -S`.
-- Per visualizzare le partite in diretta, inserisci `LIVE`.
-- Per visualizzare le partite per una data specifica, inserisci `SERIEA -T <giorni>`, dove `<giorni>` è il numero di giorni in avanti o indietro rispetto alla data corrente.
+- To view the Serie A standings, enter the command `SERIEA -S`.
+- To view live matches, enter `LIVE`.
+- To view matches for a specific date, enter `SERIEA -T <days>`, where `<days>` is the number of days forward or backward from the current date.
 
-### Flusso di Utilizzo
+### Usage Flow
 
-1. Premi `l` per aprire il menu di selezione del campionato
-2. Seleziona un campionato dalla lista
-3. Scegli un'azione dal menu secondario (partita del giorno, classifica, ecc.)
-4. Seleziona una partita specifica quando necessario
-5. Utilizza i tasti speciali (`j`, `s`, ecc.) per visualizzare ulteriori informazioni
+1. Press `l` to open the league selection menu
+2. Select a league from the list
+3. Choose an action from the secondary menu (match of the day, standings, etc.)
+4. Select a specific match when necessary
+5. Use the special keys (`j`, `s`, etc.) to view additional information
 
-### Previsioni
+### Predictions
 
-GoalMasterApp offre previsioni avanzate sulle partite utilizzando l'AI. Analizzando le statistiche e i dati sulle prestazioni delle squadre, l'app genera previsioni per:
+GoalMasterApp offers advanced match predictions using AI. By analyzing statistics and team performance data, the app generates predictions for:
 
-- **Risultato della Partita (1X2)**: Identifica il probabile esito della partita—vittoria, pareggio o sconfitta.
-- **Doppia Chance**: Fornisce previsioni come 1X, X2 o 12, dove sono possibili due esiti.
-- **Realizzazione di Gol**: Analizza quali squadre hanno probabilità di segnare, se entrambe le squadre segneranno (GG) o se una o entrambe le squadre potrebbero non segnare (NG).
-- **Probabilità di Segnare**: Evidenzia la squadra con la più alta probabilità di segnare (sopra il 70%) e la squadra meno propensa a segnare (sotto il 30%).
+- **Match Result (1X2)**: Identifies the likely outcome of the match—win, draw, or loss.
+- **Double Chance**: Provides predictions such as 1X, X2, or 12, where two outcomes are possible.
+- **Goal Scoring**: Analyzes which teams are likely to score, if both teams will score (GG) or if one or both teams might not score (NG).
+- **Scoring Probability**: Highlights the team with the highest probability of scoring (above 70%) and the team least likely to score (below 30%).
 
-Le previsioni si basano sulle ultime statistiche delle partite disponibili, le classifiche dei campionati e le prestazioni in casa/trasferta, offrendo agli utenti approfondimenti dettagliati per una migliore comprensione dei risultati delle partite.
+The predictions are based on the latest available match statistics, league standings, and home/away performances, offering users detailed insights for a better understanding of match results.
 
-## Novità nella Versione 0.8.0
+## What's New in Version 0.8.0
 
-- **Visualizzazione degli Infortuni**: Aggiunta la possibilità di visualizzare i giocatori infortunati per la partita selezionata premendo il tasto `j`.
-- **Aggiornamento dei Dati sugli Infortuni**: Migliorata la gestione del salvataggio e dell'aggiornamento dei dati sugli infortuni, utilizzando la data corrente del sistema anziché la data della partita.
-- **Miglioramento dell'Interfaccia Utente**: 
-  - Il tasto `l` ora funziona come un toggle, mostrando e nascondendo il menu di selezione del campionato.
-  - Risolti problemi con la visualizzazione dei componenti dell'interfaccia.
-- **Gestione Avanzata degli Eventi**: Migliorata la logica per la visualizzazione degli eventi delle partite, con un messaggio appropriato quando non ci sono eventi disponibili.
+- **Injury Visualization**: Added the ability to view injured players for the selected match by pressing the `j` key.
+- **Injury Data Update**: Improved the management of saving and updating injury data, using the current system date instead of the match date.
+- **User Interface Improvement**: 
+  - The `l` key now works as a toggle, showing and hiding the league selection menu.
+  - Fixed issues with the display of interface components.
+- **Advanced Event Management**: Improved logic for displaying match events, with an appropriate message when no events are available.
 
-## Sviluppi Futuri
+## Future Developments
 
-Nelle versioni future, prevediamo di introdurre:
+In future versions, we plan to introduce:
 
-- **Visualizzazioni Dati Aggiuntive**: Incorporare grafici per visualizzare le prestazioni delle squadre, come i tassi di possesso palla e i tiri in porta.
-- **Approfondimenti sulle Partite**: Fornire analisi più dettagliate sulle prestazioni dei giocatori e sui potenziali impatti delle partite, inclusi rapporti sugli infortuni.
-- **Previsioni Migliorate**: Perfezionare il modello AI per previsioni ancora più accurate, integrando fattori come le condizioni meteorologiche e la forma recente.
-- **Supporto per Altri Campionati**: Espandere il numero di campionati e competizioni supportati, inclusi tornei internazionali come la Coppa del Mondo FIFA e la Copa Libertadores.
-- **Compatibilità Mobile**: Costruire una versione dell'app compatibile con i dispositivi mobili per accedere ai dati in movimento.
+- **Additional Data Visualizations**: Incorporate charts to visualize team performances, such as possession rates and shots on target.
+- **Match Insights**: Provide more detailed analysis of player performances and potential match impacts, including injury reports.
+- **Improved Predictions**: Refine the AI model for even more accurate predictions, integrating factors such as weather conditions and recent form.
+- **Support for Other Leagues**: Expand the number of supported leagues and competitions, including international tournaments such as the FIFA World Cup and Copa Libertadores.
+- **Mobile Compatibility**: Build a version of the app compatible with mobile devices for accessing data on the go.
 
-## Sviluppo
+## Development
 
-Per contribuire allo sviluppo:
+To contribute to development:
 
-1. Effettua il fork del progetto.
-2. Crea un nuovo branch:
+1. Fork the project.
+2. Create a new branch:
 
 ```bash
-git checkout -b feature-nuova-funzionalita
+git checkout -b feature-new-functionality
 ```
 
-3. Fai le tue modifiche e invia una pull request.
+3. Make your changes and submit a pull request.
 
-## Licenza
+## License
 
-Questo progetto è sotto licenza MIT. Vedi il file [LICENSE](./LICENSE) per i dettagli.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.

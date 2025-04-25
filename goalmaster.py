@@ -23,7 +23,7 @@ from weasyprint import HTML
 import mistune
 
 
-APPVERSION = "0.8.0"
+APPVERSION = "0.8.5"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
@@ -44,6 +44,18 @@ af_map={
     "UNL":{"id":5,"name":"UEFA Nations League","country":"Europe"},
     "ERE":{"id":88,"name":"Eredivisie","country":"Netherlands"},
     "COPPAITALIA":{"id":142,"name":"Coppa Italia","country":"Italy"},
+    # Additional European championships
+    "SCOTTISHPREM":{"id":179,"name":"Premiership","country":"Scotland"},
+    "BELGIANPRO":{"id":144,"name":"Jupiler Pro League","country":"Belgium"},
+    "SUPERLEAGUE":{"id":197,"name":"Super League","country":"Switzerland"},
+    "AUSTRIANBL":{"id":218,"name":"Bundesliga","country":"Austria"},
+    "GREEKSL":{"id":207,"name":"Super League","country":"Greece"},
+    "DANISHSL":{"id":119,"name":"Superliga","country":"Denmark"},
+    "RUSSIANPL":{"id":235,"name":"Premier League","country":"Russia"},
+    "CROATIANHNL":{"id":210,"name":"HNL","country":"Croatia"},
+    "NORWEGIANL":{"id":103,"name":"Eliteserien","country":"Norway"},
+    "SWEDISHALLSV":{"id":113,"name":"Allsvenskan","country":"Sweden"},
+    "CONFERENCELEA":{"id":848,"name":"UEFA Conference League","country":"Europe"},
 }
 
 languege="italian"  #set here the language for the analysis of predictions
