@@ -17,7 +17,8 @@ PREDICTION_FILE_DB = "predictions.json"
 STANDINGS_FILE_DB = "standings.json"
 TEAM_STATISTICS_FILE_DB="team_statistics.json"
 INJURYPLAYER_FILE_DB="player_injury.json"
-
+TOPSCORE_PLAYERS_FILE_DB="topscore_players.json"
+TOPASS_PLAYERS_FILE_DB="topassist_players.json"
 
 class ApiFootball:
     def __init__(self, year=datetime.now().year,timezone="Europe/Rome"):
@@ -209,7 +210,6 @@ class ApiFootball:
             "timezone": self.timezone
         }
         response = requests.get(url, params=params, headers=self.headers)
-
         #update API_CALLS
         self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
 
@@ -476,139 +476,231 @@ class ApiFootball:
         return response.json()['response']
 
     #get top scores from api_football
-    # def get_top_scores(self,id_league,assists=False) -> list[TopPlayer]:
-    #     url = f"{API_URL}/players/topscorers" if not assists else f"{API_URL}/players/topassists"
-    #     params = {
-    #         "league": id_league,
-    #         "season": self.YEAR
-    #     }
-    #     response = requests.get(url, headers=self.headers, params=params)
-    #     res_json = response.json()['response']
-    #     #update API_CALLS
-    #     self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
-
-    #     top_players = []
-    #     for player in res_json:
-    #         top_players.append(TopPlayer(player['player']['name'],
-    #                                      player['statistics'][0]['games']['position'],
-    #                                      "",
-    #                                      player['statistics'][0]['games']['number'],
-    #                                      player['statistics'][0]['team']['name'],
-    #                                      player['statistics'][0]['goals']['total'],
-    #                                      player['statistics'][0]['goals']['assists'],
-    #                                      player['statistics'][0]['cards']['yellow'],
-    #                                      player['statistics'][0]['cards']['red'],
-    #                                      player['player']['nationality'],
-    #                                      player['player']['age'],
-    #                                      player['statistics'][0]['penalty']['scored'],
-    #                                      player['statistics'][0]['penalty']['missed']))
-
-    #     return top_players
-    
     def get_top_scores(self, id_league) -> list[TopPlayer]:
-        file_path = "topscore_players.json"
-        today = datetime.today().date()
-
-        # Se il file esiste, carica i dati
-        if os.path.exists(file_path):
-            with open(file_path, "r") as f:
-                try:
-                    cache = json.load(f)
-                except json.JSONDecodeError:
+        """
+        Returns a list of TopPlayer objects of the top scorers of the league.
+        
+        Args:
+            id_league (int): The id of the league to get the top scorers for
+            
+        Returns:
+            list[TopPlayer]: A list of TopPlayer objects
+        """
+        url = f"{API_URL}/players/topscorers"
+        file_path = TOPSCORE_PLAYERS_FILE_DB
+        data = {}
+        
+        # Check if file exists and if it does, load data
+        cache = {}
+        today = datetime.now()
+        
+        try:
+            if os.path.exists(file_path):
+                with open(file_path, "r") as f:
+                    try:
+                        cache = json.load(f)
+                        #print(f"Statistics loaded for {len(cache)} teams")
+                    except json.JSONDecodeError:
+                        # print(f"Error decoding {TEAM_STATISTICS_FILE_DB}, creating new file")
+                        cache = {}
+        except FileNotFoundError:
+            # print(f"File {TEAM_STATISTICS_FILE_DB} not found, creating new file")
+            # Will create the file later
+            pass
+        
+        # If the file was empty or didn't exist, make an API call and create the file
+        if not cache:
+            try:
+                response = requests.get(url, headers=self.headers)
+                #update API_CALLS
+                self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+                
+                # Verify that the response contains the expected data
+                if 'response' in response.json():
+                    data[id_league] = {"data": {"date": datetime.now().strftime("%Y-%m-%d"), "statistics": response.json()['response']}}
+                    with open(file_path, "w") as f:
+                        json.dump(data, f, indent=4, ensure_ascii=False)
+                    return response.json()['response']
+                else:
+                    # print(f"API response does not contain expected data: {response.json()}")
+                    return []
+            except Exception as e:
+                # print(f"Error fetching team statistics: {str(e)}")
+                return []
+        
+        # If we loaded data from the file, check if it contains data for the requested league
+        if id_league in cache:
+            try:
+                date_limit = (datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
+                if cache[id_league]["data"]["date"] >= date_limit:
+                    return cache[id_league]["data"]["statistics"]
+            except KeyError as e:
+                # print(f"Data structure error for team {id_league}: {str(e)}")
+                # Continue with a new API request
+                pass 
+        # If we get here, the data doesn't exist or is outdated, make a new request
+        try:
+            params = {
+                "league": id_league,
+                "season": self.YEAR
+            }
+            response = requests.get(url, params=params, headers=self.headers)
+            #update API_CALLS
+            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+            
+            # Verify that the response contains the expected data
+            if 'response' in response.json():
+                data = {}
+                data[id_league] = {"data": {"date": datetime.now().strftime("%Y-%m-%d"), "statistics": response.json()['response']}}
+                if not cache:
                     cache = {}
-        else:
-            cache = {}
-
-        # Controlla se i dati sono aggiornati a meno di 4 giorni
-        if (str(id_league) in cache and datetime.strptime(cache[str(id_league)]["date"], "%Y-%m-%d").date() >= today - timedelta(days=4)):
-            res_json = cache[str(id_league)]["response"]
-        else:
-            url = f"{API_URL}/players/topscorers"
-            params = {"league": id_league, "season": self.YEAR}
-            response = requests.get(url, headers=self.headers, params=params)
-            res_json = response.json()['response']
-            
-            # Aggiorna API_CALLS
-            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining', 0))
-            
-            # Salva i dati nel file
-            cache[str(id_league)] = {"date": today.strftime("%Y-%m-%d"), "response": res_json}
-            with open(file_path, "w") as f:
-                json.dump(cache, f, indent=4)
-
-        # Continua con la creazione della lista dei TopPlayer
-        top_players = []
-        for player in res_json:
-            top_players.append(TopPlayer(
-                player['player']['name'],
-                player['statistics'][0]['games']['position'],
-                "",
-                player['statistics'][0]['games']['number'],
-                player['statistics'][0]['team']['name'],
-                player['statistics'][0]['goals']['total'],
-                player['statistics'][0]['goals']['assists'],
-                player['statistics'][0]['cards']['yellow'],
-                player['statistics'][0]['cards']['red'],
-                player['player']['nationality'],
-                player['player']['age'],
-                player['statistics'][0]['penalty']['scored'],
-                player['statistics'][0]['penalty']['missed']
-            ))
-
-        return top_players
-    #def a function to get table of top scorers from api_football
+                cache.update(data)
+                with open(file_path, "w") as f:
+                    json.dump(cache, f, indent=4, ensure_ascii=False)
+                
+                # Create list of TopPlayer objects
+                top_players = []
+                for player in response.json()['response']:
+                    try:
+                        top_players.append(TopPlayer(
+                            player['player']['id'],
+                            player['player']['name'],
+                            player['statistics'][0]['games']['position'],
+                            player['statistics'][0]['team']['name'],
+                            player['statistics'][0]['goals']['total'] or 0,
+                            player['statistics'][0]['goals']['assists'] or 0,
+                            player['statistics'][0]['penalty']['scored'] or 0,
+                            player['statistics'][0]['penalty']['missed'] or 0,
+                            player['statistics'][0]['cards']['yellow'] or 0,
+                            player['statistics'][0]['cards']['red'] or 0,
+                            player['player']['nationality'],
+                            player['player']['age']
+                        ))
+                    except (KeyError, TypeError, IndexError) as e:
+                        # print(f"Error creating TopPlayer object: {str(e)}")
+                        continue
+                return top_players
+            else:
+                # print(f"API response does not contain expected data: {response.json()}")
+                return []
+        except Exception as e:
+            # print(f"Error fetching or saving team statistics: {str(e)}")
+            return []
 
     def get_top_assists(self, id_league) -> list[TopPlayer]:
-        file_path = "topassist_players.json"
-        today = datetime.today().date()
-
-        # Se il file esiste, carica i dati
-        if os.path.exists(file_path):
-            with open(file_path, "r") as f:
-                try:
-                    cache = json.load(f)
-                except json.JSONDecodeError:
+        """
+        Returns a list of TopPlayer objects of the top assisters of the league.
+        
+        Args:
+            id_league (int): The id of the league to get the top assisters for
+            
+        Returns:
+            list[TopPlayer]: A list of TopPlayer objects
+        """
+        url = f"{API_URL}/players/topassists"
+        file_path = TOPASS_PLAYERS_FILE_DB
+        data = {}
+        
+        # Check if file exists and if it does, load data
+        cache = {}
+        today = datetime.now()
+        
+        try:
+            if os.path.exists(file_path):
+                with open(file_path, "r") as f:
+                    try:
+                        cache = json.load(f)
+                        #print(f"Statistics loaded for {len(cache)} teams")
+                    except json.JSONDecodeError:
+                        # print(f"Error decoding {TEAM_STATISTICS_FILE_DB}, creating new file")
+                        cache = {}
+        except FileNotFoundError:
+            # print(f"File {TEAM_STATISTICS_FILE_DB} not found, creating new file")
+            # Will create the file later
+            pass
+        
+        # If the file was empty or didn't exist, make an API call and create the file
+        if not cache:
+            try:
+                params = {
+                    "league": id_league,
+                    "season": self.YEAR
+                }
+                response = requests.get(url, params=params, headers=self.headers)
+                #update API_CALLS
+                self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+                
+                # Verify that the response contains the expected data
+                if 'response' in response.json():
+                    data[id_league] = {"data": {"date": datetime.now().strftime("%Y-%m-%d"), "statistics": response.json()['response']}}
+                    with open(file_path, "w") as f:
+                        json.dump(data, f, indent=4, ensure_ascii=False)
+                    return response.json()['response']
+                else:
+                    # print(f"API response does not contain expected data: {response.json()}")
+                    return []
+            except Exception as e:
+                # print(f"Error fetching team statistics: {str(e)}")
+                return []
+        
+        # If we loaded data from the file, check if it contains data for the requested league
+        if id_league in cache:
+            try:
+                date_limit = (datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
+                if cache[id_league]["data"]["date"] >= date_limit:
+                    return cache[id_league]["data"]["statistics"]
+            except KeyError as e:
+                # print(f"Data structure error for team {id_league}: {str(e)}")
+                # Continue with a new API request
+                pass 
+        # If we get here, the data doesn't exist or is outdated, make a new request
+        try:
+            params = {
+                "league": id_league,
+                "season": self.YEAR
+            }
+            response = requests.get(url, params=params, headers=self.headers)
+            #update API_CALLS
+            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
+            
+            # Verify that the response contains the expected data
+            if 'response' in response.json():
+                data = {}
+                data[id_league] = {"data": {"date": datetime.now().strftime("%Y-%m-%d"), "statistics": response.json()['response']}}
+                if not cache:
                     cache = {}
-        else:
-            cache = {}
-
-        # Controlla se i dati sono aggiornati a meno di 4 giorni
-        if (str(id_league) in cache and datetime.strptime(cache[str(id_league)]["date"], "%Y-%m-%d").date() >= today - timedelta(days=4)):
-            res_json = cache[str(id_league)]["response"]
-        else:
-            url = f"{API_URL}/players/topassists"
-            params = {"league": id_league, "season": self.YEAR}
-            response = requests.get(url, headers=self.headers, params=params)
-            res_json = response.json()['response']
-            
-            # Aggiorna API_CALLS
-            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining', 0))
-            
-            # Salva i dati nel file
-            cache[str(id_league)] = {"date": today.strftime("%Y-%m-%d"), "response": res_json}
-            with open(file_path, "w") as f:
-                json.dump(cache, f, indent=4)
-
-        # Continua con la creazione della lista dei TopPlayer
-        top_players = []
-        for player in res_json:
-            top_players.append(TopPlayer(
-                player['player']['name'],
-                player['statistics'][0]['games']['position'],
-                "",
-                player['statistics'][0]['games']['number'],
-                player['statistics'][0]['team']['name'],
-                player['statistics'][0]['goals']['total'],
-                player['statistics'][0]['goals']['assists'],
-                player['statistics'][0]['cards']['yellow'],
-                player['statistics'][0]['cards']['red'],
-                player['player']['nationality'],
-                player['player']['age'],
-                player['statistics'][0]['penalty']['scored'],
-                player['statistics'][0]['penalty']['missed']
-            ))
-
-        return top_players
+                cache.update(data)
+                with open(file_path, "w") as f:
+                    json.dump(cache, f, indent=4, ensure_ascii=False)
+                
+                # Create list of TopPlayer objects
+                top_players = []
+                for player in response.json()['response']:
+                    try:
+                        top_players.append(TopPlayer(
+                            player['player']['id'],
+                            player['player']['name'],
+                            player['statistics'][0]['games']['position'],
+                            player['statistics'][0]['team']['name'],
+                            player['statistics'][0]['goals']['total'] or 0,
+                            player['statistics'][0]['goals']['assists'] or 0,
+                            player['statistics'][0]['penalty']['scored'] or 0,
+                            player['statistics'][0]['penalty']['missed'] or 0,
+                            player['statistics'][0]['cards']['yellow'] or 0,
+                            player['statistics'][0]['cards']['red'] or 0,
+                            player['player']['nationality'],
+                            player['player']['age']
+                        ))
+                    except (KeyError, TypeError, IndexError) as e:
+                        # print(f"Error creating TopPlayer object: {str(e)}")
+                        continue
+                return top_players
+            else:
+                # print(f"API response does not contain expected data: {response.json()}")
+                return []
+        except Exception as e:
+            # print(f"Error fetching or saving team statistics: {str(e)}")
+            return []
     
     def table_top_scores(self,id_league,assists=False) -> None:
 
@@ -616,16 +708,16 @@ class ApiFootball:
 
         table = Table(show_lines=False, show_header=True, header_style="bold",show_edge=False)
 
-        table.add_column("Player", style="white", justify="left")
-        table.add_column("Position", style="blue", justify="left")
-        table.add_column("Team", style="cyan", justify="left")
-        table.add_column("Goals", style="blue", justify="left")
-        table.add_column("Ass.", style="blue", justify="left")
-        table.add_column("Pen.S-M", style="cyan", justify="left")
-        table.add_column("YC", style="yellow", justify="left")
-        table.add_column("RC", style="red", justify="left")
-        table.add_column("Nationality", style="blue", justify="left")
-        table.add_column("Age", style="blue", justify="left")
+        table.add_column("Player", style="white")
+        table.add_column("Position", style="blue")
+        table.add_column("Team", style="cyan")
+        table.add_column("Goals", style="blue")
+        table.add_column("Ass.", style="blue")
+        table.add_column("Pen.S-M", style="cyan")
+        table.add_column("YC", style="yellow")
+        table.add_column("RC", style="red")
+        table.add_column("Nationality", style="blue")
+        table.add_column("Age", style="blue")
         for player in top_players:
             table.add_row(player.name,
                           player.position,
@@ -661,11 +753,12 @@ class ApiFootball:
                     team_statistics_to_disk = json.load(f)
                     #print(f"Statistics loaded for {len(team_statistics_to_disk)} teams")
                 except json.JSONDecodeError:
-                    print(f"Error decoding {TEAM_STATISTICS_FILE_DB}, creating new file")
+                    # print(f"Error decoding {TEAM_STATISTICS_FILE_DB}, creating new file")
                     team_statistics_to_disk = {}
         except FileNotFoundError: #create file and structure data inside
-            print(f"File {TEAM_STATISTICS_FILE_DB} not found, creating new file")
+            # print(f"File {TEAM_STATISTICS_FILE_DB} not found, creating new file")
             # Non facciamo nulla qui, il file verrà creato sotto
+            pass
         
         # Se il file era vuoto o non esisteva, facciamo una chiamata API e creiamo il file
         if not team_statistics_to_disk:
@@ -681,21 +774,22 @@ class ApiFootball:
                         json.dump(data, f, indent=4, ensure_ascii=False)
                     return response.json()['response']
                 else:
-                    print(f"API response does not contain expected data: {response.json()}")
+                    # print(f"API response does not contain expected data: {response.json()}")
                     return None
             except Exception as e:
-                print(f"Error fetching team statistics: {str(e)}")
+                # print(f"Error fetching team statistics: {str(e)}")
                 return None
         
         # Se abbiamo caricato i dati dal file, verifichiamo se contengono i dati della squadra richiesta
         if id_team in team_statistics_to_disk:
             try:
-                date_limit = (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d")
+                date_limit = (datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
                 if team_statistics_to_disk[id_team]["data"]["date"] >= date_limit: #== datetime.now().strftime("%Y-%m-%d"):
                     return team_statistics_to_disk[id_team]["data"]["statistics"]
             except KeyError as e:
-                print(f"Data structure error for team {id_team}: {str(e)}")
+                # print(f"Data structure error for team {id_team}: {str(e)}")
                 # Continua con una nuova richiesta API
+                pass
         
         # Se arriviamo qui, i dati non ci sono o sono obsoleti, facciamo una nuova richiesta
         try:
@@ -711,10 +805,10 @@ class ApiFootball:
                     json.dump(team_statistics_to_disk, f, indent=4, ensure_ascii=False)
                 return response.json()['response']
             else:
-                print(f"API response does not contain expected data: {response.json()}")
+                # print(f"API response does not contain expected data: {response.json()}")
                 return None
         except Exception as e:
-            print(f"Error fetching or saving team statistics: {str(e)}")
+            # print(f"Error fetching or saving team statistics: {str(e)}")
             return None
     #def a funnction that extract the injuries player from api_football
     def get_players_injuries(self,id_league,date):
@@ -843,88 +937,601 @@ class ApiFootball:
 
 
     #def a function that print a table of team statistic from api_football to compare two teams
-    def print_table_compareteams(self,team1, team2):
+    def print_table_compareteams(self, team1, team2):
+        """
+        Creates a comprehensive comparison of team statistics.
         
+        Args:
+            team1: TeamStats object for the first team
+            team2: TeamStats object for the second team
+            
+        Returns:
+            Rich renderable with detailed comparative statistics
+        """
         from rich import box
+        from rich.table import Table
+        from rich.panel import Panel
+        from rich.layout import Layout
+        from rich.console import Group
+        from rich.columns import Columns
+        from rich.align import Align
         from rich.text import Text
-
-        # Campi da escludere
-        excluded_fields = [
-            "team_id", "team_logo", "league_id", "league_flag", "league_logo"#,"lineups","form"
-        ]
-
-
-        def add_rows_recursive(table, prefix, data1, data2):
-            """Aggiunge righe alla tabella per ogni campo trovato nei dizionari, escludendo quelli indicati."""
-            for key in (set(data1.keys()).union(data2.keys())):
-                if f"{prefix}{key}" in excluded_fields:
-                    continue  # Salta i campi esclusi
-
-                val1 = data1.get(key, "-")
-                val2 = data2.get(key, "-")
-
-                if key == "form":
-                    # Visualizza il campo `form` con pallini colorati
-                    val1 = format_form(val1)
-                    val2 = format_form(val2)
-                elif key == "lineups":
-                    # Visualizza `lineups` in maniera leggibile
-                    val1 = format_lineups(val1)
-                    val2 = format_lineups(val2)
-                elif isinstance(val1, dict) or isinstance(val2, dict):
-                    # Se il valore è un dizionario, continua la ricorsione
-                    sub_data1 = val1 if isinstance(val1, dict) else {}
-                    sub_data2 = val2 if isinstance(val2, dict) else {}
-                    #exclude to add row if value is None
-                    if sub_data1=={} and sub_data2=={}:
-                        continue
-                    add_rows_recursive(table, f"{prefix}{key}.", sub_data1, sub_data2)
-                    continue
-                else:
-                    val1 = str(val1 or "-")
-                    val2 = str(val2 or "-")
-                if val1 == "-" and val2 == "-":
-                    continue
-                table.add_row(f"{prefix}{key}", val1, val2)
-
-        def format_form(form_string):
-            """Formatta il campo `form` con pallini colorati."""
-            if not form_string or not isinstance(form_string, str):
-                return "N/A"
-            text = Text()
-            #make the char arrow right in the table
-            ch_green="🟩"
-            ch_yellow="🟨"
-            ch_red="🟥"
-            for char in form_string:
-                if char == "W":
-                    text.append(ch_green, style="green")
-                elif char == "D":
-                    text.append(ch_yellow, style="yellow")
-                elif char == "L":
-                    text.append(ch_red, style="red")
-                else:
-                    text.append(f"{char} ", style="dim")
-            return text
-
-        def format_lineups(lineups):
-            """Formatta il campo `lineups` in maniera leggibile."""
-            if not lineups or not isinstance(lineups, list):
-                return "N/A"
-            return "\n".join(f"Formation: {item['formation']} - Played: {item['played']}" for item in lineups)
-
-        # Creazione della tabella
-        table = Table(title="Team Comparison", show_lines=False, box=box.ROUNDED)
-        table.add_column("Attribute", justify="left", style="bold")
-        table.add_column(team1.team_name or "Team 1", justify="center", style="cyan")
-        table.add_column(team2.team_name or "Team 2", justify="center", style="magenta")
-
-        # Aggiunta delle righe
-        add_rows_recursive(table, "", team1.__dict__, team2.__dict__)
-        # Stampa la tabella
-        return table
         
+        # Handle potential missing data gracefully
+        team1_name = team1.team_name or "Team 1"
+        team2_name = team2.team_name or "Team 2"
+        
+        try:
+            # Create a layout for better organization
+            layout = Layout()
+            layout.split_column(
+                #Layout(name="header"),
+                Layout(name="main_stats"),
+                Layout(name="detailed_stats")
+            )
+            
+            # Header with team names and league info
+            # header_text = Text(f"[bold cyan]{team1_name}[/bold cyan] vs [bold magenta]{team2_name}[/bold magenta]")
+            # header_text.append("\n")
+            # header_text.append(f"[yellow]{team1.league_name or 'Unknown'}[/yellow] ({team1.league_country or 'Unknown'}) | Season: [green]{team1.league_season or 'Unknown'}[/green]")
+            
+            # layout["header"].update(Align.center(header_text))
+            
+            # Main statistics section
+            main_stats_tables = []
+            
+            # Form information 
+            form_table = Table(title="Recent Form", box=box.ROUNDED)
+            form_table.add_column("Team", style="bold")
+            form_table.add_column("Form", no_wrap=True)
+            
+            form1 = self._format_form_string(team1.form) if team1.form else "No data"
+            form2 = self._format_form_string(team2.form) if team2.form else "No data"
+            
+            form_table.add_row(team1_name, form1)
+            form_table.add_row(team2_name, form2)
+            
+            main_stats_tables.append(form_table)
+            
+            # Fixtures statistics table
+            if isinstance(team1.fixtures, dict) and isinstance(team2.fixtures, dict):
+                fixtures_table = Table(title="Fixtures Statistics", box=box.ROUNDED)
+                fixtures_table.add_column("Statistic", style="bold")
+                fixtures_table.add_column(team1_name, style="cyan")
+                fixtures_table.add_column(team2_name, style="magenta")
+                
+                # Home/Away/Total Played
+                if "played" in team1.fixtures and "played" in team2.fixtures:
+                    fixtures_table.add_row(
+                        "Games Played (Home)",
+                        str(team1.fixtures["played"].get("home", 0)),
+                        str(team2.fixtures["played"].get("home", 0))
+                    )
+                    fixtures_table.add_row(
+                        "Games Played (Away)",
+                        str(team1.fixtures["played"].get("away", 0)),
+                        str(team2.fixtures["played"].get("away", 0))
+                    )
+                    fixtures_table.add_row(
+                        "Games Played (Total)",
+                        str(team1.fixtures["played"].get("total", 0)),
+                        str(team2.fixtures["played"].get("total", 0))
+                    )
+                
+                # Wins statistics
+                if "wins" in team1.fixtures and "wins" in team2.fixtures:
+                    fixtures_table.add_row(
+                        "Wins (Home)",
+                        str(team1.fixtures["wins"].get("home", 0)),
+                        str(team2.fixtures["wins"].get("home", 0))
+                    )
+                    fixtures_table.add_row(
+                        "Wins (Away)",
+                        str(team1.fixtures["wins"].get("away", 0)),
+                        str(team2.fixtures["wins"].get("away", 0))
+                    )
+                    fixtures_table.add_row(
+                        "Wins (Total)",
+                        str(team1.fixtures["wins"].get("total", 0)),
+                        str(team2.fixtures["wins"].get("total", 0))
+                    )
+                
+                # Draws statistics
+                if "draws" in team1.fixtures and "draws" in team2.fixtures:
+                    fixtures_table.add_row(
+                        "Draws (Home)",
+                        str(team1.fixtures["draws"].get("home", 0)),
+                        str(team2.fixtures["draws"].get("home", 0))
+                    )
+                    fixtures_table.add_row(
+                        "Draws (Away)",
+                        str(team1.fixtures["draws"].get("away", 0)),
+                        str(team2.fixtures["draws"].get("away", 0))
+                    )
+                    fixtures_table.add_row(
+                        "Draws (Total)",
+                        str(team1.fixtures["draws"].get("total", 0)),
+                        str(team2.fixtures["draws"].get("total", 0))
+                    )
+                
+                # Losses statistics
+                if "loses" in team1.fixtures and "loses" in team2.fixtures:
+                    fixtures_table.add_row(
+                        "Losses (Home)",
+                        str(team1.fixtures["loses"].get("home", 0)),
+                        str(team2.fixtures["loses"].get("home", 0))
+                    )
+                    fixtures_table.add_row(
+                        "Losses (Away)",
+                        str(team1.fixtures["loses"].get("away", 0)),
+                        str(team2.fixtures["loses"].get("away", 0))
+                    )
+                    fixtures_table.add_row(
+                        "Losses (Total)",
+                        str(team1.fixtures["loses"].get("total", 0)),
+                        str(team2.fixtures["loses"].get("total", 0))
+                    )
+                
+                main_stats_tables.append(fixtures_table)
+            
+            # Goals statistics
+            if isinstance(team1.goals, dict) and isinstance(team2.goals, dict):
+                goals_table = Table(title="Goals Statistics", box=box.ROUNDED)
+                goals_table.add_column("Statistic", style="bold")
+                goals_table.add_column(team1_name, style="cyan")
+                goals_table.add_column(team2_name, style="magenta")
+                
+                # Goals For
+                if "for" in team1.goals and "for" in team2.goals:
+                    if "total" in team1.goals["for"] and "total" in team2.goals["for"]:
+                        goals_table.add_row(
+                            "Goals Scored (Home)",
+                            str(team1.goals["for"]["total"].get("home", 0)),
+                            str(team2.goals["for"]["total"].get("home", 0))
+                        )
+                        goals_table.add_row(
+                            "Goals Scored (Away)",
+                            str(team1.goals["for"]["total"].get("away", 0)),
+                            str(team2.goals["for"]["total"].get("away", 0))
+                        )
+                        goals_table.add_row(
+                            "Goals Scored (Total)",
+                            str(team1.goals["for"]["total"].get("total", 0)),
+                            str(team2.goals["for"]["total"].get("total", 0))
+                        )
+                    
+                    if "average" in team1.goals["for"] and "average" in team2.goals["for"]:
+                        goals_table.add_row(
+                            "Avg Goals Scored (Home)",
+                            str(team1.goals["for"]["average"].get("home", 0)),
+                            str(team2.goals["for"]["average"].get("home", 0))
+                        )
+                        goals_table.add_row(
+                            "Avg Goals Scored (Away)",
+                            str(team1.goals["for"]["average"].get("away", 0)),
+                            str(team2.goals["for"]["average"].get("away", 0))
+                        )
+                        goals_table.add_row(
+                            "Avg Goals Scored (Total)",
+                            str(team1.goals["for"]["average"].get("total", 0)),
+                            str(team2.goals["for"]["average"].get("total", 0))
+                        )
+                
+                # Goals Against
+                if "against" in team1.goals and "against" in team2.goals:
+                    if "total" in team1.goals["against"] and "total" in team2.goals["against"]:
+                        goals_table.add_row(
+                            "Goals Conceded (Home)",
+                            str(team1.goals["against"]["total"].get("home", 0)),
+                            str(team2.goals["against"]["total"].get("home", 0))
+                        )
+                        goals_table.add_row(
+                            "Goals Conceded (Away)",
+                            str(team1.goals["against"]["total"].get("away", 0)),
+                            str(team2.goals["against"]["total"].get("away", 0))
+                        )
+                        goals_table.add_row(
+                            "Goals Conceded (Total)",
+                            str(team1.goals["against"]["total"].get("total", 0)),
+                            str(team2.goals["against"]["total"].get("total", 0))
+                        )
+                    
+                    if "average" in team1.goals["against"] and "average" in team2.goals["against"]:
+                        goals_table.add_row(
+                            "Avg Goals Conceded (Home)",
+                            str(team1.goals["against"]["average"].get("home", 0)),
+                            str(team2.goals["against"]["average"].get("home", 0))
+                        )
+                        goals_table.add_row(
+                            "Avg Goals Conceded (Away)",
+                            str(team1.goals["against"]["average"].get("away", 0)),
+                            str(team2.goals["against"]["average"].get("away", 0))
+                        )
+                        goals_table.add_row(
+                            "Avg Goals Conceded (Total)",
+                            str(team1.goals["against"]["average"].get("total", 0)),
+                            str(team2.goals["against"]["average"].get("total", 0))
+                        )
+                
+                main_stats_tables.append(goals_table)
+            
+            # Clean sheets and Failed to score
+            additional_stats_table = Table(title="Additional Statistics", box=box.ROUNDED)
+            additional_stats_table.add_column("Statistic", style="bold")
+            additional_stats_table.add_column(team1_name, style="cyan")
+            additional_stats_table.add_column(team2_name, style="magenta")
+            
+            # Clean sheets
+            if isinstance(team1.clean_sheet, dict) and isinstance(team2.clean_sheet, dict):
+                additional_stats_table.add_row(
+                    "Clean Sheets (Home)",
+                    str(team1.clean_sheet.get("home", 0)),
+                    str(team2.clean_sheet.get("home", 0))
+                )
+                additional_stats_table.add_row(
+                    "Clean Sheets (Away)",
+                    str(team1.clean_sheet.get("away", 0)),
+                    str(team2.clean_sheet.get("away", 0))
+                )
+                additional_stats_table.add_row(
+                    "Clean Sheets (Total)",
+                    str(team1.clean_sheet.get("total", 0)),
+                    str(team2.clean_sheet.get("total", 0))
+                )
+            
+            # Failed to score
+            if isinstance(team1.failed_to_score, dict) and isinstance(team2.failed_to_score, dict):
+                additional_stats_table.add_row(
+                    "Failed to Score (Home)",
+                    str(team1.failed_to_score.get("home", 0)),
+                    str(team2.failed_to_score.get("home", 0))
+                )
+                additional_stats_table.add_row(
+                    "Failed to Score (Away)",
+                    str(team1.failed_to_score.get("away", 0)),
+                    str(team2.failed_to_score.get("away", 0))
+                )
+                additional_stats_table.add_row(
+                    "Failed to Score (Total)",
+                    str(team1.failed_to_score.get("total", 0)),
+                    str(team2.failed_to_score.get("total", 0))
+                )
+            
+            main_stats_tables.append(additional_stats_table)
+            
+            # Penalty statistics
+            if isinstance(team1.penalty, dict) and isinstance(team2.penalty, dict):
+                penalty_table = Table(title="Penalty Statistics", box=box.ROUNDED)
+                penalty_table.add_column("Statistic", style="bold")
+                penalty_table.add_column(team1_name, style="cyan")
+                penalty_table.add_column(team2_name, style="magenta")
+                
+                if "scored" in team1.penalty and "scored" in team2.penalty:
+                    penalty_table.add_row(
+                        "Penalties Scored",
+                        str(team1.penalty["scored"].get("total", 0)),
+                        str(team2.penalty["scored"].get("total", 0))
+                    )
+                    
+                if "missed" in team1.penalty and "missed" in team2.penalty:
+                    penalty_table.add_row(
+                        "Penalties Missed",
+                        str(team1.penalty["missed"].get("total", 0)),
+                        str(team2.penalty["missed"].get("total", 0))
+                    )
+                    
+                if "total" in team1.penalty and "total" in team2.penalty:
+                    penalty_table.add_row(
+                        "Total Penalties",
+                        str(team1.penalty.get("total", 0)),
+                        str(team2.penalty.get("total", 0))
+                    )
+                
+                main_stats_tables.append(penalty_table)
+            
+            # Cards statistics
+            if isinstance(team1.cards, dict) and isinstance(team2.cards, dict):
+                cards_table = Table(title="Cards Statistics", box=box.ROUNDED)
+                cards_table.add_column("Statistic", style="bold")
+                cards_table.add_column(team1_name, style="cyan")
+                cards_table.add_column(team2_name, style="magenta")
+                
+                # Yellow cards
+                if "yellow" in team1.cards and "yellow" in team2.cards:
+                    cards_table.add_row(
+                        "Yellow Cards (Total)",
+                        str(team1.cards["yellow"].get("total", 0)),
+                        str(team2.cards["yellow"].get("total", 0))
+                    )
+                    
+                    # Add time ranges for yellow cards if available
+                    time_ranges = ["0-15", "16-30", "31-45", "46-60", "61-75", "76-90", "91-105", "106-120"]
+                    for time_range in time_ranges:
+                        if time_range in team1.cards["yellow"] and time_range in team2.cards["yellow"]:
+                            cards_table.add_row(
+                                f"Yellow Cards ({time_range} min)",
+                                str(team1.cards["yellow"].get(time_range, 0)["total"]),
+                                str(team2.cards["yellow"].get(time_range, 0)["total"])
+                            )
+                
+                # Red cards
+                if "red" in team1.cards and "red" in team2.cards:
+                    cards_table.add_row(
+                        "Red Cards (Total)",
+                        str(team1.cards["red"].get("total", 0)),
+                        str(team2.cards["red"].get("total", 0))
+                    )
+                    
+                    # Add time ranges for red cards if available
+                    for time_range in time_ranges:
+                        if time_range in team1.cards["red"] and time_range in team2.cards["red"]:
+                            cards_table.add_row(
+                                f"Red Cards ({time_range} min)",
+                                str(team1.cards["red"].get(time_range, 0)["total"]),
+                                str(team2.cards["red"].get(time_range, 0)["total"])
+                            )
+                
+                main_stats_tables.append(cards_table)
+            
+            # Most used lineups
+            if team1.lineups and team2.lineups and isinstance(team1.lineups, list) and isinstance(team2.lineups, list):
+                lineup_table = Table(title="Formation Information", box=box.ROUNDED)
+                lineup_table.add_column("Team", style="bold")
+                lineup_table.add_column("Formation", style="bold")
+                lineup_table.add_column("Games Played", style="bold")
+                
+                # Add up to 3 most used formations for each team
+                max_formations = min(len(team1.lineups), len(team2.lineups), 3)
+                
+                # Team 1 formations
+                for i in range(max_formations):
+                    if i < len(team1.lineups) and isinstance(team1.lineups[i], dict):
+                        lineup_table.add_row(
+                            team1_name if i == 0 else "",
+                            team1.lineups[i].get("formation", "Unknown"),
+                            str(team1.lineups[i].get("played", 0))
+                        )
+                
+                # Add a separator row
+                lineup_table.add_row("", "", "")
+                
+                # Team 2 formations
+                for i in range(max_formations):
+                    if i < len(team2.lineups) and isinstance(team2.lineups[i], dict):
+                        lineup_table.add_row(
+                            team2_name if i == 0 else "",
+                            team2.lineups[i].get("formation", "Unknown"),
+                            str(team2.lineups[i].get("played", 0))
+                        )
+                
+                main_stats_tables.append(lineup_table)
+            
+            # Arrange tables in columns
+            layout["main_stats"].update(Columns(main_stats_tables))
+            
+            # Create detailed stats section for goal minute distribution
+            detailed_stats_tables = []
+            
+            if isinstance(team1.goals, dict) and isinstance(team2.goals, dict):
+                # Goal distributions by minute
+                if "for" in team1.goals and "for" in team2.goals:
+                    if "minute" in team1.goals["for"] and "minute" in team2.goals["for"]:
+                        goals_minute_table = Table(title="Goals Scored by Minute", box=box.ROUNDED)
+                        goals_minute_table.add_column("Time Range", style="bold")
+                        goals_minute_table.add_column(f"{team1_name} (Scored)", style="cyan")
+                        goals_minute_table.add_column(f"{team2_name} (Scored)", style="magenta")
+                        
+                        time_ranges = ["0-15", "16-30", "31-45", "46-60", "61-75", "76-90", "91-105", "106-120"]
+                        for time_range in time_ranges:
+                            if time_range in team1.goals["for"]["minute"] and time_range in team2.goals["for"]["minute"]:
+                                goals_minute_table.add_row(
+                                    time_range,
+                                    f"{team1.goals['for']['minute'][time_range].get('total', 0)} ({team1.goals['for']['minute'][time_range].get('percentage', '0%')})",
+                                    f"{team2.goals['for']['minute'][time_range].get('total', 0)} ({team2.goals['for']['minute'][time_range].get('percentage', '0%')})"
+                                )
+                        
+                        detailed_stats_tables.append(goals_minute_table)
+                
+                # Goals conceded by minute
+                if "against" in team1.goals and "against" in team2.goals:
+                    if "minute" in team1.goals["against"] and "minute" in team2.goals["against"]:
+                        conceded_minute_table = Table(title="Goals Conceded by Minute", box=box.ROUNDED)
+                        conceded_minute_table.add_column("Time Range", style="bold")
+                        conceded_minute_table.add_column(f"{team1_name} (Conceded)", style="cyan")
+                        conceded_minute_table.add_column(f"{team2_name} (Conceded)", style="magenta")
+                        
+                        time_ranges = ["0-15", "16-30", "31-45", "46-60", "61-75", "76-90", "91-105", "106-120"]
+                        for time_range in time_ranges:
+                            if time_range in team1.goals["against"]["minute"] and time_range in team2.goals["against"]["minute"]:
+                                conceded_minute_table.add_row(
+                                    time_range,
+                                    f"{team1.goals['against']['minute'][time_range].get('total', 0)} ({team1.goals['against']['minute'][time_range].get('percentage', '0%')})",
+                                    f"{team2.goals['against']['minute'][time_range].get('total', 0)} ({team2.goals['against']['minute'][time_range].get('percentage', '0%')})"
+                                )
+                        
+                        detailed_stats_tables.append(conceded_minute_table)
+            
+            # Biggest stats
+            if hasattr(team1, 'biggest') and hasattr(team2, 'biggest'):
+                if isinstance(team1.biggest, dict) and isinstance(team2.biggest, dict):
+                    biggest_table = Table(title="Record Statistics", box=box.ROUNDED)
+                    biggest_table.add_column("Statistic", style="bold")
+                    biggest_table.add_column(team1_name, style="cyan")
+                    biggest_table.add_column(team2_name, style="magenta")
+                    
+                    # Streak information
+                    if "streak" in team1.biggest and "streak" in team2.biggest:
+                        biggest_table.add_row(
+                            "Longest Win Streak",
+                            str(team1.biggest["streak"].get("wins", 0)),
+                            str(team2.biggest["streak"].get("wins", 0))
+                        )
+                        biggest_table.add_row(
+                            "Longest Draw Streak",
+                            str(team1.biggest["streak"].get("draws", 0)),
+                            str(team2.biggest["streak"].get("draws", 0))
+                        )
+                        biggest_table.add_row(
+                            "Longest Loss Streak",
+                            str(team1.biggest["streak"].get("loses", 0)),
+                            str(team2.biggest["streak"].get("loses", 0))
+                        )
+                    
+                    # Biggest wins
+                    if "wins" in team1.biggest and "wins" in team2.biggest:
+                        biggest_table.add_row(
+                            "Biggest Home Win",
+                            str(team1.biggest["wins"].get("home", "N/A")),
+                            str(team2.biggest["wins"].get("home", "N/A"))
+                        )
+                        biggest_table.add_row(
+                            "Biggest Away Win",
+                            str(team1.biggest["wins"].get("away", "N/A")),
+                            str(team2.biggest["wins"].get("away", "N/A"))
+                        )
+                    
+                    # Biggest losses
+                    if "loses" in team1.biggest and "loses" in team2.biggest:
+                        biggest_table.add_row(
+                            "Biggest Home Loss",
+                            str(team1.biggest["loses"].get("home", "N/A")),
+                            str(team2.biggest["loses"].get("home", "N/A"))
+                        )
+                        biggest_table.add_row(
+                            "Biggest Away Loss",
+                            str(team1.biggest["loses"].get("away", "N/A")),
+                            str(team2.biggest["loses"].get("away", "N/A"))
+                        )
+                    
+                    # Biggest goals
+                    if "goals" in team1.biggest and "goals" in team2.biggest:
+                        if "for" in team1.biggest["goals"] and "for" in team2.biggest["goals"]:
+                            biggest_table.add_row(
+                                "Most Goals Scored (Home)",
+                                str(team1.biggest["goals"]["for"].get("home", 0)),
+                                str(team2.biggest["goals"]["for"].get("home", 0))
+                            )
+                            biggest_table.add_row(
+                                "Most Goals Scored (Away)",
+                                str(team1.biggest["goals"]["for"].get("away", 0)),
+                                str(team2.biggest["goals"]["for"].get("away", 0))
+                            )
+                        
+                        if "against" in team1.biggest["goals"] and "against" in team2.biggest["goals"]:
+                            biggest_table.add_row(
+                                "Most Goals Conceded (Home)",
+                                str(team1.biggest["goals"]["against"].get("home", 0)),
+                                str(team2.biggest["goals"]["against"].get("home", 0))
+                            )
+                            biggest_table.add_row(
+                                "Most Goals Conceded (Away)",
+                                str(team1.biggest["goals"]["against"].get("away", 0)),
+                                str(team2.biggest["goals"]["against"].get("away", 0))
+                            )
+                    
+                    detailed_stats_tables.append(biggest_table)
+            
+            # Add goals over/under stats if available
+            if isinstance(team1.goals, dict) and isinstance(team2.goals, dict):
+                if "for" in team1.goals and "for" in team2.goals:
+                    if "under_over" in team1.goals["for"] and "under_over" in team2.goals["for"]:
+                        goals_ou_table = Table(title="Goals Scored Over/Under", box=box.ROUNDED)
+                        goals_ou_table.add_column("Over/Under", style="bold")
+                        goals_ou_table.add_column(f"{team1_name} Over", style="cyan")
+                        goals_ou_table.add_column(f"{team1_name} Under", style="cyan")
+                        goals_ou_table.add_column(f"{team2_name} Over", style="magenta")
+                        goals_ou_table.add_column(f"{team2_name} Under", style="magenta")
+                        
+                        thresholds = ["0.5", "1.5", "2.5", "3.5", "4.5"]
+                        for threshold in thresholds:
+                            if threshold in team1.goals["for"]["under_over"] and threshold in team2.goals["for"]["under_over"]:
+                                goals_ou_table.add_row(
+                                    threshold,
+                                    str(team1.goals["for"]["under_over"][threshold].get("over", 0)),
+                                    str(team1.goals["for"]["under_over"][threshold].get("under", 0)),
+                                    str(team2.goals["for"]["under_over"][threshold].get("over", 0)),
+                                    str(team2.goals["for"]["under_over"][threshold].get("under", 0))
+                                )
+                        
+                        detailed_stats_tables.append(goals_ou_table)
+            
+            # Arrange detailed tables in columns
+            layout["detailed_stats"].update(Columns(detailed_stats_tables))
 
+            # Alla fine della funzione, prima di return layout:
+            from rich.console import Console
+            from io import StringIO
 
+            console = Console(file=open("stats_output.txt", "w"), width=250,height=150)
+            console.print(layout)
 
-    #def a function that extract the injuries player from api_football
+            memfile = StringIO()
+            memconsole = Console(file=memfile,width=100,height=200)
+            memconsole.print(layout)
+
+            return memfile.getvalue()
+        
+            
+        except Exception as e:
+            # Fallback to a simple table if there's an error
+            error_table = Table(title="Team Comparison")
+            error_table.add_column("Team")
+            error_table.add_column("Info")
+            error_table.add_row(team1_name, "Basic stats not available")
+            error_table.add_row(team2_name, "Basic stats not available")
+            return error_table
+
+        
+    
+    def _format_form_string(self, form_string):
+        """Format the form string to visual indicators"""
+        if not form_string or not isinstance(form_string, str):
+            return "No data"
+            
+        result = ""
+        for char in form_string:
+            if char == "W":
+                result += "🟢"
+            elif char == "D":
+                result += "🟡"
+            elif char == "L":
+                result += "🔴"
+            else:
+                result += char
+                
+        return result
+
+#print statisti between twi teams
+# import gm_data as gm
+# r1 = ApiFootball().get_team_statistics(517,135)
+# r2 = ApiFootball().get_team_statistics(489,135)
+# g1,g2 = gm.TeamStats(),gm.TeamStats()
+# g1.Charge_Data(r1)
+# g2.Charge_Data(r2)
+# rich_print(ApiFootball().print_table_compareteams(g1,g2)# Modifichiamo il codice di test per verificare i dati
+
+# import gm_data as gm
+# from rich.console import Console
+# from rich import print as rich_print
+
+# console = Console(width=150)  # Impostiamo una larghezza maggiore
+
+# r1 = ApiFootball().get_team_statistics(517, 135)
+# r2 = ApiFootball().get_team_statistics(489, 135)
+# g1, g2 = gm.TeamStats(), gm.TeamStats()
+# g1.Charge_Data(r1)
+# g2.Charge_Data(r2)
+
+# # Stampiamo la tabella con una console più ampia
+# result = ApiFootball().print_table_compareteams(g1, g2)
+# console.print(result)
+
+# def print_table_compareteams(self, team1, team2):
+#     # Resto del codice invariato
+    
+#     # Alla fine della funzione, prima di return layout:
+#     from rich.console import Console
+#     console = Console(file=open("stats_output.txt", "w"), width=200)
+#     console.print(layout)
+    
+#     return layout

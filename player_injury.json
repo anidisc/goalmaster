@@ -2108,5 +2108,1908 @@
                 }
             }
         ]
+    },
+    "203": {
+        "date": "2025-04-25",
+        "injuries": [
+            {
+                "player": {
+                    "id": 18816,
+                    "name": "A. Masuaku",
+                    "photo": "https://media.api-sports.io/football/players/18816.png",
+                    "type": "Missing Fixture",
+                    "reason": "Yellow Cards"
+                },
+                "team": {
+                    "id": 549,
+                    "name": "Besiktas",
+                    "logo": "https://media.api-sports.io/football/teams/549.png"
+                },
+                "fixture": {
+                    "id": 1238138,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T17:00:00+00:00",
+                    "timestamp": 1745600400
+                },
+                "league": {
+                    "id": 203,
+                    "season": 2024,
+                    "name": "S\u00fcper Lig",
+                    "country": "Turkey",
+                    "logo": "https://media.api-sports.io/football/leagues/203.png",
+                    "flag": "https://media.api-sports.io/flags/tr.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 3638,
+                    "name": "E. Muci",
+                    "photo": "https://media.api-sports.io/football/players/3638.png",
+                    "type": "Missing Fixture",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 549,
+                    "name": "Besiktas",
+                    "logo": "https://media.api-sports.io/football/teams/549.png"
+                },
+                "fixture": {
+                    "id": 1238138,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T17:00:00+00:00",
+                    "timestamp": 1745600400
+                },
+                "league": {
+                    "id": 203,
+                    "season": 2024,
+                    "name": "S\u00fcper Lig",
+                    "country": "Turkey",
+                    "logo": "https://media.api-sports.io/football/leagues/203.png",
+                    "flag": "https://media.api-sports.io/flags/tr.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 364816,
+                    "name": "E. Ricardo",
+                    "photo": "https://media.api-sports.io/football/players/364816.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 549,
+                    "name": "Besiktas",
+                    "logo": "https://media.api-sports.io/football/teams/549.png"
+                },
+                "fixture": {
+                    "id": 1238138,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T17:00:00+00:00",
+                    "timestamp": 1745600400
+                },
+                "league": {
+                    "id": 203,
+                    "season": 2024,
+                    "name": "S\u00fcper Lig",
+                    "country": "Turkey",
+                    "logo": "https://media.api-sports.io/football/leagues/203.png",
+                    "flag": "https://media.api-sports.io/flags/tr.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 25406,
+                    "name": "F. Uduokhai",
+                    "photo": "https://media.api-sports.io/football/players/25406.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 549,
+                    "name": "Besiktas",
+                    "logo": "https://media.api-sports.io/football/teams/549.png"
+                },
+                "fixture": {
+                    "id": 1238138,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T17:00:00+00:00",
+                    "timestamp": 1745600400
+                },
+                "league": {
+                    "id": 203,
+                    "season": 2024,
+                    "name": "S\u00fcper Lig",
+                    "country": "Turkey",
+                    "logo": "https://media.api-sports.io/football/leagues/203.png",
+                    "flag": "https://media.api-sports.io/flags/tr.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 1997,
+                    "name": "N. Uysal",
+                    "photo": "https://media.api-sports.io/football/players/1997.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 549,
+                    "name": "Besiktas",
+                    "logo": "https://media.api-sports.io/football/teams/549.png"
+                },
+                "fixture": {
+                    "id": 1238138,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T17:00:00+00:00",
+                    "timestamp": 1745600400
+                },
+                "league": {
+                    "id": 203,
+                    "season": 2024,
+                    "name": "S\u00fcper Lig",
+                    "country": "Turkey",
+                    "logo": "https://media.api-sports.io/football/leagues/203.png",
+                    "flag": "https://media.api-sports.io/flags/tr.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 53533,
+                    "name": "B. Zaynutdinov",
+                    "photo": "https://media.api-sports.io/football/players/53533.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 549,
+                    "name": "Besiktas",
+                    "logo": "https://media.api-sports.io/football/teams/549.png"
+                },
+                "fixture": {
+                    "id": 1238138,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T17:00:00+00:00",
+                    "timestamp": 1745600400
+                },
+                "league": {
+                    "id": 203,
+                    "season": 2024,
+                    "name": "S\u00fcper Lig",
+                    "country": "Turkey",
+                    "logo": "https://media.api-sports.io/football/leagues/203.png",
+                    "flag": "https://media.api-sports.io/flags/tr.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 119029,
+                    "name": "L. Diack",
+                    "photo": "https://media.api-sports.io/football/players/119029.png",
+                    "type": "Missing Fixture",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 3575,
+                    "name": "Hatayspor",
+                    "logo": "https://media.api-sports.io/football/teams/3575.png"
+                },
+                "fixture": {
+                    "id": 1238138,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T17:00:00+00:00",
+                    "timestamp": 1745600400
+                },
+                "league": {
+                    "id": 203,
+                    "season": 2024,
+                    "name": "S\u00fcper Lig",
+                    "country": "Turkey",
+                    "logo": "https://media.api-sports.io/football/leagues/203.png",
+                    "flag": "https://media.api-sports.io/flags/tr.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 61927,
+                    "name": "K. Alici",
+                    "photo": "https://media.api-sports.io/football/players/61927.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 3575,
+                    "name": "Hatayspor",
+                    "logo": "https://media.api-sports.io/football/teams/3575.png"
+                },
+                "fixture": {
+                    "id": 1238138,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T17:00:00+00:00",
+                    "timestamp": 1745600400
+                },
+                "league": {
+                    "id": 203,
+                    "season": 2024,
+                    "name": "S\u00fcper Lig",
+                    "country": "Turkey",
+                    "logo": "https://media.api-sports.io/football/leagues/203.png",
+                    "flag": "https://media.api-sports.io/flags/tr.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 194850,
+                    "name": "C. Demir",
+                    "photo": "https://media.api-sports.io/football/players/194850.png",
+                    "type": "Questionable",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 3575,
+                    "name": "Hatayspor",
+                    "logo": "https://media.api-sports.io/football/teams/3575.png"
+                },
+                "fixture": {
+                    "id": 1238138,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T17:00:00+00:00",
+                    "timestamp": 1745600400
+                },
+                "league": {
+                    "id": 203,
+                    "season": 2024,
+                    "name": "S\u00fcper Lig",
+                    "country": "Turkey",
+                    "logo": "https://media.api-sports.io/football/leagues/203.png",
+                    "flag": "https://media.api-sports.io/flags/tr.svg"
+                }
+            }
+        ]
+    },
+    "78": {
+        "date": "2025-04-25",
+        "injuries": [
+            {
+                "player": {
+                    "id": 361981,
+                    "name": "A. Chase",
+                    "photo": "https://media.api-sports.io/football/players/361981.png",
+                    "type": "Missing Fixture",
+                    "reason": "Groin Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 287927,
+                    "name": "J. Diehl",
+                    "photo": "https://media.api-sports.io/football/players/287927.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 162887,
+                    "name": "E. Millot",
+                    "photo": "https://media.api-sports.io/football/players/162887.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 24806,
+                    "name": "N. Nartey",
+                    "photo": "https://media.api-sports.io/football/players/24806.png",
+                    "type": "Missing Fixture",
+                    "reason": "Lacking Match Fitness"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 400750,
+                    "name": "C. Olivier",
+                    "photo": "https://media.api-sports.io/football/players/400750.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 339230,
+                    "name": "L. Raimund",
+                    "photo": "https://media.api-sports.io/football/players/339230.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 194750,
+                    "name": "E. B. Toure",
+                    "photo": "https://media.api-sports.io/football/players/194750.png",
+                    "type": "Missing Fixture",
+                    "reason": "Leg Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 24868,
+                    "name": "J. Vagnoman",
+                    "photo": "https://media.api-sports.io/football/players/24868.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 13,
+                    "name": "D. Zagadou",
+                    "photo": "https://media.api-sports.io/football/players/13.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 172,
+                    "name": "VfB Stuttgart",
+                    "logo": "https://media.api-sports.io/football/teams/172.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 24641,
+                    "name": "B. Zivzivadze",
+                    "photo": "https://media.api-sports.io/football/players/24641.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 180,
+                    "name": "1. FC Heidenheim",
+                    "logo": "https://media.api-sports.io/football/teams/180.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 24955,
+                    "name": "M. Honsak",
+                    "photo": "https://media.api-sports.io/football/players/24955.png",
+                    "type": "Questionable",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 180,
+                    "name": "1. FC Heidenheim",
+                    "logo": "https://media.api-sports.io/football/teams/180.png"
+                },
+                "fixture": {
+                    "id": 1224246,
+                    "timezone": "UTC",
+                    "date": "2025-04-25T18:30:00+00:00",
+                    "timestamp": 1745605800
+                },
+                "league": {
+                    "id": 78,
+                    "season": 2024,
+                    "name": "Bundesliga",
+                    "country": "Germany",
+                    "logo": "https://media.api-sports.io/football/leagues/78.png",
+                    "flag": "https://media.api-sports.io/flags/de.svg"
+                }
+            }
+        ]
+    },
+    "2": {
+        "date": "2025-04-26",
+        "injuries": []
+    },
+    "39": {
+        "date": "2025-04-26",
+        "injuries": [
+            {
+                "player": {
+                    "id": 291476,
+                    "name": "D. D. Fofana",
+                    "photo": "https://media.api-sports.io/football/players/291476.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 49,
+                    "name": "Chelsea",
+                    "logo": "https://media.api-sports.io/football/teams/49.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 22094,
+                    "name": "W. Fofana",
+                    "photo": "https://media.api-sports.io/football/players/22094.png",
+                    "type": "Missing Fixture",
+                    "reason": "Hamstring Injury"
+                },
+                "team": {
+                    "id": 49,
+                    "name": "Chelsea",
+                    "logo": "https://media.api-sports.io/football/teams/49.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 392270,
+                    "name": "M. Guiu",
+                    "photo": "https://media.api-sports.io/football/players/392270.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 49,
+                    "name": "Chelsea",
+                    "logo": "https://media.api-sports.io/football/teams/49.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 161907,
+                    "name": "M. Gusto",
+                    "photo": "https://media.api-sports.io/football/players/161907.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 49,
+                    "name": "Chelsea",
+                    "logo": "https://media.api-sports.io/football/teams/49.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 329347,
+                    "name": "O. Kellyman",
+                    "photo": "https://media.api-sports.io/football/players/329347.png",
+                    "type": "Missing Fixture",
+                    "reason": "Hamstring Injury"
+                },
+                "team": {
+                    "id": 49,
+                    "name": "Chelsea",
+                    "logo": "https://media.api-sports.io/football/teams/49.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 63577,
+                    "name": "M. Mudryk",
+                    "photo": "https://media.api-sports.io/football/players/63577.png",
+                    "type": "Missing Fixture",
+                    "reason": "Suspended"
+                },
+                "team": {
+                    "id": 49,
+                    "name": "Chelsea",
+                    "logo": "https://media.api-sports.io/football/teams/49.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 138822,
+                    "name": "A. Broja",
+                    "photo": "https://media.api-sports.io/football/players/138822.png",
+                    "type": "Missing Fixture",
+                    "reason": "Loan agreement"
+                },
+                "team": {
+                    "id": 45,
+                    "name": "Everton",
+                    "logo": "https://media.api-sports.io/football/teams/45.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 18766,
+                    "name": "D. Calvert-Lewin",
+                    "photo": "https://media.api-sports.io/football/players/18766.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 45,
+                    "name": "Everton",
+                    "logo": "https://media.api-sports.io/football/teams/45.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 15884,
+                    "name": "J. Lindstrom",
+                    "photo": "https://media.api-sports.io/football/players/15884.png",
+                    "type": "Missing Fixture",
+                    "reason": "Groin Injury"
+                },
+                "team": {
+                    "id": 45,
+                    "name": "Everton",
+                    "logo": "https://media.api-sports.io/football/teams/45.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 24882,
+                    "name": "O. Mangala",
+                    "photo": "https://media.api-sports.io/football/players/24882.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 45,
+                    "name": "Everton",
+                    "logo": "https://media.api-sports.io/football/teams/45.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 2936,
+                    "name": "J. Tarkowski",
+                    "photo": "https://media.api-sports.io/football/players/2936.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 45,
+                    "name": "Everton",
+                    "logo": "https://media.api-sports.io/football/teams/45.png"
+                },
+                "fixture": {
+                    "id": 1208356,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T11:30:00+00:00",
+                    "timestamp": 1745667000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 7600,
+                    "name": "Igor",
+                    "photo": "https://media.api-sports.io/football/players/7600.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 51,
+                    "name": "Brighton",
+                    "logo": "https://media.api-sports.io/football/teams/51.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 10329,
+                    "name": "Joao Pedro",
+                    "photo": "https://media.api-sports.io/football/players/10329.png",
+                    "type": "Missing Fixture",
+                    "reason": "Red Card"
+                },
+                "team": {
+                    "id": 51,
+                    "name": "Brighton",
+                    "logo": "https://media.api-sports.io/football/teams/51.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 1361,
+                    "name": "F. Kadioglu",
+                    "photo": "https://media.api-sports.io/football/players/1361.png",
+                    "type": "Missing Fixture",
+                    "reason": "Toe Injury"
+                },
+                "team": {
+                    "id": 51,
+                    "name": "Brighton",
+                    "logo": "https://media.api-sports.io/football/teams/51.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 296,
+                    "name": "J. Milner",
+                    "photo": "https://media.api-sports.io/football/players/296.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 51,
+                    "name": "Brighton",
+                    "logo": "https://media.api-sports.io/football/teams/51.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 90590,
+                    "name": "G. Rutter",
+                    "photo": "https://media.api-sports.io/football/players/90590.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 51,
+                    "name": "Brighton",
+                    "logo": "https://media.api-sports.io/football/teams/51.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 19265,
+                    "name": "A. Webster",
+                    "photo": "https://media.api-sports.io/football/players/19265.png",
+                    "type": "Missing Fixture",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 51,
+                    "name": "Brighton",
+                    "logo": "https://media.api-sports.io/football/teams/51.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 38695,
+                    "name": "J. P. van Hecke",
+                    "photo": "https://media.api-sports.io/football/players/38695.png",
+                    "type": "Missing Fixture",
+                    "reason": "Head Injury"
+                },
+                "team": {
+                    "id": 51,
+                    "name": "Brighton",
+                    "logo": "https://media.api-sports.io/football/teams/51.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 18819,
+                    "name": "M. Antonio",
+                    "photo": "https://media.api-sports.io/football/players/18819.png",
+                    "type": "Missing Fixture",
+                    "reason": "Inactive"
+                },
+                "team": {
+                    "id": 48,
+                    "name": "West Ham",
+                    "logo": "https://media.api-sports.io/football/teams/48.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 129643,
+                    "name": "E. Ferguson",
+                    "photo": "https://media.api-sports.io/football/players/129643.png",
+                    "type": "Missing Fixture",
+                    "reason": "Loan agreement"
+                },
+                "team": {
+                    "id": 48,
+                    "name": "West Ham",
+                    "logo": "https://media.api-sports.io/football/teams/48.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 37724,
+                    "name": "C. Summerville",
+                    "photo": "https://media.api-sports.io/football/players/37724.png",
+                    "type": "Missing Fixture",
+                    "reason": "Hamstring Injury"
+                },
+                "team": {
+                    "id": 48,
+                    "name": "West Ham",
+                    "logo": "https://media.api-sports.io/football/teams/48.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 2869,
+                    "name": "E. Alvarez",
+                    "photo": "https://media.api-sports.io/football/players/2869.png",
+                    "type": "Questionable",
+                    "reason": "Back Injury"
+                },
+                "team": {
+                    "id": 48,
+                    "name": "West Ham",
+                    "logo": "https://media.api-sports.io/football/teams/48.png"
+                },
+                "fixture": {
+                    "id": 1208355,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 284492,
+                    "name": "L. Hall",
+                    "photo": "https://media.api-sports.io/football/players/284492.png",
+                    "type": "Missing Fixture",
+                    "reason": "Foot Injury"
+                },
+                "team": {
+                    "id": 34,
+                    "name": "Newcastle",
+                    "logo": "https://media.api-sports.io/football/teams/34.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 18894,
+                    "name": "J. Lascelles",
+                    "photo": "https://media.api-sports.io/football/players/18894.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 34,
+                    "name": "Newcastle",
+                    "logo": "https://media.api-sports.io/football/teams/34.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 20089,
+                    "name": "W. Burns",
+                    "photo": "https://media.api-sports.io/football/players/20089.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 57,
+                    "name": "Ipswich",
+                    "logo": "https://media.api-sports.io/football/teams/57.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 19119,
+                    "name": "L. Davis",
+                    "photo": "https://media.api-sports.io/football/players/19119.png",
+                    "type": "Missing Fixture",
+                    "reason": "Red Card"
+                },
+                "team": {
+                    "id": 57,
+                    "name": "Ipswich",
+                    "logo": "https://media.api-sports.io/football/teams/57.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 616,
+                    "name": "A. Muric",
+                    "photo": "https://media.api-sports.io/football/players/616.png",
+                    "type": "Missing Fixture",
+                    "reason": "Shoulder Injury"
+                },
+                "team": {
+                    "id": 57,
+                    "name": "Ipswich",
+                    "logo": "https://media.api-sports.io/football/teams/57.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 19365,
+                    "name": "C. Ogbene",
+                    "photo": "https://media.api-sports.io/football/players/19365.png",
+                    "type": "Missing Fixture",
+                    "reason": "Calf Injury"
+                },
+                "team": {
+                    "id": 57,
+                    "name": "Ipswich",
+                    "logo": "https://media.api-sports.io/football/teams/57.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 19130,
+                    "name": "K. Phillips",
+                    "photo": "https://media.api-sports.io/football/players/19130.png",
+                    "type": "Missing Fixture",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 57,
+                    "name": "Ipswich",
+                    "logo": "https://media.api-sports.io/football/teams/57.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 138931,
+                    "name": "J. Philogene",
+                    "photo": "https://media.api-sports.io/football/players/138931.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 57,
+                    "name": "Ipswich",
+                    "logo": "https://media.api-sports.io/football/teams/57.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 17579,
+                    "name": "S. Szmodics",
+                    "photo": "https://media.api-sports.io/football/players/17579.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 57,
+                    "name": "Ipswich",
+                    "logo": "https://media.api-sports.io/football/teams/57.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 126791,
+                    "name": "N. Broadhead",
+                    "photo": "https://media.api-sports.io/football/players/126791.png",
+                    "type": "Questionable",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 57,
+                    "name": "Ipswich",
+                    "logo": "https://media.api-sports.io/football/teams/57.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 19152,
+                    "name": "C. Townsend",
+                    "photo": "https://media.api-sports.io/football/players/19152.png",
+                    "type": "Questionable",
+                    "reason": "Thigh Injury"
+                },
+                "team": {
+                    "id": 57,
+                    "name": "Ipswich",
+                    "logo": "https://media.api-sports.io/football/teams/57.png"
+                },
+                "fixture": {
+                    "id": 1208359,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 263177,
+                    "name": "A. Gronbaek",
+                    "photo": "https://media.api-sports.io/football/players/263177.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 41,
+                    "name": "Southampton",
+                    "logo": "https://media.api-sports.io/football/teams/41.png"
+                },
+                "fixture": {
+                    "id": 1208361,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 18918,
+                    "name": "C. Taylor",
+                    "photo": "https://media.api-sports.io/football/players/18918.png",
+                    "type": "Questionable",
+                    "reason": "Knock"
+                },
+                "team": {
+                    "id": 41,
+                    "name": "Southampton",
+                    "logo": "https://media.api-sports.io/football/teams/41.png"
+                },
+                "fixture": {
+                    "id": 1208361,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 727,
+                    "name": "R. Nelson",
+                    "photo": "https://media.api-sports.io/football/players/727.png",
+                    "type": "Missing Fixture",
+                    "reason": "Hamstring Injury"
+                },
+                "team": {
+                    "id": 36,
+                    "name": "Fulham",
+                    "logo": "https://media.api-sports.io/football/teams/36.png"
+                },
+                "fixture": {
+                    "id": 1208361,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 195106,
+                    "name": "Rodrigo Muniz",
+                    "photo": "https://media.api-sports.io/football/players/195106.png",
+                    "type": "Missing Fixture",
+                    "reason": "Inactive"
+                },
+                "team": {
+                    "id": 36,
+                    "name": "Fulham",
+                    "logo": "https://media.api-sports.io/football/teams/36.png"
+                },
+                "fixture": {
+                    "id": 1208361,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 380653,
+                    "name": "L. Chiwome",
+                    "photo": "https://media.api-sports.io/football/players/380653.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 39,
+                    "name": "Wolves",
+                    "logo": "https://media.api-sports.io/football/teams/39.png"
+                },
+                "fixture": {
+                    "id": 1208362,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 385726,
+                    "name": "E. Gonzalez",
+                    "photo": "https://media.api-sports.io/football/players/385726.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 39,
+                    "name": "Wolves",
+                    "logo": "https://media.api-sports.io/football/teams/39.png"
+                },
+                "fixture": {
+                    "id": 1208362,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 19143,
+                    "name": "S. Johnstone",
+                    "photo": "https://media.api-sports.io/football/players/19143.png",
+                    "type": "Missing Fixture",
+                    "reason": "Injury"
+                },
+                "team": {
+                    "id": 39,
+                    "name": "Wolves",
+                    "logo": "https://media.api-sports.io/football/teams/39.png"
+                },
+                "fixture": {
+                    "id": 1208362,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 7722,
+                    "name": "S. Kalajdzic",
+                    "photo": "https://media.api-sports.io/football/players/7722.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 39,
+                    "name": "Wolves",
+                    "logo": "https://media.api-sports.io/football/teams/39.png"
+                },
+                "fixture": {
+                    "id": 1208362,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 195717,
+                    "name": "Y. Mosquera",
+                    "photo": "https://media.api-sports.io/football/players/195717.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 39,
+                    "name": "Wolves",
+                    "logo": "https://media.api-sports.io/football/teams/39.png"
+                },
+                "fixture": {
+                    "id": 1208362,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 449245,
+                    "name": "Pedro Lima",
+                    "photo": "https://media.api-sports.io/football/players/449245.png",
+                    "type": "Questionable",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 39,
+                    "name": "Wolves",
+                    "logo": "https://media.api-sports.io/football/teams/39.png"
+                },
+                "fixture": {
+                    "id": 1208362,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 303467,
+                    "name": "I. Fatawu",
+                    "photo": "https://media.api-sports.io/football/players/303467.png",
+                    "type": "Missing Fixture",
+                    "reason": "Knee Injury"
+                },
+                "team": {
+                    "id": 46,
+                    "name": "Leicester",
+                    "logo": "https://media.api-sports.io/football/teams/46.png"
+                },
+                "fixture": {
+                    "id": 1208362,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 879,
+                    "name": "S. Mavididi",
+                    "photo": "https://media.api-sports.io/football/players/879.png",
+                    "type": "Missing Fixture",
+                    "reason": "Muscle Injury"
+                },
+                "team": {
+                    "id": 46,
+                    "name": "Leicester",
+                    "logo": "https://media.api-sports.io/football/teams/46.png"
+                },
+                "fixture": {
+                    "id": 1208362,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 20079,
+                    "name": "H. Souttar",
+                    "photo": "https://media.api-sports.io/football/players/20079.png",
+                    "type": "Missing Fixture",
+                    "reason": "Ankle Injury"
+                },
+                "team": {
+                    "id": 46,
+                    "name": "Leicester",
+                    "logo": "https://media.api-sports.io/football/teams/46.png"
+                },
+                "fixture": {
+                    "id": 1208362,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            },
+            {
+                "player": {
+                    "id": 182,
+                    "name": "H. Winks",
+                    "photo": "https://media.api-sports.io/football/players/182.png",
+                    "type": "Missing Fixture",
+                    "reason": "Coach's decision"
+                },
+                "team": {
+                    "id": 46,
+                    "name": "Leicester",
+                    "logo": "https://media.api-sports.io/football/teams/46.png"
+                },
+                "fixture": {
+                    "id": 1208362,
+                    "timezone": "UTC",
+                    "date": "2025-04-26T14:00:00+00:00",
+                    "timestamp": 1745676000
+                },
+                "league": {
+                    "id": 39,
+                    "season": 2024,
+                    "name": "Premier League",
+                    "country": "England",
+                    "logo": "https://media.api-sports.io/football/leagues/39.png",
+                    "flag": "https://media.api-sports.io/flags/gb-eng.svg"
+                }
+            }
+        ]
+    },
+    "141": {
+        "date": "2025-04-27",
+        "injuries": []
+    },
+    "136": {
+        "date": "2025-04-27",
+        "injuries": []
     }
 }

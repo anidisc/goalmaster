@@ -1,4 +1,4 @@
-## GoalMasterApp v0.8.0
+## GoalMasterApp v0.8.5
 
 GoalMasterApp is an interactive application built with [Textual](https://textual.textualize.io/), designed to provide statistics, events, rankings, and predictions for major football (soccer) leagues. It uses the [api_football](https://rapidapi.com/api-sports/api/api-football) API to retrieve up-to-date match data and [gemini_ai](https://gemini.ai) to generate advanced match predictions.
 
@@ -100,7 +100,7 @@ GoalMasterApp offers advanced match predictions using AI. By analyzing statistic
 
 The predictions are based on the latest available match statistics, league standings, and home/away performances, offering users detailed insights for a better understanding of match results.
 
-## What's New in Version 0.8.0
+## What's New in Version 0.8.5
 
 - **Injury Visualization**: Added the ability to view injured players for the selected match by pressing the `j` key.
 - **Injury Data Update**: Improved the management of saving and updating injury data, using the current system date instead of the match date.

@@ -9,7 +9,7 @@ import gemini_ai
 import api_football
 from textual.app import App
 from textual.widgets import Header, Footer, Static, Input, OptionList, Collapsible
-from textual.containers import ScrollableContainer
+from textual.containers import ScrollableContainer, HorizontalScroll
 from rich import print as rich_print
 from rich.markdown import Markdown
 from rich.table import Table
@@ -214,6 +214,7 @@ class goalmasterapp(App):
                 ("s", "show_full_stats", "Full Stats"),
                 ("j", "show_injuries", "Show Injuries"),
                 ("l", "select_league", "Select League"),
+                ("h", "toggle_help", "Show Help"),
                 ]
     CSS_PATH = "appstyle.tcss"
 
@@ -275,12 +276,67 @@ class goalmasterapp(App):
         self.select_todo_box = OptionList("EVENT TABLE","MATCH STATS","PREDICTION","FORM.LINEUPS","EXIT",id="select_todo_box")
         yield self.select_todo_box
         self.compare_text_box = Static("TEXt TEAM TO COMPARE",id="compare_text_box")
+        self.compare_teams_box_hor = HorizontalScroll(self.compare_text_box)
         self.compare_teams_box = ScrollableContainer(self.compare_text_box,id="compare_teams_box")
         yield self.compare_teams_box
         self.injury_players_text = Static("INJURIES",id="injury_players_text")
         self.injury_players_box = ScrollableContainer(self.injury_players_text,id="injury_players_box")
         self.injury_players_box.styles.visibility = "hidden" # Imposta la visibilità iniziale a hidden
         yield self.injury_players_box
+        
+        # Add help window
+        tabmap=table_af_map()
+        formatted_tabmap = tabmap.split("\n")[0] + "\n" +"\n".join("            " + line for line in tabmap.split("\n")[1:])
+        HELPTEXT=f"""
+        
+        GOAL MASTER {APPVERSION}
+        
+        KEYBOARD SHORTCUTS:
+        
+        q - Exit the application
+        y - Change year of the selected football season
+        i - Insert a manual command
+        l - Open/close the league selection menu
+        j - View player injuries for the selected match
+        r - Remove the last displayed block
+        c - Collapse all displayed sections
+        e - Expand all displayed sections
+        s - Show complete team statistics
+        h - Toggle this help window
+
+        INPUT BOX COMMANDS:
+        -LIVE - show live matches define in ApiFootball and function get_fixture_live
+        -HELP - show this help
+        -STATUS - show status of api calls
+        -EXIT - exit the app
+        -LEAGUE -args:
+            -S - standings
+               - ALL - all groups standings if league has groups
+               - #GROUPNUMBER - specific groups standings if league has groups
+               - UPDATE - update standings and not call from existing standings on disk
+            -T - timeshift days (example 1 is from today to today+1, or -1 is from today to today-1)
+            -TOP 'S' - top scorers 'A' - top assists
+        REPORT args:
+            args - create a mergded report of all prediction of a league in pdf format
+        
+        AVAILABLE LEAGUES:
+        
+        {formatted_tabmap}
+        """
+        self.help_text = Static(HELPTEXT, id="help_text")
+        self.help_box = ScrollableContainer(self.help_text, id="help_box")
+        self.help_box.border_title = "COMMAND HELP"
+        self.help_box.styles.width = "80%"
+        self.help_box.styles.height = "80%"
+        self.help_box.styles.dock = "top"
+        self.help_box.styles.margin = (2, 2, 2, 2)
+        self.help_box.styles.padding = (1, 1, 1, 1)
+        self.help_box.styles.border = ("solid", "white")
+        self.help_box.styles.background = "black"
+        # content_align expects two values (horizontal, vertical)
+        self.help_box.styles.align = ("center", "middle") 
+        self.help_box.display = False  # Initially hidden
+        yield self.help_box
 
     def find_league(self,league):
             #find name of league with de id of league
@@ -340,24 +396,30 @@ class goalmasterapp(App):
         #list_fixtures.focus()
         #self.query_one(f"#{block_id}_fixtures").focus()
     def add_block_events_match(self,id_fixture,team1,team2):
-        #check if match has started
-        if self.selec_match.status in ["NS","RS"]: #not started or resulted
-            self.notify("Match not started", severity="warning", timeout=5, title="Events not available")
-            return
+        """
+        Add a block with the events of the match.
+        
+        Args:
+            id_fixture: ID of the fixture
+            team1: Name of the first team
+            team2: Name of the second team
+        """
+        
+        af = api_football.ApiFootball()
         
         #self.input_box.styles.visibility = "hidden" # Hide the input box
-        events_table=af.get_table_event_flow(id_fixture)
+        events_table = af.get_table_event_flow(id_fixture)
         
-        # Check if there are any events to display
-        if not events_table or events_table.strip() == "":
+        # Check if there are any events to display - now properly checking Table object
+        if not events_table or (isinstance(events_table, Table) and len(events_table.rows) == 0):
             self.notify("Non ci sono eventi da visualizzare", severity="warning", timeout=5, title="Nessun evento")
             return
         
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         self.query_one("#main_container").mount(Collapsible(Static(events_table),
-                                                            id=block_id,title="Events Match: "+team1+" vs "+team2,
-                                                            collapsed=False)) #mount block and list_fixtures)
+                                                             id=block_id,title="Events Match: "+team1+" vs "+team2,
+                                                             collapsed=False)) #mount block and list_fixtures)
         #focus on list view
         #events.focus()
         #scrool maioncontainer on botton of list view
@@ -369,13 +431,21 @@ class goalmasterapp(App):
             self.notify("Match not started", severity="warning", timeout=5, title="Statistics not available")
             return
         
+        af = api_football.ApiFootball()
+        
         #self.input_box.styles.visibility = "hidden" # Hide the input box
         stats_table=af.print_table_standings(id_fixture)
+        
+        # Check if stats table exists and has content
+        if not stats_table or (isinstance(stats_table, Table) and len(stats_table.rows) == 0):
+            self.notify("Non ci sono statistiche da visualizzare", severity="warning", timeout=5, title="Nessuna statistica")
+            return
+            
         self.block_counter += 1 # Increment the block counter
         block_id = f"block_{self.block_counter}" # Create a unique block id
         self.query_one("#main_container").mount(Collapsible(Static(stats_table),
-                                                            id=block_id,title="Statistic Match: "+team1+" vs "+team2,
-                                                            collapsed=False)) #mount block and list_fixtures)
+                                                             id=block_id,title="Statistic Match: "+team1+" vs "+team2,
+                                                             collapsed=False)) #mount block and list_fixtures)
         self.query_one("#main_container").scroll_end()
 
     def add_block_prediction(self,league_id,id_fixture,team1,team2,prompt,team1_id,team2_id):
@@ -485,9 +555,10 @@ class goalmasterapp(App):
             -TOP 'S' - top scorers 'A' - top assists
         REPORT args:
             args - create a mergded report of all prediction of a league in pdf format
-        Available LEAGUES:
-
-            {formatted_tabmap}
+        
+        AVAILABLE LEAGUES:
+        
+        {formatted_tabmap}
 
         Press q - Exit
 
@@ -513,10 +584,42 @@ class goalmasterapp(App):
         self.leaguebox.display = False # Hide the league selection box initially
         self.league_actions.display = False # Hide the league actions menu initially
         self.shift_days_input.display = False # Hide the shift days input box initially
-        self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.YEAR} CALLS:{af.remains_calls}"
+        self.update_title()
         # self.boxmessage = self.query_one("#infolayout")
         # self.boxmessage.styles.visibility = "hidden"
         self.query_one("#main_container").focus()
+
+    def update_title(self):
+        """Update the application title with current context including selected match if any."""
+        if self.selec_match:
+            match_info = f" - {self.selec_match.home_team} vs {self.selec_match.away_team}"
+            if hasattr(self.selec_match, 'status') and self.selec_match.status:
+                status_map = {
+                    "NS": "Not Started",
+                    "TBD": "To Be Decided",
+                    "1H": "1st Half",
+                    "HT": "Half Time", 
+                    "2H": "2nd Half",
+                    "ET": "Extra Time",
+                    "P": "Penalty",
+                    "FT": "Finished",
+                    "AET": "After Extra Time",
+                    "PEN": "Penalties",
+                    "BT": "Break Time",
+                    "SUSP": "Suspended",
+                    "INT": "Interrupted",
+                    "PST": "Postponed",
+                    "CANC": "Cancelled",
+                    "ABD": "Abandoned",
+                    "AWD": "Technical Loss",
+                    "WO": "WalkOver",
+                }
+                status = status_map.get(self.selec_match.status, self.selec_match.status)
+                match_info += f" [{status}]"
+        else:
+            match_info = ""
+        
+        self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.YEAR} CALLS:{af.remains_calls}{match_info}"
 
     # async def on_focus(self, event):
     #     self.last_focus_id = event.app.focused.id if event.app.focused else None
@@ -557,6 +660,27 @@ class goalmasterapp(App):
             self.action_collapse_or_expand(True)
         elif event.key == "e":
             self.action_collapse_or_expand(False)
+        elif event.key == "space":
+            # If the focused widget is an OptionList and its id is in the list of blocks (match lists)
+            if isinstance(self.focused, OptionList) and self.focused.id in self.list_of_blocks:
+                # Get the currently highlighted option index
+                highlighted_index = self.focused.highlighted
+                
+                if highlighted_index is not None:
+                    # Get the match from the blocklist
+                    self.selec_match = self.blocklist[self.focused.id][highlighted_index]
+                    self.id_focused = self.focused.id
+                    
+                    # Show the action menu and focus on it
+                    # self.select_todo_box.display = True
+                    # self.select_todo_box.focus()
+                    
+                    # Notify and update title
+                    self.notify(f"Selected match: {self.selec_match.home_team} vs {self.selec_match.away_team}", 
+                               severity="info", timeout=3)
+                    self.update_title()
+        # elif event.key == "h":
+        #     self.action_toggle_help()
     #button pressed
 
     def action_insert_command(self):
@@ -777,7 +901,7 @@ class goalmasterapp(App):
             self.yearsbox.border_subtitle = selected_option
             self.yearsbox.display = False
             af.YEAR = selected_option
-            self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.YEAR} CALLS:{af.remains_calls}"
+            self.update_title()
             self.query_one(f"#{self.id_focused}").focus()
         
         elif event.option_list.id == "leaguebox":
@@ -804,23 +928,14 @@ class goalmasterapp(App):
         
         elif event.option_list.id in self.list_of_blocks:
             self.selec_match = self.blocklist[event.option_list.id][event.option_index]
-            # if self.selec_match.status in ["NS","RS"]: #not started or resulted
-            #     self.notify("match not started yet",severity="warning",timeout=5)
-            #     #self.select_todo_box.styles.visibility = "hidden"
-
-            #     self.screen.focus()
-            #     return
-            #self.select_todo_box.styles.visibility = "visible" #show select todo box
             self.id_focused = event.option_list.id
             self.select_todo_box.display = True
             #focus on select todo box
             self.select_todo_box.focus()
 
-
-            self.notify(self.selec_match.home_team+" vs "+self.selec_match.away_team,severity="info",timeout=5)
-            # fix selection match in the title
-            self.title = f"GOAL MASTER {APPVERSION} YEAR:{af.YEAR} CALLS:{af.remains_calls} - Match SELECTED:{self.selec_match.home_team} vs {self.selec_match.away_team}"
-            #TODO show live matches in the future
+            self.notify(self.selec_match.home_team+" vs "+self.selec_match.away_team, severity="info", timeout=5)
+            # Update the title with selected match info
+            self.update_title()
         
         elif event.option_list.id == "league_actions":
             option_index = event.option_index
@@ -935,6 +1050,23 @@ class goalmasterapp(App):
             if event.option_index == 4:  #exit
                 self.query_one(f"#{self.id_focused}").focus()
                 return
+
+    def action_toggle_help(self):
+        """Toggle the visibility of the help box."""
+        if self.help_box.display:
+            self.help_box.display = False
+            # Restore focus to previously focused element if possible
+            if hasattr(self, 'id_focused') and self.id_focused:
+                try:
+                    self.query_one(f"#{self.id_focused}").focus()
+                except:
+                    pass
+        else:
+            # Store current focus before showing help
+            if self.focused:
+                self.id_focused = self.focused.id
+            self.help_box.display = True
+            self.help_box.focus()
 
 if __name__ == "__main__":
     app = goalmasterapp().run()
