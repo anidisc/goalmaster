@@ -477,230 +477,109 @@ class ApiFootball:
 
     #get top scores from api_football
     def get_top_scores(self, id_league) -> list[TopPlayer]:
-        """
-        Returns a list of TopPlayer objects of the top scorers of the league.
-        
-        Args:
-            id_league (int): The id of the league to get the top scorers for
-            
-        Returns:
-            list[TopPlayer]: A list of TopPlayer objects
-        """
-        url = f"{API_URL}/players/topscorers"
         file_path = TOPSCORE_PLAYERS_FILE_DB
-        data = {}
-        
-        # Check if file exists and if it does, load data
-        cache = {}
-        today = datetime.now()
-        
-        try:
-            if os.path.exists(file_path):
-                with open(file_path, "r") as f:
-                    try:
-                        cache = json.load(f)
-                        #print(f"Statistics loaded for {len(cache)} teams")
-                    except json.JSONDecodeError:
-                        # print(f"Error decoding {TEAM_STATISTICS_FILE_DB}, creating new file")
-                        cache = {}
-        except FileNotFoundError:
-            # print(f"File {TEAM_STATISTICS_FILE_DB} not found, creating new file")
-            # Will create the file later
-            pass
-        
-        # If the file was empty or didn't exist, make an API call and create the file
-        if not cache:
-            try:
-                response = requests.get(url, headers=self.headers)
-                #update API_CALLS
-                self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
-                
-                # Verify that the response contains the expected data
-                if 'response' in response.json():
-                    data[id_league] = {"data": {"date": datetime.now().strftime("%Y-%m-%d"), "statistics": response.json()['response']}}
-                    with open(file_path, "w") as f:
-                        json.dump(data, f, indent=4, ensure_ascii=False)
-                    return response.json()['response']
-                else:
-                    # print(f"API response does not contain expected data: {response.json()}")
-                    return []
-            except Exception as e:
-                # print(f"Error fetching team statistics: {str(e)}")
-                return []
-        
-        # If we loaded data from the file, check if it contains data for the requested league
-        if id_league in cache:
-            try:
-                date_limit = (datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
-                if cache[id_league]["data"]["date"] >= date_limit:
-                    return cache[id_league]["data"]["statistics"]
-            except KeyError as e:
-                # print(f"Data structure error for team {id_league}: {str(e)}")
-                # Continue with a new API request
-                pass 
-        # If we get here, the data doesn't exist or is outdated, make a new request
-        try:
-            params = {
-                "league": id_league,
-                "season": self.YEAR
-            }
-            response = requests.get(url, params=params, headers=self.headers)
-            #update API_CALLS
-            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
-            
-            # Verify that the response contains the expected data
-            if 'response' in response.json():
-                data = {}
-                data[id_league] = {"data": {"date": datetime.now().strftime("%Y-%m-%d"), "statistics": response.json()['response']}}
-                if not cache:
+        today = datetime.today().date()
+
+        # Se il file esiste, carica i dati
+        if os.path.exists(file_path):
+            with open(file_path, "r") as f:
+                try:
+                    cache = json.load(f)
+                except json.JSONDecodeError:
                     cache = {}
-                cache.update(data)
-                with open(file_path, "w") as f:
-                    json.dump(cache, f, indent=4, ensure_ascii=False)
-                
-                # Create list of TopPlayer objects
-                top_players = []
-                for player in response.json()['response']:
-                    try:
-                        top_players.append(TopPlayer(
-                            player['player']['id'],
-                            player['player']['name'],
-                            player['statistics'][0]['games']['position'],
-                            player['statistics'][0]['team']['name'],
-                            player['statistics'][0]['goals']['total'] or 0,
-                            player['statistics'][0]['goals']['assists'] or 0,
-                            player['statistics'][0]['penalty']['scored'] or 0,
-                            player['statistics'][0]['penalty']['missed'] or 0,
-                            player['statistics'][0]['cards']['yellow'] or 0,
-                            player['statistics'][0]['cards']['red'] or 0,
-                            player['player']['nationality'],
-                            player['player']['age']
-                        ))
-                    except (KeyError, TypeError, IndexError) as e:
-                        # print(f"Error creating TopPlayer object: {str(e)}")
-                        continue
-                return top_players
-            else:
-                # print(f"API response does not contain expected data: {response.json()}")
-                return []
-        except Exception as e:
-            # print(f"Error fetching or saving team statistics: {str(e)}")
-            return []
+        else:
+            cache = {}
+
+        # Controlla se i dati sono aggiornati a meno di 4 giorni
+        if (str(id_league) in cache and datetime.strptime(cache[str(id_league)]["date"], "%Y-%m-%d").date() >= today - timedelta(days=4)):
+            res_json = cache[str(id_league)]["response"]
+        else:
+            url = f"{API_URL}/players/topscorers"
+            params = {"league": id_league, "season": self.YEAR}
+            response = requests.get(url, headers=self.headers, params=params)
+            res_json = response.json()['response']
+            
+            # Aggiorna API_CALLS
+            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining', 0))
+            
+            # Salva i dati nel file
+            cache[str(id_league)] = {"date": today.strftime("%Y-%m-%d"), "response": res_json}
+            with open(file_path, "w") as f:
+                json.dump(cache, f, indent=4)
+
+        # Continua con la creazione della lista dei TopPlayer
+        top_players = []
+        for player in res_json:
+            top_players.append(TopPlayer(
+                player['player']['name'],
+                player['statistics'][0]['games']['position'],
+                "",
+                player['statistics'][0]['games']['number'],
+                player['statistics'][0]['team']['name'],
+                player['statistics'][0]['goals']['total'],
+                player['statistics'][0]['goals']['assists'],
+                player['statistics'][0]['cards']['yellow'],
+                player['statistics'][0]['cards']['red'],
+                player['player']['nationality'],
+                player['player']['age'],
+                player['statistics'][0]['penalty']['scored'],
+                player['statistics'][0]['penalty']['missed']
+            ))
+
+        return top_players
+    #def a function to get table of top scorers from api_football
 
     def get_top_assists(self, id_league) -> list[TopPlayer]:
-        """
-        Returns a list of TopPlayer objects of the top assisters of the league.
-        
-        Args:
-            id_league (int): The id of the league to get the top assisters for
-            
-        Returns:
-            list[TopPlayer]: A list of TopPlayer objects
-        """
-        url = f"{API_URL}/players/topassists"
         file_path = TOPASS_PLAYERS_FILE_DB
-        data = {}
-        
-        # Check if file exists and if it does, load data
-        cache = {}
-        today = datetime.now()
-        
-        try:
-            if os.path.exists(file_path):
-                with open(file_path, "r") as f:
-                    try:
-                        cache = json.load(f)
-                        #print(f"Statistics loaded for {len(cache)} teams")
-                    except json.JSONDecodeError:
-                        # print(f"Error decoding {TEAM_STATISTICS_FILE_DB}, creating new file")
-                        cache = {}
-        except FileNotFoundError:
-            # print(f"File {TEAM_STATISTICS_FILE_DB} not found, creating new file")
-            # Will create the file later
-            pass
-        
-        # If the file was empty or didn't exist, make an API call and create the file
-        if not cache:
-            try:
-                params = {
-                    "league": id_league,
-                    "season": self.YEAR
-                }
-                response = requests.get(url, params=params, headers=self.headers)
-                #update API_CALLS
-                self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
-                
-                # Verify that the response contains the expected data
-                if 'response' in response.json():
-                    data[id_league] = {"data": {"date": datetime.now().strftime("%Y-%m-%d"), "statistics": response.json()['response']}}
-                    with open(file_path, "w") as f:
-                        json.dump(data, f, indent=4, ensure_ascii=False)
-                    return response.json()['response']
-                else:
-                    # print(f"API response does not contain expected data: {response.json()}")
-                    return []
-            except Exception as e:
-                # print(f"Error fetching team statistics: {str(e)}")
-                return []
-        
-        # If we loaded data from the file, check if it contains data for the requested league
-        if id_league in cache:
-            try:
-                date_limit = (datetime.now() - timedelta(days=3)).strftime("%Y-%m-%d")
-                if cache[id_league]["data"]["date"] >= date_limit:
-                    return cache[id_league]["data"]["statistics"]
-            except KeyError as e:
-                # print(f"Data structure error for team {id_league}: {str(e)}")
-                # Continue with a new API request
-                pass 
-        # If we get here, the data doesn't exist or is outdated, make a new request
-        try:
-            params = {
-                "league": id_league,
-                "season": self.YEAR
-            }
-            response = requests.get(url, params=params, headers=self.headers)
-            #update API_CALLS
-            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining'))
-            
-            # Verify that the response contains the expected data
-            if 'response' in response.json():
-                data = {}
-                data[id_league] = {"data": {"date": datetime.now().strftime("%Y-%m-%d"), "statistics": response.json()['response']}}
-                if not cache:
+        today = datetime.today().date()
+
+        # Se il file esiste, carica i dati
+        if os.path.exists(file_path):
+            with open(file_path, "r") as f:
+                try:
+                    cache = json.load(f)
+                except json.JSONDecodeError:
                     cache = {}
-                cache.update(data)
-                with open(file_path, "w") as f:
-                    json.dump(cache, f, indent=4, ensure_ascii=False)
-                
-                # Create list of TopPlayer objects
-                top_players = []
-                for player in response.json()['response']:
-                    try:
-                        top_players.append(TopPlayer(
-                            player['player']['id'],
-                            player['player']['name'],
-                            player['statistics'][0]['games']['position'],
-                            player['statistics'][0]['team']['name'],
-                            player['statistics'][0]['goals']['total'] or 0,
-                            player['statistics'][0]['goals']['assists'] or 0,
-                            player['statistics'][0]['penalty']['scored'] or 0,
-                            player['statistics'][0]['penalty']['missed'] or 0,
-                            player['statistics'][0]['cards']['yellow'] or 0,
-                            player['statistics'][0]['cards']['red'] or 0,
-                            player['player']['nationality'],
-                            player['player']['age']
-                        ))
-                    except (KeyError, TypeError, IndexError) as e:
-                        # print(f"Error creating TopPlayer object: {str(e)}")
-                        continue
-                return top_players
-            else:
-                # print(f"API response does not contain expected data: {response.json()}")
-                return []
-        except Exception as e:
-            # print(f"Error fetching or saving team statistics: {str(e)}")
-            return []
+        else:
+            cache = {}
+
+        # Controlla se i dati sono aggiornati a meno di 4 giorni
+        if (str(id_league) in cache and datetime.strptime(cache[str(id_league)]["date"], "%Y-%m-%d").date() >= today - timedelta(days=4)):
+            res_json = cache[str(id_league)]["response"]
+        else:
+            url = f"{API_URL}/players/topassists"
+            params = {"league": id_league, "season": self.YEAR}
+            response = requests.get(url, headers=self.headers, params=params)
+            res_json = response.json()['response']
+            
+            # Aggiorna API_CALLS
+            self.remains_calls = int(response.headers.get('x-ratelimit-requests-remaining', 0))
+            
+            # Salva i dati nel file
+            cache[str(id_league)] = {"date": today.strftime("%Y-%m-%d"), "response": res_json}
+            with open(file_path, "w") as f:
+                json.dump(cache, f, indent=4)
+
+        # Continua con la creazione della lista dei TopPlayer
+        top_players = []
+        for player in res_json:
+            top_players.append(TopPlayer(
+                player['player']['name'],
+                player['statistics'][0]['games']['position'],
+                "",
+                player['statistics'][0]['games']['number'],
+                player['statistics'][0]['team']['name'],
+                player['statistics'][0]['goals']['total'],
+                player['statistics'][0]['goals']['assists'],
+                player['statistics'][0]['cards']['yellow'],
+                player['statistics'][0]['cards']['red'],
+                player['player']['nationality'],
+                player['player']['age'],
+                player['statistics'][0]['penalty']['scored'],
+                player['statistics'][0]['penalty']['missed']
+            ))
+
+        return top_players
     
     def table_top_scores(self,id_league,assists=False) -> None:
 
@@ -1238,11 +1117,11 @@ class ApiFootball:
                 
                 # Yellow cards
                 if "yellow" in team1.cards and "yellow" in team2.cards:
-                    cards_table.add_row(
-                        "Yellow Cards (Total)",
-                        str(team1.cards["yellow"].get("total", 0)),
-                        str(team2.cards["yellow"].get("total", 0))
-                    )
+                    # cards_table.add_row(
+                    #     "Yellow Cards (Total)",
+                    #     str(team1.cards["yellow"].get("total", 0)),
+                    #     str(team2.cards["yellow"].get("total", 0))
+                    # )
                     
                     # Add time ranges for yellow cards if available
                     time_ranges = ["0-15", "16-30", "31-45", "46-60", "61-75", "76-90", "91-105", "106-120"]
@@ -1256,11 +1135,11 @@ class ApiFootball:
                 
                 # Red cards
                 if "red" in team1.cards and "red" in team2.cards:
-                    cards_table.add_row(
-                        "Red Cards (Total)",
-                        str(team1.cards["red"].get("total", 0)),
-                        str(team2.cards["red"].get("total", 0))
-                    )
+                    # cards_table.add_row(
+                    #     "Red Cards (Total)",
+                    #     str(team1.cards["red"].get("total", 0)),
+                    #     str(team2.cards["red"].get("total", 0))
+                    # )
                     
                     # Add time ranges for red cards if available
                     for time_range in time_ranges:

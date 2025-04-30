@@ -23,7 +23,7 @@ from weasyprint import HTML
 import mistune
 
 
-APPVERSION = "0.8.5"
+APPVERSION = "0.8.6"
 af_map={
     "SERIEA":{"id":135,"name":"Serie A","country":"Italy"},
     "LALIGA":{"id":140,"name":"LaLiga","country":"Spain"},
