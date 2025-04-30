@@ -1,4 +1,4 @@
-## GoalMasterApp v0.8.0
+## GoalMasterApp v0.8.6
 
 GoalMasterApp is an interactive application built with [Textual](https://textual.textualize.io/), designed to provide statistics, events, rankings, and predictions for major football (soccer) leagues. It uses the [api_football](https://rapidapi.com/api-sports/api/api-football) API to retrieve up-to-date match data and [gemini_ai](https://gemini.ai) to generate advanced match predictions.
 
@@ -50,10 +50,18 @@ pip install -r requirements.txt
 To run the application, you'll need to configure the APIs:
 
 1. **api_football**:
-   - Get your API credentials from [api_football](https://rapidapi.com/api-sports/api/api-football) and configure them in the `api_football.py` file.
+   - Get your API credentials from [api_football](https://rapidapi.com/api-sports/api/api-football) and configure them in your environment variables:
+   ```bash
+   export APIFOOTBALL_KEY="your_api_football_key"
+   ```
 
 2. **gemini_ai**:
-   - Register your account on [gemini_ai](https://gemini.ai) and configure the access token in the `gemini_ai.py` file.
+   - Register your account on [Google Cloud](https://console.cloud.google.com/) and enable the Generative AI API.
+   - Create a service account and download the JSON key file.
+   - Configure the access token in your environment variables:
+   ```bash
+   export GOOGLE_API_KEY="your_google_api_key"
+   ```
 
 ### Running the Application
 
@@ -62,6 +70,22 @@ To run the application, use the following command:
 ```bash
 python3.12 goalmaster.py
 ```
+
+## Screenshots
+
+Here are some screenshots showcasing the main features of GoalMasterApp:
+
+![League Selection](screenshots/league_selection.png)
+_League selection menu showing available championships_
+
+![Match Statistics](screenshots/match_statistics.png)
+_Detailed match statistics and events_
+
+![Injury Information](screenshots/injury_info.png)
+_Injured players information for selected teams_
+
+![Match Predictions](screenshots/match_predictions.png)
+_Advanced match predictions with team analysis_
 
 ## Commands
 
@@ -102,7 +126,7 @@ GoalMasterApp offers advanced match predictions using AI. By analyzing statistic
 
 The predictions are based on the latest available match statistics, league standings, and home/away performances, offering users detailed insights for a better understanding of match results.
 
-## What's New in Version 0.8.0
+## What's New in Version 0.8.6
 
 - **Injury Visualization**: Added the ability to view injured players for the selected match by pressing the `j` key.
 - **Injury Data Update**: Improved the management of saving and updating injury data, using the current system date instead of the match date.
